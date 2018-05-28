@@ -4,11 +4,17 @@
   "description": "Javascript API for Point autocomplete",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --no-warnings --experimental-modules test.mjs",
+    "build": "rollup main.js --format umd --name 'point-api' --file index.js",
+    "build:watch":
+      "rollup main.js -w --format umd --name 'point-api' --file index.js"
   },
   "author": "Alex Iansiti <alex@easyemail.ai>",
   "license": "ISC",
   "devDependencies": {
     "rollup": "^0.59.4"
+  },
+  "dependencies": {
+    "axios": "^0.18.0"
   }
 }
