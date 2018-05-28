@@ -1,5 +1,6 @@
 import axios from "axios";
 import fuzzysearch from "./search";
+
 const ROOT_URI = "https://alpha-autocomplete.easyemail.ai";
 
 class PointApi {
