@@ -4,14 +4,15 @@
   "description": "Javascript API for Point autocomplete",
   "main": "index.js",
   "scripts": {
-    "test": "node --no-warnings --experimental-modules test.mjs",
-    "build": "rollup main.js --format umd --name 'point-api' --file index.js",
-    "build:watch":
-      "rollup main.js -w --format umd --name 'point-api' --file index.js"
+    "test": "jest",
+    "build":
+      "rollup src/main.js --format umd --name 'point-api' --file build/index.js",
+    "build:watch": "npm run build -- -w"
   },
   "author": "Alex Iansiti <alex@easyemail.ai>",
   "license": "ISC",
   "devDependencies": {
+    "jest": "^23.0.1",
     "rollup": "^0.59.4"
   },
   "dependencies": {

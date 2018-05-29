@@ -10,7 +10,7 @@ class PointApi {
     this.suggestions = null;
   }
 
-  async loadSuggestions() {
+  async getSuggestions() {
     try {
       const result = await axios.get(ROOT_URI + "/suggestions", {
         params: { emailAddress: this.emailAddress, authCode: this.authCode }
