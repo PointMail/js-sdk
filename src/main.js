@@ -1,13 +1,20 @@
+//@flow
 import axios from "axios";
 import fuzzysearch from "./search";
 
 const ROOT_URI = "https://alpha-autocomplete.easyemail.ai";
 
+type SuggestionMeta = { suggestion: string, userAdded: boolean, type: string };
+
 class PointApi {
-  constructor(emailAddress, authCode) {
+  emailAddress: string;
+  authCode: string;
+  suggestions: Array<SuggestionMeta>;
+
+  constructor(emailAddress: string, authCode: string) {
     this.emailAddress = emailAddress;
     this.authCode = authCode;
-    this.suggestions = null;
+    this.suggestions = [];
   }
 
   async getSuggestions() {
@@ -22,8 +29,8 @@ class PointApi {
     }
   }
 
-  async searchSuggestions(query) {
-    if (!this.suggestions) {
+  async searchSuggestions(query: string): Promise<Array<SuggestionMeta>> {
+    if (!this.suggestions.length) {
       throw new Error("Suggestions not loaded");
     }
     if (!query || !query.trim()) {

@@ -6,7 +6,9 @@
 
   axios = axios && axios.hasOwnProperty('default') ? axios['default'] : axios;
 
-  function fuzzysearch(needle, haystack) {
+  //     
+
+  function fuzzysearch(needle        , haystack        )          {
     // Fuzzy search as done by Matt.
     const split_in = needle.split(/(\s+)/, 1);
     if (split_in.length > 1) {
@@ -38,13 +40,21 @@
     return true;
   }
 
+  //     
+
   const ROOT_URI = "https://alpha-autocomplete.easyemail.ai";
 
+                                                                                 
+
   class PointApi {
-    constructor(emailAddress, authCode) {
+                         
+                     
+                                       
+
+    constructor(emailAddress        , authCode        ) {
       this.emailAddress = emailAddress;
       this.authCode = authCode;
-      this.suggestions = null;
+      this.suggestions = [];
     }
 
     async getSuggestions() {
@@ -59,8 +69,8 @@
       }
     }
 
-    async searchSuggestions(query) {
-      if (!this.suggestions) {
+    async searchSuggestions(query        )                                 {
+      if (!this.suggestions.length) {
         throw new Error("Suggestions not loaded");
       }
       if (!query || !query.trim()) {

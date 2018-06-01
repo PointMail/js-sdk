@@ -1,4 +1,6 @@
-export default function fuzzysearch(needle, haystack) {
+//@flow
+
+export default function fuzzysearch(needle: string, haystack: string): boolean {
   // Fuzzy search as done by Matt.
   const split_in = needle.split(/(\s+)/, 1);
   if (split_in.length > 1) {
