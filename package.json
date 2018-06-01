@@ -2,11 +2,10 @@
   "name": "point-api",
   "version": "1.0.0",
   "description": "Javascript API for Point autocomplete",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "test": "jest",
-    "build":
-      "rollup src/main.js --format umd --name 'point-api' --file build/index.js",
+    "build": "rollup src/main.js --format umd --name 'point-api' --file build/index.js",
     "build:watch": "npm run build -- -w"
   },
   "author": "Alex Iansiti <alex@easyemail.ai>",

@@ -26,6 +26,9 @@ class PointApi {
     if (!this.suggestions) {
       throw new Error("Suggestions not loaded");
     }
+    if (!query || !query.trim()) {
+      return [];
+    }
     const punctuationReg = /[,\/;:\-_()']/g;
     query = query
       .toLowerCase()
@@ -35,6 +38,7 @@ class PointApi {
       const sentence = meta.suggestion
         .toLowerCase()
         .replace(punctuationReg, "");
+      if (sentence === query) return false;
       return fuzzysearch(query, sentence); //fuzzy search on the entire database of answers. Search isn't case-specific.
     });
   }
