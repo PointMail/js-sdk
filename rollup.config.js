@@ -3,7 +3,7 @@ var flow = require("rollup-plugin-flow");
 export default {
   input: "src/main.js",
   output: {
-    file: "build/index.js",
+    file: "dist/index.js",
     format: "umd",
     name: "point-api"
   },

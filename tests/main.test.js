@@ -1,4 +1,4 @@
-const PointApi = require("./../build/index");
+const PointApi = require("./../dist/index");
 
 const emailAddress = "aiansiti@college.harvard.edu";
 const authCode =
