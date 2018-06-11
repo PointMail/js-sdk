@@ -16,21 +16,21 @@ Point Websockets Api Instance
 
 ### Properties
 
-* [apiKey](_main_.pointapi.md#apikey)
-* [emailAddress](_main_.pointapi.md#emailaddress)
-* [socket](_main_.pointapi.md#socket)
-* [suggestions](_main_.pointapi.md#suggestions)
+* [apiKey](README.md#apikey)
+* [emailAddress](README.md#emailaddress)
+* [socket]README.md#socket)
+* [suggestions](README.md#suggestions)
 
 ### Methods
 
-* [searchSuggestions](_main_.pointapi.md#searchsuggestions)
+* [searchSuggestions](README.md#searchsuggestions)
 
 ---
 
 ###  constructor
 <a id="constructor"></a>
 
-**new PointApi**(emailAddress: *`string`*, apiKey: *`string`*): [PointApi](_main_.pointapi.md)
+**new PointApi**(emailAddress: *`string`*, apiKey: *`string`*): [PointApi](README.md)
 
 **Parameters:**
 
@@ -39,7 +39,7 @@ Point Websockets Api Instance
 | emailAddress | `string` |  Email address of Point user |
 | apiKey | `string` |  API key of Point client |
 
-**Returns:** [PointApi](_main_.pointapi.md)
+**Returns:** [PointApi](README.md)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 ###  suggestions
 
-**● suggestions**: *`Array`<[SuggestionMeta](../modules/_main_.md#suggestionmeta)>*
+**● suggestions**: *`Array`<[SuggestionMeta](README.md#suggestionmeta)>*
 
 List of suggestions recieved from last query
 
@@ -86,7 +86,7 @@ ___
 
 ###  searchSuggestions
 
-▸ **searchSuggestions**(seedText: *`string`*): `Promise`< `Array`<[SuggestionMeta](../modules/_main_.md#suggestionmeta)> &#124; `null`>
+▸ **searchSuggestions**(seedText: *`string`*): `Promise`< `Array`<[SuggestionMeta](README.md#suggestionmeta)> &#124; `null`>
 
 Query PointApi with seed text to get predicted suggestions
 
@@ -96,7 +96,7 @@ Query PointApi with seed text to get predicted suggestions
 | ------ | ------ | ------ |
 | seedText | `string` |  The text to base suggestion predictions off of |
 
-**Returns:** `Promise`< `Array`<[SuggestionMeta](../modules/_main_.md#suggestionmeta)> &#124; `null`>
+**Returns:** `Promise`< `Array`<[SuggestionMeta](README.md#suggestionmeta)> &#124; `null`>
 A list of the predicted suggestion objects
 
 ___
