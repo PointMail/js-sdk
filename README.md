@@ -103,11 +103,11 @@ Suggestion with metadata recieved from Point
 
 #### Type declaration
 
- suggestion: `string`
+ suggestion: `string` The suggestion text
 
- type: `string`
+ type: `string` What kind of a suggestion it is (ie. `suggestion` is just text or `calendar` would be interactive)
 
- userAdded: `boolean`
+ userAdded: `boolean` Whether a user manually added the suggestion to their profile
 
 ___
 
