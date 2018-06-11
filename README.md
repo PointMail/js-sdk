@@ -18,7 +18,7 @@ Point Websockets Api Instance
 
 * [apiKey](README.md#apikey)
 * [emailAddress](README.md#emailaddress)
-* [socket]README.md#socket)
+* [socket](README.md#socket)
 * [suggestions](README.md#suggestions)
 
 ### Methods
