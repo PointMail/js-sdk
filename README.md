@@ -101,4 +101,24 @@ A list of the predicted suggestion objects
 
 ___
 
+<a id="suggestionmeta"></a>
+
+###  SuggestionMeta
+
+**ΤSuggestionMeta**: *`object`*
+
+*Defined in main.ts:8*
+
+Suggestion metadata
+
+#### Type declaration
+
+ suggestion: `string`
+
+ type: `string`
+
+ userAdded: `boolean`
+
+___
+
 
