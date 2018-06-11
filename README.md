@@ -103,13 +103,9 @@ ___
 
 <a id="suggestionmeta"></a>
 
-###  SuggestionMeta
+**SuggestionMeta**: *`object`*
 
-**ΤSuggestionMeta**: *`object`*
-
-*Defined in main.ts:8*
-
-Suggestion metadata
+Suggestion with metadata recieved from Point
 
 #### Type declaration
 
