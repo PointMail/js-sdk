@@ -1,6 +1,6 @@
-# point-api
-Javascript API for Point autocomplete
-***
+# ✍ Point AutoSuggest 
+> Javascript API  
+
 ### To Run for Development:
 
 * Clone repo
