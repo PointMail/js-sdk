@@ -103,7 +103,7 @@ ___
 
 <a id="suggestionmeta"></a>
 
-**SuggestionMeta**: *`object`*
+## Object: SuggestionMeta
 
 Suggestion with metadata recieved from Point
 
