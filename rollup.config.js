@@ -1,4 +1,4 @@
-var flow = require("rollup-plugin-flow");
+import typescript from "rollup-plugin-typescript";
 
 export default {
   input: "src/main.js",
@@ -7,5 +7,5 @@ export default {
     format: "umd",
     name: "point-api"
   },
-  plugins: [flow()]
+  plugins: [typescript()]
 };
