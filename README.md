@@ -1,7 +1,7 @@
-# ✍ Point AutoSuggest 
-> Javascript API  
+# ✍ Point AutoSuggest JS API
+> The Point AutoSuggest package provides an easy client and serverside frontend for the Point API
 
-### To Run for Development:
+## Setup:
 
 * Clone repo
 * `cd point-api`
@@ -9,26 +9,39 @@
 * For development, you might need to `npm link` too so you can access the package from other projects
 * You're done! (`npm test` should pass all tests)
 
-## Class: PointApi
+## Usage:
+To query suggestions given some seed text:
+```js
+const api = new PointApi("<user_email>", "<api_key>");
+// A websockets connection is automatically established on api init
+
+api.searchSuggestions("Hey")
+// {{suggestion: "Hey, how are you?", "type": "suggestion", "userAdded": false}, ...}
+```
+A reference autocomplete dropdown implementation can be found [here](https://github.com/PointMail/point-dropdown-react)
+
+## Documentation
+
+### Class: PointApi
 
 Point Websockets Api Instance
 
 * [constructor](README.md#constructor)
 
-### Properties
+#### Properties
 
 * [apiKey](README.md#apikey)
 * [emailAddress](README.md#emailaddress)
 * [socket](README.md#socket)
 * [suggestions](README.md#suggestions)
 
-### Methods
+#### Methods
 
 * [searchSuggestions](README.md#searchsuggestions)
 
 ---
 
-###  constructor
+#### constructor
 <a id="constructor"></a>
 
 **new PointApi**(emailAddress: *`string`*, apiKey: *`string`*): [PointApi](README.md)
@@ -44,11 +57,11 @@ Point Websockets Api Instance
 
 ___
 
-## Properties
+### Properties
 
 <a id="apikey"></a>
 
-###  apiKey
+####  apiKey
 
 **● apiKey**: *`string`*
 
@@ -57,7 +70,7 @@ API key of Point client
 ___
 <a id="emailaddress"></a>
 
-###  emailAddress
+####  emailAddress
 
 **● emailAddress**: *`string`*
 
@@ -66,7 +79,7 @@ Email address of Point user
 ___
 <a id="suggestions"></a>
 
-###  suggestions
+####  suggestions
 
 **● suggestions**: *`Array`<[SuggestionMeta](README.md#suggestionmeta)>*
 
@@ -74,11 +87,11 @@ List of suggestions recieved from last query
 
 ___
 
-## Methods
+### Methods
 
 <a id="searchsuggestions"></a>
 
-###  searchSuggestions
+####  searchSuggestions
 
 ▸ **searchSuggestions**(seedText: *`string`*): `Promise`< `Array`<[SuggestionMeta](README.md#suggestionmeta)> &#124; `null`>
 
@@ -97,11 +110,11 @@ ___
 
 <a id="suggestionmeta"></a>
 
-## Object: SuggestionMeta
+### Object: SuggestionMeta
 
 Suggestion with metadata recieved from Point
 
-#### Type declaration
+##### Type declaration
 
  suggestion: `string` The suggestion text
 
