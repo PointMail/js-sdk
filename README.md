@@ -105,7 +105,7 @@ Suggestion with metadata recieved from Point
 
  suggestion: `string` The suggestion text
 
- type: `string` What kind of a suggestion it is (ie. `suggestion` is just text or `calendar` would be interactive)
+ type: `string` What kind of a suggestion it is (ie. `"suggestion"` is just text or `"calendar"` would be interactive)
 
  userAdded: `boolean` Whether a user manually added the suggestion to their profile
 
