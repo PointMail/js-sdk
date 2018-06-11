@@ -1,11 +1,12 @@
 # point-api
 Javascript API for Point autocomplete
 ***
-### To Run:
+### To Run for Development:
 
 * Clone repo
 * `cd point-api`
 * `npm install` 
+* For development, you might need to `npm link` too so you can access the package from other projects
 * You're done! (`npm test` should pass all tests)
 
 ## Class: PointApi
@@ -61,13 +62,6 @@ ___
 **● emailAddress**: *`string`*
 
 Email address of Point user
-
-___
-<a id="socket"></a>
-
-### `<Private>` socket
-
-**● socket**: *`Socket`*
 
 ___
 <a id="suggestions"></a>
