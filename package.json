@@ -18,6 +18,8 @@
     "rollup": "^0.59.4",
     "rollup-plugin-typescript": "^0.8.1",
     "ts-jest": "^22.4.6",
+    "tslint": "^5.10.0",
+    "tslint-config-prettier": "^1.13.0",
     "typedoc": "^0.11.1",
     "typedoc-plugin-markdown": "^1.1.13",
     "typescript": "^2.9.1"
