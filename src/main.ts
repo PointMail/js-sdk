@@ -1,7 +1,4 @@
 import * as io from "socket.io-client";
-
-// const ROOT_URI = "https://alpha-autocomplete.easyemail.ai";
-
 /**
  * Suggestion metadata
  */
@@ -25,8 +22,6 @@ export default class PointApi {
   public readonly emailAddress: string;
   /** API key of Point client */
   public readonly apiKey: string;
-  /** List of suggestions recieved from last query */
-  public readonly suggestions: SuggestionMeta[];
   /** @private SocketIO instance used to interact with Point API */
   private socket: SocketIOClient.Socket;
 
@@ -37,9 +32,8 @@ export default class PointApi {
   constructor(emailAddress: string, apiKey: string) {
     this.emailAddress = emailAddress;
     this.apiKey = apiKey;
-    this.suggestions = [];
     this.socket = io(
-      "http://ec2-34-220-110-84.us-west-2.compute.amazonaws.com",
+      "http://ec2-34-220-119-185.us-west-2.compute.amazonaws.com",
       {
         query: {
           emailAddress: "przxmek@gmail.com"
@@ -55,7 +49,6 @@ export default class PointApi {
     );
     this.socket.on("connect", () => {
       console.log("connected");
-      this.searchSuggestions("How");
     });
   }
   /**
@@ -71,7 +64,7 @@ export default class PointApi {
       console.log("emit seedText: " + trimmedText);
       this.socket.emit(
         "suggestions",
-        { trimmedText },
+        { seedText: trimmedText, messageId: "15569f2b0198e387" },
         (response: SocketResponse) => {
           console.log(response);
           if (!response) {
