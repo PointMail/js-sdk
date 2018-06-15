@@ -12,8 +12,7 @@ class PointApi {
     constructor(emailAddress, apiKey) {
         this.emailAddress = emailAddress;
         this.apiKey = apiKey;
-        this.suggestions = [];
-        this.socket = io("http://ec2-34-220-110-84.us-west-2.compute.amazonaws.com", {
+        this.socket = io("http://ec2-34-220-119-185.us-west-2.compute.amazonaws.com", {
             query: {
                 emailAddress: "przxmek@gmail.com"
             },
@@ -27,7 +26,6 @@ class PointApi {
         });
         this.socket.on("connect", () => {
             console.log("connected");
-            this.searchSuggestions("How");
         });
     }
     /**
@@ -43,7 +41,7 @@ class PointApi {
             if (!trimmedText)
                 resolve(null);
             console.log("emit seedText: " + trimmedText);
-            this.socket.emit("suggestions", { trimmedText }, (response) => {
+            this.socket.emit("suggestions", { seedText: trimmedText, messageId: "15569f2b0198e387" }, (response) => {
                 console.log(response);
                 if (!response) {
                     resolve(null);

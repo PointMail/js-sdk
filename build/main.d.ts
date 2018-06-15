@@ -14,8 +14,6 @@ export default class PointApi {
     readonly emailAddress: string;
     /** API key of Point client */
     readonly apiKey: string;
-    /** List of suggestions recieved from last query */
-    readonly suggestions: SuggestionMeta[];
     /** @private SocketIO instance used to interact with Point API */
     private socket;
     /**
