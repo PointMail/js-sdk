@@ -6,3 +6,5 @@ before_install:
 cache:
  directories:
    - "node_modules"
+notifications:
+   slack: easyemail:Sjvqcwm25jFhXxEdZirCDqRk
