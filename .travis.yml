@@ -7,4 +7,6 @@ cache:
  directories:
    - "node_modules"
 notifications:
-   slack: easyemail:Sjvqcwm25jFhXxEdZirCDqRk
+   slack:
+     easyemail:Sjvqcwm25jFhXxEdZirCDqRk
+     on_pull_requests: false
