@@ -47,9 +47,6 @@ export default class PointApi {
         }
       }
     );
-    this.socket.on("connect", () => {
-      console.log("connected");
-    });
   }
   /**
    *  Query PointApi with seed text to get predicted suggestions
@@ -61,12 +58,10 @@ export default class PointApi {
       if (!seedText) resolve(null);
       const trimmedText = seedText.trim();
       if (!trimmedText) resolve(null);
-      console.log("emit seedText: " + trimmedText);
       this.socket.emit(
         "suggestions",
         { seedText: trimmedText, messageId: "15569f2b0198e387" },
         (response: SocketResponse) => {
-          console.log(response);
           if (!response) {
             resolve(null);
           }
