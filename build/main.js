@@ -12,7 +12,9 @@ class PointApi {
     constructor(emailAddress, apiKey) {
         this.emailAddress = emailAddress;
         this.apiKey = apiKey;
-        this.socket = io("http://ec2-34-220-119-185.us-west-2.compute.amazonaws.com", {
+        this.socket = io(
+        // "http://ec2-34-220-119-185.us-west-2.compute.amazonaws.com",
+        "localhost:5000", {
             query: {
                 emailAddress: "przxmek@gmail.com"
             },
@@ -47,6 +49,19 @@ class PointApi {
                 }
                 resolve(suggestions);
             });
+        });
+    }
+    /**
+     *  Tell the PointApi what suggestion was chosen to improve its model
+     */
+    async reportChosenSuggestion(seedText, displayedSuggestions, chosenSuggestion, currentContext) {
+        if (!seedText) {
+            throw new Error("Must provide seed text if reporting chosen suggestion");
+        }
+        this.socket.emit("chosen-suggestions", { seedText, displayedSuggestions, chosenSuggestion, currentContext }, (response) => {
+            if (!response || response !== "success") {
+                throw new Error("Could not recore chosen suggestion");
+            }
         });
     }
 }

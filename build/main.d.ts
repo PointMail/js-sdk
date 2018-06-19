@@ -27,4 +27,8 @@ export default class PointApi {
      * @returns A list of the predicted suggestion objects
      */
     searchSuggestions(seedText: string): Promise<SuggestionMeta[] | null>;
+    /**
+     *  Tell the PointApi what suggestion was chosen to improve its model
+     */
+    reportChosenSuggestion(seedText: string | null, displayedSuggestions: SuggestionMeta[], chosenSuggestion: SuggestionMeta, currentContext: string): Promise<void>;
 }
