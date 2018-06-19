@@ -1,5 +1,10 @@
 import PointApi from "./../src/main";
-import { emit, testResponse } from "../__mocks__/socket-mock";
+import {
+  suggestions,
+  testResponse,
+  mockChosenSuggestions,
+  mockSuggestions
+} from "../__mocks__/socket-mock";
 const { response } = testResponse;
 const emailAddress = "aiansiti@college.harvard.edu";
 const apiKey = "apikey1234";
@@ -18,7 +23,10 @@ describe("Query suggestions", () => {
     const seedText = "hello123";
     const result = await api.searchSuggestions(seedText);
     expect(result).toHaveLength(3);
-    expect(emit.mock.calls[0][1]).toHaveProperty("seedText", seedText);
+    expect(mockSuggestions.mock.calls[0][0]).toHaveProperty(
+      "seedText",
+      seedText
+    );
   });
   test("Bad queries", async () => {
     expect(await api.searchSuggestions("")).toBeNull();
@@ -32,4 +40,19 @@ describe("Query suggestions", () => {
     delete testResponse.response;
     expect(await api.searchSuggestions("hello")).toBeNull();
   });
+});
+
+test("Chosen suggestions tracking", async () => {
+  expect(
+    api.reportChosenSuggestion(null, suggestions, suggestions[2], "")
+  ).rejects.toThrow();
+  expect(
+    api.reportChosenSuggestion("hello", suggestions, suggestions[2], "")
+  ).resolves.toBeUndefined();
+  expect(
+    api.reportChosenSuggestion("hello", suggestions, suggestions[2], "")
+  ).rejects.toThrow();
+  expect(
+    api.reportChosenSuggestion("hello", suggestions, suggestions[2], "")
+  ).rejects.toThrow();
 });

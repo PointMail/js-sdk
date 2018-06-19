@@ -15,11 +15,24 @@ export const testResponse = {
     messageId: null
   }
 };
-export const emit = jest
+
+export const mockSuggestions = jest
   .fn()
-  .mockImplementation((channel, data, callback) =>
-    callback(testResponse.response)
-  );
+  .mockImplementation((data, callback) => callback(testResponse.response));
+
+export const mockChosenSuggestions = jest
+  .fn()
+  .mockImplementationOnce(callback => callback("success"))
+  .mockImplementationOnce(callback => callback("failure"))
+  .mockImplementationOnce(callback => callback());
+
+const emit = jest.fn().mockImplementation((channel, data, callback) => {
+  if (channel === "suggestions") {
+    mockSuggestions(data, callback);
+  } else if (channel === "chosen-suggestions") {
+    return mockChosenSuggestions(callback);
+  }
+});
 const mockIo = jest.fn().mockReturnValue({
   emit
 });
