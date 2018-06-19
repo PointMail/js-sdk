@@ -33,7 +33,8 @@ export default class PointApi {
     this.emailAddress = emailAddress;
     this.apiKey = apiKey;
     this.socket = io(
-      "http://ec2-34-220-119-185.us-west-2.compute.amazonaws.com",
+      // "http://ec2-34-220-119-185.us-west-2.compute.amazonaws.com",
+      "localhost:5000",
       {
         query: {
           emailAddress: "przxmek@gmail.com"
@@ -73,5 +74,28 @@ export default class PointApi {
         }
       );
     });
+  }
+
+  /**
+   *  Tell the PointApi what suggestion was chosen to improve its model
+   */
+  public async reportChosenSuggestion(
+    seedText: string | null,
+    displayedSuggestions: SuggestionMeta[],
+    chosenSuggestion: SuggestionMeta,
+    currentContext: string
+  ): Promise<void> {
+    if (!seedText) {
+      throw new Error("Must provide seed text if reporting chosen suggestion");
+    }
+    this.socket.emit(
+      "chosen-suggestions",
+      { seedText, displayedSuggestions, chosenSuggestion, currentContext },
+      (response: string) => {
+        if (!response || response !== "success") {
+          throw new Error("Could not recore chosen suggestion");
+        }
+      }
+    );
   }
 }
