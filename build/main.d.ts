@@ -30,5 +30,9 @@ export default class PointApi {
     /**
      *  Tell the PointApi what suggestion was chosen to improve its model
      */
-    reportChosenSuggestion(seedText: string | null, displayedSuggestions: SuggestionMeta[], chosenSuggestion: SuggestionMeta, currentContext: string): Promise<void>;
+    reportChosenSuggestion(seedText: string, displayedSuggestions: SuggestionMeta[], chosenSuggestion: SuggestionMeta, currentContext: string): Promise<void>;
+    /**
+     *  Set the context of the autocomplete session
+     */
+    setContext(pastContext: string, contextType: string): void;
 }

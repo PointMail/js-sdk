@@ -39,7 +39,7 @@ class PointApi {
             const trimmedText = seedText.trim();
             if (!trimmedText)
                 resolve(null);
-            this.socket.emit("suggestions", { seedText: trimmedText, messageId: "15569f2b0198e387" }, (response) => {
+            this.socket.emit("suggestions", { seedText: trimmedText }, (response) => {
                 if (!response) {
                     resolve(null);
                 }
@@ -55,14 +55,17 @@ class PointApi {
      *  Tell the PointApi what suggestion was chosen to improve its model
      */
     async reportChosenSuggestion(seedText, displayedSuggestions, chosenSuggestion, currentContext) {
-        if (!seedText) {
-            throw new Error("Must provide seed text if reporting chosen suggestion");
-        }
         this.socket.emit("chosen-suggestions", { seedText, displayedSuggestions, chosenSuggestion, currentContext }, (response) => {
             if (!response || response !== "success") {
                 throw new Error("Could not recore chosen suggestion");
             }
         });
+    }
+    /**
+     *  Set the context of the autocomplete session
+     */
+    setContext(pastContext, contextType) {
+        this.socket.emit("set-context", { pastContext, contextType });
     }
 }
 exports.default = PointApi;
