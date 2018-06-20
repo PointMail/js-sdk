@@ -42,7 +42,8 @@ export default class PointApi {
         transportOptions: {
           polling: {
             extraHeaders: {
-              Authorization: "Basic " + this.apiKey
+              Authorization:
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MjkzNjIwNTgsIm5iZiI6MTUyOTM2MjA1OCwiZXhwIjoxNTI5MzY1NjU4LCJzdWIiOnsidXNlci5pZCI6MiwiZW1haWwiOiJwcnp4bWVrQGdtYWlsLmNvbSIsImtleV9pZCI6MX19.XBI_cuabfTpfA9UKLglPY9KYF18VIGI_Iqeiz8sIFSk"
             }
           }
         }
@@ -61,7 +62,7 @@ export default class PointApi {
       if (!trimmedText) resolve(null);
       this.socket.emit(
         "suggestions",
-        { seedText: trimmedText},
+        { seedText: trimmedText },
         (response: SocketResponse) => {
           if (!response) {
             resolve(null);
@@ -98,7 +99,10 @@ export default class PointApi {
   /**
    *  Set the context of the autocomplete session
    */
-  public setContext(pastContext: string, contextType: string): void {
+  public async setContext(
+    pastContext: string,
+    contextType: string
+  ): Promise<void> {
     this.socket.emit("set-context", { pastContext, contextType });
   }
 }
