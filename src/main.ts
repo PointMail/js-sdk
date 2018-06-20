@@ -61,7 +61,7 @@ export default class PointApi {
       if (!trimmedText) resolve(null);
       this.socket.emit(
         "suggestions",
-        { seedText: trimmedText, messageId: "15569f2b0198e387" },
+        { seedText: trimmedText},
         (response: SocketResponse) => {
           if (!response) {
             resolve(null);
@@ -80,14 +80,11 @@ export default class PointApi {
    *  Tell the PointApi what suggestion was chosen to improve its model
    */
   public async reportChosenSuggestion(
-    seedText: string | null,
+    seedText: string,
     displayedSuggestions: SuggestionMeta[],
     chosenSuggestion: SuggestionMeta,
     currentContext: string
   ): Promise<void> {
-    if (!seedText) {
-      throw new Error("Must provide seed text if reporting chosen suggestion");
-    }
     this.socket.emit(
       "chosen-suggestions",
       { seedText, displayedSuggestions, chosenSuggestion, currentContext },
@@ -97,5 +94,11 @@ export default class PointApi {
         }
       }
     );
+  }
+  /**
+   *  Set the context of the autocomplete session
+   */
+  public setContext(pastContext: string, contextType: string): void {
+    this.socket.emit("set-context", { pastContext, contextType });
   }
 }
