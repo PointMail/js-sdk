@@ -3,7 +3,8 @@ import {
   suggestions,
   testResponse,
   mockChosenSuggestions,
-  mockSuggestions
+  mockSuggestions,
+  mockSetContext
 } from "../__mocks__/socket-mock";
 const { response } = testResponse;
 const emailAddress = "aiansiti@college.harvard.edu";
@@ -43,16 +44,20 @@ describe("Query suggestions", () => {
 });
 
 test("Chosen suggestions tracking", async () => {
-  expect(
-    api.reportChosenSuggestion(null, suggestions, suggestions[2], "")
-  ).rejects.toThrow();
-  expect(
+  await expect(
     api.reportChosenSuggestion("hello", suggestions, suggestions[2], "")
   ).resolves.toBeUndefined();
-  expect(
+  expect(mockChosenSuggestions).toBeCalled();
+  await expect(
     api.reportChosenSuggestion("hello", suggestions, suggestions[2], "")
   ).rejects.toThrow();
-  expect(
+  await expect(
     api.reportChosenSuggestion("hello", suggestions, suggestions[2], "")
   ).rejects.toThrow();
+});
+
+test("Set Context", async () => {
+  const context = { pastContext: "hello", contextType: "gmail" };
+  await api.setContext(context.pastContext, context.contextType);
+  expect(mockSetContext).toBeCalledWith(context);
 });

@@ -26,11 +26,15 @@ export const mockChosenSuggestions = jest
   .mockImplementationOnce(callback => callback("failure"))
   .mockImplementationOnce(callback => callback());
 
+export const mockSetContext = jest.fn();
+
 const emit = jest.fn().mockImplementation((channel, data, callback) => {
   if (channel === "suggestions") {
     mockSuggestions(data, callback);
   } else if (channel === "chosen-suggestions") {
     return mockChosenSuggestions(callback);
+  } else if (channel === "set-context") {
+    mockSetContext(data);
   }
 });
 const mockIo = jest.fn().mockReturnValue({
