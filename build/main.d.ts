@@ -13,14 +13,14 @@ export default class PointApi {
     /** Email address of Point user */
     readonly emailAddress: string;
     /** API key of Point client */
-    readonly apiKey: string;
+    readonly authCode: string;
     /** @private SocketIO instance used to interact with Point API */
     private socket;
     /**
      * @param  emailAddress Email address of Point user
-     * @param  apiKey API key of Point client
+     * @param  authCode API key of Point client
      */
-    constructor(emailAddress: string, apiKey: string);
+    constructor(emailAddress: string, authCode: string);
     /**
      *  Query PointApi with seed text to get predicted suggestions
      * @param seedText The text to base suggestion predictions off of

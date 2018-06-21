@@ -7,21 +7,19 @@ const io = require("socket.io-client");
 class PointApi {
     /**
      * @param  emailAddress Email address of Point user
-     * @param  apiKey API key of Point client
+     * @param  authCode API key of Point client
      */
-    constructor(emailAddress, apiKey) {
+    constructor(emailAddress, authCode) {
         this.emailAddress = emailAddress;
-        this.apiKey = apiKey;
-        this.socket = io(
-        // "http://ec2-34-220-119-185.us-west-2.compute.amazonaws.com",
-        "localhost:5000", {
+        this.authCode = authCode;
+        this.socket = io("dev-api-autocomplete-docker2.n3sazrwma3.us-west-2.elasticbeanstalk.com", {
             query: {
-                emailAddress: "przxmek@gmail.com"
+                emailAddress: this.emailAddress
             },
             transportOptions: {
                 polling: {
                     extraHeaders: {
-                        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MjkzNjIwNTgsIm5iZiI6MTUyOTM2MjA1OCwiZXhwIjoxNTI5MzY1NjU4LCJzdWIiOnsidXNlci5pZCI6MiwiZW1haWwiOiJwcnp4bWVrQGdtYWlsLmNvbSIsImtleV9pZCI6MX19.XBI_cuabfTpfA9UKLglPY9KYF18VIGI_Iqeiz8sIFSk"
+                        Authorization: "Bearer " + this.authCode
                     }
                 }
             }
