@@ -89,8 +89,8 @@ export default class PointApi {
     this.socket.emit(
       "chosen-suggestions",
       { seedText, displayedSuggestions, chosenSuggestion, currentContext },
-      (response: string) => {
-        if (!response || response !== "success") {
+      (response: { timestamp: string; status: string }) => {
+        if (!response || response.status !== "success") {
           throw new Error("Could not recore chosen suggestion");
         }
       }

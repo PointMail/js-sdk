@@ -22,8 +22,12 @@ export const mockSuggestions = jest
 
 export const mockChosenSuggestions = jest
   .fn()
-  .mockImplementationOnce(callback => callback("success"))
-  .mockImplementationOnce(callback => callback("failure"))
+  .mockImplementationOnce(callback =>
+    callback({ timestamp: "foo", status: "success" })
+  )
+  .mockImplementationOnce(callback =>
+    callback({ timestamp: "foo", status: "failure" })
+  )
   .mockImplementationOnce(callback => callback());
 
 export const mockSetContext = jest.fn();
