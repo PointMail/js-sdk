@@ -21,29 +21,27 @@ export default class PointApi {
   /** Email address of Point user */
   public readonly emailAddress: string;
   /** API key of Point client */
-  public readonly apiKey: string;
+  public readonly authCode: string;
   /** @private SocketIO instance used to interact with Point API */
   private socket: SocketIOClient.Socket;
 
   /**
    * @param  emailAddress Email address of Point user
-   * @param  apiKey API key of Point client
+   * @param  authCode API key of Point client
    */
-  constructor(emailAddress: string, apiKey: string) {
+  constructor(emailAddress: string, authCode: string) {
     this.emailAddress = emailAddress;
-    this.apiKey = apiKey;
+    this.authCode = authCode;
     this.socket = io(
-      // "http://ec2-34-220-119-185.us-west-2.compute.amazonaws.com",
-      "localhost:5000",
+      "dev-api-autocomplete-docker2.n3sazrwma3.us-west-2.elasticbeanstalk.com",
       {
         query: {
-          emailAddress: "przxmek@gmail.com"
+          emailAddress: this.emailAddress
         },
         transportOptions: {
           polling: {
             extraHeaders: {
-              Authorization:
-                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MjkzNjIwNTgsIm5iZiI6MTUyOTM2MjA1OCwiZXhwIjoxNTI5MzY1NjU4LCJzdWIiOnsidXNlci5pZCI6MiwiZW1haWwiOiJwcnp4bWVrQGdtYWlsLmNvbSIsImtleV9pZCI6MX19.XBI_cuabfTpfA9UKLglPY9KYF18VIGI_Iqeiz8sIFSk"
+              Authorization: "Bearer " + this.authCode
             }
           }
         }
