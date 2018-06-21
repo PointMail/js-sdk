@@ -56,7 +56,7 @@ class PointApi {
      */
     async reportChosenSuggestion(seedText, displayedSuggestions, chosenSuggestion, currentContext) {
         this.socket.emit("chosen-suggestions", { seedText, displayedSuggestions, chosenSuggestion, currentContext }, (response) => {
-            if (!response || response !== "success") {
+            if (!response || response.status !== "success") {
                 throw new Error("Could not recore chosen suggestion");
             }
         });
@@ -64,7 +64,7 @@ class PointApi {
     /**
      *  Set the context of the autocomplete session
      */
-    setContext(pastContext, contextType) {
+    async setContext(pastContext, contextType) {
         this.socket.emit("set-context", { pastContext, contextType });
     }
 }
