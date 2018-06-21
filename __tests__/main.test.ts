@@ -3,20 +3,21 @@ import {
   suggestions,
   testResponse,
   mockChosenSuggestions,
-  mockSuggestions
+  mockSuggestions,
+  mockSetContext
 } from "../__mocks__/socket-mock";
 const { response } = testResponse;
 const emailAddress = "aiansiti@college.harvard.edu";
-const apiKey = "apikey1234";
+const authCode = "authcode1234";
 jest.mock(
   "socket.io-client",
   () => require.requireActual("../__mocks__/socket-mock").default
 );
-const api = new PointApi(emailAddress, apiKey);
+const api = new PointApi(emailAddress, authCode);
 
 test("Inits PointApi object correctly", () => {
   expect(api.emailAddress).toEqual(emailAddress);
-  expect(api.apiKey).toEqual(apiKey);
+  expect(api.authCode).toEqual(authCode);
 });
 describe("Query suggestions", () => {
   test("Returns results correctly", async () => {
@@ -43,16 +44,20 @@ describe("Query suggestions", () => {
 });
 
 test("Chosen suggestions tracking", async () => {
-  expect(
-    api.reportChosenSuggestion(null, suggestions, suggestions[2], "")
-  ).rejects.toThrow();
-  expect(
+  await expect(
     api.reportChosenSuggestion("hello", suggestions, suggestions[2], "")
   ).resolves.toBeUndefined();
-  expect(
+  expect(mockChosenSuggestions).toBeCalled();
+  await expect(
     api.reportChosenSuggestion("hello", suggestions, suggestions[2], "")
   ).rejects.toThrow();
-  expect(
+  await expect(
     api.reportChosenSuggestion("hello", suggestions, suggestions[2], "")
   ).rejects.toThrow();
+});
+
+test("Set Context", async () => {
+  const context = { pastContext: "hello", contextType: "gmail" };
+  await api.setContext(context.pastContext, context.contextType);
+  expect(mockSetContext).toBeCalledWith(context);
 });

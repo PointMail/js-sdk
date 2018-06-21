@@ -7,21 +7,19 @@ const io = require("socket.io-client");
 class PointApi {
     /**
      * @param  emailAddress Email address of Point user
-     * @param  apiKey API key of Point client
+     * @param  authCode API key of Point client
      */
-    constructor(emailAddress, apiKey) {
+    constructor(emailAddress, authCode) {
         this.emailAddress = emailAddress;
-        this.apiKey = apiKey;
-        this.socket = io(
-        // "http://ec2-34-220-119-185.us-west-2.compute.amazonaws.com",
-        "localhost:5000", {
+        this.authCode = authCode;
+        this.socket = io("dev-api-autocomplete-docker2.n3sazrwma3.us-west-2.elasticbeanstalk.com", {
             query: {
-                emailAddress: "przxmek@gmail.com"
+                emailAddress: this.emailAddress
             },
             transportOptions: {
                 polling: {
                     extraHeaders: {
-                        Authorization: "Basic " + this.apiKey
+                        Authorization: "Bearer " + this.authCode
                     }
                 }
             }
@@ -39,7 +37,7 @@ class PointApi {
             const trimmedText = seedText.trim();
             if (!trimmedText)
                 resolve(null);
-            this.socket.emit("suggestions", { seedText: trimmedText, messageId: "15569f2b0198e387" }, (response) => {
+            this.socket.emit("suggestions", { seedText: trimmedText }, (response) => {
                 if (!response) {
                     resolve(null);
                 }
@@ -55,14 +53,17 @@ class PointApi {
      *  Tell the PointApi what suggestion was chosen to improve its model
      */
     async reportChosenSuggestion(seedText, displayedSuggestions, chosenSuggestion, currentContext) {
-        if (!seedText) {
-            throw new Error("Must provide seed text if reporting chosen suggestion");
-        }
         this.socket.emit("chosen-suggestions", { seedText, displayedSuggestions, chosenSuggestion, currentContext }, (response) => {
-            if (!response || response !== "success") {
+            if (!response || response.status !== "success") {
                 throw new Error("Could not recore chosen suggestion");
             }
         });
+    }
+    /**
+     *  Set the context of the autocomplete session
+     */
+    async setContext(pastContext, contextType) {
+        this.socket.emit("set-context", { pastContext, contextType });
     }
 }
 exports.default = PointApi;

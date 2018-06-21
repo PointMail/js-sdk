@@ -21,28 +21,27 @@ export default class PointApi {
   /** Email address of Point user */
   public readonly emailAddress: string;
   /** API key of Point client */
-  public readonly apiKey: string;
+  public readonly authCode: string;
   /** @private SocketIO instance used to interact with Point API */
   private socket: SocketIOClient.Socket;
 
   /**
    * @param  emailAddress Email address of Point user
-   * @param  apiKey API key of Point client
+   * @param  authCode API key of Point client
    */
-  constructor(emailAddress: string, apiKey: string) {
+  constructor(emailAddress: string, authCode: string) {
     this.emailAddress = emailAddress;
-    this.apiKey = apiKey;
+    this.authCode = authCode;
     this.socket = io(
-      // "http://ec2-34-220-119-185.us-west-2.compute.amazonaws.com",
-      "localhost:5000",
+      "dev-api-autocomplete-docker2.n3sazrwma3.us-west-2.elasticbeanstalk.com",
       {
         query: {
-          emailAddress: "przxmek@gmail.com"
+          emailAddress: this.emailAddress
         },
         transportOptions: {
           polling: {
             extraHeaders: {
-              Authorization: "Basic " + this.apiKey
+              Authorization: "Bearer " + this.authCode
             }
           }
         }
@@ -61,7 +60,7 @@ export default class PointApi {
       if (!trimmedText) resolve(null);
       this.socket.emit(
         "suggestions",
-        { seedText: trimmedText, messageId: "15569f2b0198e387" },
+        { seedText: trimmedText },
         (response: SocketResponse) => {
           if (!response) {
             resolve(null);
@@ -80,22 +79,28 @@ export default class PointApi {
    *  Tell the PointApi what suggestion was chosen to improve its model
    */
   public async reportChosenSuggestion(
-    seedText: string | null,
+    seedText: string,
     displayedSuggestions: SuggestionMeta[],
     chosenSuggestion: SuggestionMeta,
     currentContext: string
   ): Promise<void> {
-    if (!seedText) {
-      throw new Error("Must provide seed text if reporting chosen suggestion");
-    }
     this.socket.emit(
       "chosen-suggestions",
       { seedText, displayedSuggestions, chosenSuggestion, currentContext },
-      (response: string) => {
-        if (!response || response !== "success") {
+      (response: { timestamp: string; status: string }) => {
+        if (!response || response.status !== "success") {
           throw new Error("Could not recore chosen suggestion");
         }
       }
     );
+  }
+  /**
+   *  Set the context of the autocomplete session
+   */
+  public async setContext(
+    pastContext: string,
+    contextType: string
+  ): Promise<void> {
+    this.socket.emit("set-context", { pastContext, contextType });
   }
 }
