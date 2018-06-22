@@ -53,14 +53,17 @@ export default class PointApi {
    * @param seedText The text to base suggestion predictions off of
    * @returns A list of the predicted suggestion objects
    */
-  public searchSuggestions(seedText: string): Promise<SuggestionMeta[] | null> {
+  public searchSuggestions(
+    seedText: string,
+    currentContext?: string
+  ): Promise<SuggestionMeta[] | null> {
     return new Promise(resolve => {
       if (!seedText) resolve(null);
       const trimmedText = seedText.trim();
       if (!trimmedText) resolve(null);
       this.socket.emit(
         "suggestions",
-        { seedText: trimmedText },
+        { seedText: trimmedText, currentContext },
         (response: SocketResponse) => {
           if (!response) {
             resolve(null);
