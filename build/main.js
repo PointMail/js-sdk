@@ -30,14 +30,14 @@ class PointApi {
      * @param seedText The text to base suggestion predictions off of
      * @returns A list of the predicted suggestion objects
      */
-    searchSuggestions(seedText) {
+    searchSuggestions(seedText, currentContext) {
         return new Promise(resolve => {
             if (!seedText)
                 resolve(null);
             const trimmedText = seedText.trim();
             if (!trimmedText)
                 resolve(null);
-            this.socket.emit("suggestions", { seedText: trimmedText }, (response) => {
+            this.socket.emit("suggestions", { seedText: trimmedText, currentContext }, (response) => {
                 if (!response) {
                     resolve(null);
                 }
