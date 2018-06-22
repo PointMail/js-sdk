@@ -9,4 +9,3 @@ cache:
 notifications:
    slack:
      easyemail:Sjvqcwm25jFhXxEdZirCDqRk
-     on_pull_requests: false
