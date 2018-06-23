@@ -33,7 +33,7 @@ export default class PointApi {
     this.emailAddress = emailAddress;
     this.authCode = authCode;
     this.socket = io(
-      "dev-api-autocomplete-docker2.n3sazrwma3.us-west-2.elasticbeanstalk.com",
+      "http://api-autocomplete-green.us-west-2.elasticbeanstalk.com/",
       {
         query: {
           emailAddress: this.emailAddress
