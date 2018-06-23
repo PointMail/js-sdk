@@ -12,7 +12,7 @@ class PointApi {
     constructor(emailAddress, authCode) {
         this.emailAddress = emailAddress;
         this.authCode = authCode;
-        this.socket = io("dev-api-autocomplete-docker2.n3sazrwma3.us-west-2.elasticbeanstalk.com", {
+        this.socket = io("http://api-autocomplete-green.us-west-2.elasticbeanstalk.com/", {
             query: {
                 emailAddress: this.emailAddress
             },
