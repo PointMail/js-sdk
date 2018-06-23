@@ -26,7 +26,7 @@ export default class PointApi {
      * @param seedText The text to base suggestion predictions off of
      * @returns A list of the predicted suggestion objects
      */
-    searchSuggestions(seedText: string): Promise<SuggestionMeta[] | null>;
+    searchSuggestions(seedText: string, currentContext?: string): Promise<SuggestionMeta[] | null>;
     /**
      *  Tell the PointApi what suggestion was chosen to improve its model
      */
