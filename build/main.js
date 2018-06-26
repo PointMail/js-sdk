@@ -19,7 +19,6 @@ class PointApi {
                 emailAddress: this.emailAddress,
                 keywordSearch
             },
-            transports: ["polling"],
             transportOptions: {
                 polling: {
                     extraHeaders: {
