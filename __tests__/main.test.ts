@@ -13,6 +13,7 @@ jest.mock(
   "socket.io-client",
   () => require.requireActual("../__mocks__/socket-mock").default
 );
+process.env.REACT_APP_BASE_URI = "localhost:5000";
 const api = new PointApi(emailAddress, authCode);
 
 test("Inits PointApi object correctly", () => {
