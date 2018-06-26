@@ -12,7 +12,9 @@ class PointApi {
     constructor(emailAddress, authCode) {
         this.emailAddress = emailAddress;
         this.authCode = authCode;
-        this.socket = io("http://api-autocomplete-green.us-west-2.elasticbeanstalk.com/", {
+        if (!process.env.REACT_APP_BASE_URI)
+            throw new Error("Base URI not set!");
+        this.socket = io(process.env.REACT_APP_BASE_URI, {
             query: {
                 emailAddress: this.emailAddress
             },
