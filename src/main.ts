@@ -29,13 +29,14 @@ export default class PointApi {
    * @param  emailAddress Email address of Point user
    * @param  authCode API key of Point client
    */
-  constructor(emailAddress: string, authCode: string) {
+  constructor(emailAddress: string, authCode: string, keywordSearch = false) {
     this.emailAddress = emailAddress;
     this.authCode = authCode;
     if (!process.env.REACT_APP_BASE_URI) throw new Error("Base URI not set!");
     this.socket = io(process.env.REACT_APP_BASE_URI, {
       query: {
-        emailAddress: this.emailAddress
+        emailAddress: this.emailAddress,
+        keywordSearch
       },
       transportOptions: {
         polling: {
