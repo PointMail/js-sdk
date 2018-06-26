@@ -32,21 +32,19 @@ export default class PointApi {
   constructor(emailAddress: string, authCode: string) {
     this.emailAddress = emailAddress;
     this.authCode = authCode;
-    this.socket = io(
-      "http://api-autocomplete-green.us-west-2.elasticbeanstalk.com/",
-      {
-        query: {
-          emailAddress: this.emailAddress
-        },
-        transportOptions: {
-          polling: {
-            extraHeaders: {
-              Authorization: "Bearer " + this.authCode
-            }
+    if (!process.env.REACT_APP_BASE_URI) throw new Error("Base URI not set!");
+    this.socket = io(process.env.REACT_APP_BASE_URI, {
+      query: {
+        emailAddress: this.emailAddress
+      },
+      transportOptions: {
+        polling: {
+          extraHeaders: {
+            Authorization: "Bearer " + this.authCode
           }
         }
       }
-    );
+    });
   }
   /**
    *  Query PointApi with seed text to get predicted suggestions
