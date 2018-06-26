@@ -20,7 +20,7 @@ export default class PointApi {
      * @param  emailAddress Email address of Point user
      * @param  authCode API key of Point client
      */
-    constructor(emailAddress: string, authCode: string);
+    constructor(emailAddress: string, authCode: string, keywordSearch?: boolean);
     /**
      *  Query PointApi with seed text to get predicted suggestions
      * @param seedText The text to base suggestion predictions off of
