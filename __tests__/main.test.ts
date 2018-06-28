@@ -59,6 +59,8 @@ test("Chosen suggestions tracking", async () => {
 
 test("Set Context", async () => {
   const context = { pastContext: "hello", contextType: "gmail" };
-  await api.setContext(context.pastContext, context.contextType);
-  expect(mockSetContext).toBeCalledWith(context);
+  await expect(
+    api.setContext(context.pastContext, context.contextType)
+  ).resolves.toEqual("success");
+  expect(mockSetContext).toBeCalled();
 });

@@ -30,7 +30,11 @@ export const mockChosenSuggestions = jest
   )
   .mockImplementationOnce(callback => callback());
 
-export const mockSetContext = jest.fn();
+export const mockSetContext = jest
+  .fn()
+  .mockImplementationOnce(callback =>
+    callback({ timestamp: "foo", status: "success" })
+  );
 
 const emit = jest.fn().mockImplementation((channel, data, callback) => {
   if (channel === "suggestions") {
@@ -38,7 +42,7 @@ const emit = jest.fn().mockImplementation((channel, data, callback) => {
   } else if (channel === "chosen-suggestions") {
     return mockChosenSuggestions(callback);
   } else if (channel === "set-context") {
-    mockSetContext(data);
+    mockSetContext(callback);
   }
 });
 const mockIo = jest.fn().mockReturnValue({
