@@ -34,5 +34,5 @@ export default class PointApi {
     /**
      *  Set the context of the autocomplete session
      */
-    setContext(pastContext: string, contextType: string): Promise<void>;
+    setContext(pastContext: string, contextType: string): Promise<string>;
 }

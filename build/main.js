@@ -65,8 +65,12 @@ class PointApi {
     /**
      *  Set the context of the autocomplete session
      */
-    async setContext(pastContext, contextType) {
-        this.socket.emit("set-context", { pastContext, contextType });
+    setContext(pastContext, contextType) {
+        return new Promise(resolve => {
+            this.socket.emit("set-context", { pastContext, contextType }, (response) => {
+                resolve(response.status);
+            });
+        });
     }
 }
 exports.default = PointApi;
