@@ -10,9 +10,26 @@
 * You're done! (`npm test` should pass all tests)
 
 ## Usage:
+To use the Point API, you must first use your API key to retrieve a valid auth code.
+_Make sure to substitute your API_KEY and your user's EMAIL_ADDRESS_
+
+```js
+// Request an auth code from the Point API /auth endpoint
+const response = await fetch("v1.pointapi.com/auth?emailAddress=<EMAIL_ADDRESS>", {
+  headers: {
+    Authorization: "Basic <API_KEY>"
+  },
+  method: "POST"
+});
+// returns {"jwt":"<AUTH_CODE>"}
+
+// Parse the json response and extract the JWT into a variable
+const authCode = (await response.json()).jwt
+```
+
 To query suggestions given some seed text:
 ```js
-const api = new PointApi("<user_email>", "<auth_code>");
+const api = new PointApi("<EMAIL_ADDRESS>", "<AUTH_CODE>");
 // A websockets connection is automatically established on api init
 
 api.searchSuggestions("Hey");
@@ -23,9 +40,7 @@ api.setContext("Hey Alex, when can you send me the slide deck?", "plaintext");
 api.searchSuggestions("i can");
 // {{suggestion: "I can get it to you this afternoon.", ...}}
 
-```
-*A reference autocomplete dropdown implementation can be found [here](https://github.com/PointMail/point-dropdown-react)*  
-  
+```  
   
 You can also help us train our models by reporting a user's chosen suggestions ([Reference](#reportchosensuggestion))
 ```js
@@ -84,7 +99,7 @@ ___
 
 **● apiKey**: *`string`*
 
-Auth Code key of Point client
+Api key of Point client
 
 ___
 <a id="emailaddress"></a>
