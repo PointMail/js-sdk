@@ -32,7 +32,7 @@ export default class PointApi {
   constructor(emailAddress: string, authCode: string, keywordSearch = false) {
     this.emailAddress = emailAddress;
     this.authCode = authCode;
-    this.socket = io("v1.pointapi.com", {
+    this.socket = io("https://v1.pointapi.com", {
       query: {
         emailAddress: this.emailAddress,
         keywordSearch
