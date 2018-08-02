@@ -1,0 +1,47 @@
+{
+  "name": "point-api",
+  "version": "1.0.0",
+  "description": "Javascript API for Point autocomplete",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc",
+    "gen-docs": "typedoc --out docs src --theme markdown"
+  },
+  "author": "Alex Iansiti <alex@easyemail.ai>",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^23.0.0",
+    "envify": "^4.1.0",
+    "jest": "^23.0.1",
+    "ts-jest": "^22.4.6",
+    "tslint": "^5.10.0",
+    "tslint-config-prettier": "^1.13.0",
+    "typedoc": "^0.11.1",
+    "typedoc-plugin-markdown": "^1.1.13",
+    "typescript": "^2.9.1"
+  },
+  "dependencies": {
+    "socket.io-client": "^2.1.1",
+    "@types/socket.io-client": "^1.4.32"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.json"
+      }
+    },
+    "testMatch": [
+      "**/__tests__/*.+(ts|tsx|js)"
+    ]
+  }
+}
