@@ -1,13 +1,8 @@
-# ✍ Point AutoSuggest JS API
-> The Point AutoSuggest package provides an easy client and serverside frontend for the Point API
+# ✍ Point API Javascript SDK
+> The Point API SDK provides an easy client and serverside interface for the Point API
 
 ## Setup:
-
-* Clone repo
-* `cd point-api`
-* `npm install` 
-* For development, you might need to `npm link` too so you can access the package from other projects
-* You're done! (`npm test` should pass all tests)
+`npm install @point-api/js-sdk`
 
 ## Usage:
 To use the Point API, you must first use your API key to retrieve a valid auth code.
