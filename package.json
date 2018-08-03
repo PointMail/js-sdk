@@ -1,10 +1,10 @@
 {
   "name": "@point-api/js-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Javascript SDK for Point API",
-  "repository": "github:PointMail/point-api",
+  "repository": "github:PointMail/js-sdk",
   "homepage": "https://docs.pointapi.com",
-  "bugs": "https://github.com/PointMail/point-api/issues",
+  "bugs": "https://github.com/PointMail/js-sdk/issues",
   "keywords": [
     "Point API",
     "Point",
