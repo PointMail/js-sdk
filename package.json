@@ -1,16 +1,28 @@
 {
-  "name": "point-api",
+  "name": "@point-api/js-sdk",
   "version": "1.0.0",
-  "description": "Javascript API for Point autocomplete",
+  "description": "Javascript SDK for Point API",
+  "repository": "github:PointMail/point-api",
+  "homepage": "https://docs.pointapi.com",
+  "bugs": "https://github.com/PointMail/point-api/issues",
+  "keywords": [
+    "Point API",
+    "Point",
+    "autocomplete",
+    "completion"
+  ],
   "main": "build/index.js",
   "types": "build/index.d.ts",
+  "files": [
+    "build"
+  ],
   "scripts": {
     "test": "jest",
     "build": "tsc",
     "gen-docs": "typedoc --out docs src --theme markdown"
   },
-  "author": "Alex Iansiti <alex@easyemail.ai>",
-  "license": "ISC",
+  "author": "Alex Iansiti <alex@pointapi.com>",
+  "license": "MIT",
   "devDependencies": {
     "@types/jest": "^23.0.0",
     "envify": "^4.1.0",
@@ -20,11 +32,11 @@
     "tslint-config-prettier": "^1.13.0",
     "typedoc": "^0.11.1",
     "typedoc-plugin-markdown": "^1.1.13",
-    "typescript": "^2.9.1"
+    "typescript": "^2.9.1",
+    "@types/socket.io-client": "^1.4.32"
   },
   "dependencies": {
-    "socket.io-client": "^2.1.1",
-    "@types/socket.io-client": "^1.4.32"
+    "socket.io-client": "^2.1.1"
   },
   "jest": {
     "moduleFileExtensions": [
