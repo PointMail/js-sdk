@@ -1,7 +1,7 @@
 # ✍ Point API Javascript SDK
 > The Point API SDK provides an easy client and serverside interface for the Point API
 
-![npm](https://img.shields.io/npm/l/@point-api/js-sdk.svg) [![Build Status](https://travis-ci.com/PointMail/js-sdk.svg?branch=master)](https://travis-ci.com/PointMail/js-sdk)  
+[![npm](https://img.shields.io/npm/l/@point-api/js-sdk.svg)(https://www.npmjs.com/package/@point-api/js-sdk)] [![Build Status](https://travis-ci.com/PointMail/js-sdk.svg?branch=master)](https://travis-ci.com/PointMail/js-sdk)  
 [![forthebadge](https://forthebadge.com/images/badges/fo-shizzle.svg)](https://forthebadge.com)
 
 ## Setup:
