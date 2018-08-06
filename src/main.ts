@@ -56,10 +56,9 @@ export default class PointApi {
     currentContext?: string
   ): Promise<SuggestionMeta[] | null> {
     return new Promise(resolve => {
-      const trimmedText = seedText.trim();
       this.socket.emit(
         "suggestions",
-        { seedText: trimmedText, currentContext },
+        { seedText: seedText.trim(), currentContext },
         (response: SocketResponse) => {
           if (!response) {
             resolve(null);
