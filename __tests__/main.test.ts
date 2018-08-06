@@ -30,9 +30,9 @@ describe("Query suggestions", () => {
       seedText
     );
   });
-  test("Bad queries", async () => {
-    expect(await api.searchSuggestions("")).toBeNull();
-    expect(await api.searchSuggestions("      ")).toBeNull();
+  test("Returns Smart Reply suggestions", async () => {
+    expect(await api.searchSuggestions("")).toHaveLength(3);
+    expect(await api.searchSuggestions("      ")).toHaveLength(3);
   });
   test("Bad responses", async () => {
     response.suggestions = [];
@@ -57,7 +57,7 @@ test("Chosen suggestions tracking", async () => {
   ).rejects.toThrow();
 });
 
-test("Set Context", async () => {
+test("Set Gmail Context", async () => {
   const context = { pastContext: "hello", contextType: "gmail" };
   await expect(
     api.setContext(context.pastContext, context.contextType)
