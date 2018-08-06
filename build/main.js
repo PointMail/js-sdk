@@ -33,11 +33,7 @@ class PointApi {
      */
     searchSuggestions(seedText, currentContext) {
         return new Promise(resolve => {
-            if (!seedText)
-                resolve(null);
             const trimmedText = seedText.trim();
-            if (!trimmedText)
-                resolve(null);
             this.socket.emit("suggestions", { seedText: trimmedText, currentContext }, (response) => {
                 if (!response) {
                     resolve(null);
