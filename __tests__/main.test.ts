@@ -4,9 +4,10 @@ import {
   testResponse,
   mockChosenSuggestions,
   mockSuggestions,
-  mockSetContext
+  mockSetContext,
+  mockReplies
 } from "../__mocks__/socket-mock";
-const { response } = testResponse;
+const { suggestionsResponse } = testResponse;
 const emailAddress = "aiansiti@college.harvard.edu";
 const authCode = "authcode1234";
 jest.mock(
@@ -30,16 +31,12 @@ describe("Query suggestions", () => {
       seedText
     );
   });
-  test("Returns Smart Reply suggestions", async () => {
-    expect(await api.searchSuggestions("")).toHaveLength(3);
-    expect(await api.searchSuggestions("      ")).toHaveLength(3);
-  });
   test("Bad responses", async () => {
-    response.suggestions = [];
+    suggestionsResponse.suggestions = [];
     expect(await api.searchSuggestions("hello")).toBeNull();
-    response.suggestions = null;
+    suggestionsResponse.suggestions = null;
     expect(await api.searchSuggestions("hello")).toBeNull();
-    delete testResponse.response;
+    delete testResponse.suggestionsResponse;
     expect(await api.searchSuggestions("hello")).toBeNull();
   });
 });
@@ -63,4 +60,12 @@ test("Set Gmail Context", async () => {
     api.setContext(context.pastContext, context.contextType)
   ).resolves.toEqual("success");
   expect(mockSetContext).toBeCalled();
+});
+
+test("Get replies", async () => {
+  const context = { pastContext: "hello", contextType: "text" };
+  await expect(
+    api.getReplies(context.pastContext, context.contextType)
+  ).resolves.toHaveLength(3);
+  expect(mockReplies).toBeCalled();
 });

@@ -8,10 +8,15 @@ export interface SuggestionMeta {
   type: string;
 }
 
-interface SocketResponse {
+interface SuggestionsResponse {
   suggestions: SuggestionMeta[];
   seedText: string;
-  messageId: string;
+  timestamp: number;
+}
+
+interface RepliesResponse {
+  replies: SuggestionMeta[];
+  timestamp: number;
 }
 
 /**
@@ -59,7 +64,7 @@ export default class PointApi {
       this.socket.emit(
         "suggestions",
         { seedText: seedText.trim(), currentContext },
-        (response: SocketResponse) => {
+        (response: SuggestionsResponse) => {
           if (!response) {
             resolve(null);
           }
@@ -102,6 +107,30 @@ export default class PointApi {
         { pastContext, contextType },
         (response: { timestamp: string; status: string }) => {
           resolve(response.status);
+        }
+      );
+    });
+  }
+  /**
+   *  Get reply suggestions given some recieved text
+   */
+  public getReplies(
+    pastContext: string,
+    contextType: string
+  ): Promise<SuggestionMeta[] | null> {
+    return new Promise(resolve => {
+      this.socket.emit(
+        "replies",
+        { pastContext, contextType },
+        (response: RepliesResponse) => {
+          if (!response) {
+            resolve(null);
+          }
+          const { replies } = response;
+          if (!replies || !replies.length) {
+            resolve(null);
+          }
+          resolve(replies);
         }
       );
     });
