@@ -8,6 +8,15 @@ export interface SuggestionMeta {
   type: string;
 }
 
+/**
+ * Reply metadata
+ */
+export interface ReplyMeta {
+  prompt: string;
+  replies: string[];
+  type: string;
+}
+
 interface SuggestionsResponse {
   suggestions: SuggestionMeta[];
   seedText: string;
@@ -15,7 +24,7 @@ interface SuggestionsResponse {
 }
 
 interface RepliesResponse {
-  replies: SuggestionMeta[];
+  replies: ReplyMeta[];
   timestamp: number;
 }
 
@@ -117,7 +126,7 @@ export default class PointApi {
   public getReplies(
     pastContext: string,
     contextType: string
-  ): Promise<SuggestionMeta[] | null> {
+  ): Promise<ReplyMeta[] | null> {
     return new Promise(resolve => {
       this.socket.emit(
         "replies",

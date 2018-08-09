@@ -8,6 +8,18 @@ export const suggestions = [
   { userAdded: false, suggestion: "Hello, my name jeff", type: "suggestion" }
 ];
 
+export const replies = [
+  {
+    prompt: "what is your phone number?",
+    replies: [
+      "My phone number is PHONE_NUMBER.",
+      "You can reach me at PHONE_NUMBER.",
+      "The best number to reach me at is PHONE_NUMBER."
+    ],
+    type: "phoneNumber"
+  }
+];
+
 export const testResponse = {
   suggestionsResponse: {
     suggestions,
@@ -15,7 +27,7 @@ export const testResponse = {
     timestamp: null
   },
   repliesResponse: {
-    replies: suggestions,
+    replies,
     timestamp: null
   }
 };

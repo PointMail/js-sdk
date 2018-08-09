@@ -5,7 +5,8 @@ import {
   mockChosenSuggestions,
   mockSuggestions,
   mockSetContext,
-  mockReplies
+  mockReplies,
+  replies
 } from "../__mocks__/socket-mock";
 const { suggestionsResponse } = testResponse;
 const emailAddress = "aiansiti@college.harvard.edu";
@@ -66,6 +67,6 @@ test("Get replies", async () => {
   const context = { pastContext: "hello", contextType: "text" };
   await expect(
     api.getReplies(context.pastContext, context.contextType)
-  ).resolves.toHaveLength(3);
+  ).resolves.toHaveLength(replies.length);
   expect(mockReplies).toBeCalled();
 });
