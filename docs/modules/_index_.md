@@ -1,4 +1,4 @@
-[point-api](../README.md) > ["index"](../modules/_index_.md)
+[@point-api/js-sdk](../README.md) > ["index"](../modules/_index_.md)
 
 # External module: "index"
 

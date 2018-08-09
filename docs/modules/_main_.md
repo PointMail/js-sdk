@@ -1,4 +1,4 @@
-[point-api](../README.md) > ["main"](../modules/_main_.md)
+[@point-api/js-sdk](../README.md) > ["main"](../modules/_main_.md)
 
 # External module: "main"
 
@@ -10,8 +10,10 @@
 
 ### Interfaces
 
-* [SocketResponse](../interfaces/_main_.socketresponse.md)
+* [RepliesResponse](../interfaces/_main_.repliesresponse.md)
+* [ReplyMeta](../interfaces/_main_.replymeta.md)
 * [SuggestionMeta](../interfaces/_main_.suggestionmeta.md)
+* [SuggestionsResponse](../interfaces/_main_.suggestionsresponse.md)
 
 ---
 
