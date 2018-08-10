@@ -12,7 +12,7 @@ class PointApi {
     constructor(emailAddress, authCode, keywordSearch = false) {
         this.emailAddress = emailAddress;
         this.authCode = authCode;
-        this.socket = io("localhost:5000", {
+        this.socket = io("https://v1.pointapi.com", {
             query: {
                 emailAddress: this.emailAddress,
                 keywordSearch
