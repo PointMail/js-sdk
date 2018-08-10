@@ -7,6 +7,14 @@ export interface SuggestionMeta {
     type: string;
 }
 /**
+ * Reply metadata
+ */
+export interface ReplyMeta {
+    prompt: string;
+    replies: string[];
+    type: string;
+}
+/**
  * Point Websockets Api Instance
  */
 export default class PointApi {
@@ -35,4 +43,8 @@ export default class PointApi {
      *  Set the context of the autocomplete session
      */
     setContext(pastContext: string, contextType: string): Promise<string>;
+    /**
+     *  Get reply suggestions given some recieved text
+     */
+    getReplies(pastContext: string, contextType: string): Promise<ReplyMeta[] | null>;
 }

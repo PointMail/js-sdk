@@ -12,7 +12,7 @@ class PointApi {
     constructor(emailAddress, authCode, keywordSearch = false) {
         this.emailAddress = emailAddress;
         this.authCode = authCode;
-        this.socket = io("https://v1.pointapi.com", {
+        this.socket = io("localhost:5000", {
             query: {
                 emailAddress: this.emailAddress,
                 keywordSearch
@@ -62,6 +62,23 @@ class PointApi {
         return new Promise(resolve => {
             this.socket.emit("set-context", { pastContext, contextType }, (response) => {
                 resolve(response.status);
+            });
+        });
+    }
+    /**
+     *  Get reply suggestions given some recieved text
+     */
+    getReplies(pastContext, contextType) {
+        return new Promise(resolve => {
+            this.socket.emit("reply", { pastContext, contextType }, (response) => {
+                if (!response) {
+                    resolve(null);
+                }
+                const { replies } = response;
+                if (!replies || !replies.length) {
+                    resolve(null);
+                }
+                resolve(replies);
             });
         });
     }

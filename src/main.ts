@@ -20,12 +20,12 @@ export interface ReplyMeta {
 interface SuggestionsResponse {
   suggestions: SuggestionMeta[];
   seedText: string;
-  timestamp: number;
+  timestamp: string;
 }
 
-interface RepliesResponse {
+interface ReplyResponse {
   replies: ReplyMeta[];
-  timestamp: number;
+  timestamp: string;
 }
 
 /**
@@ -129,9 +129,9 @@ export default class PointApi {
   ): Promise<ReplyMeta[] | null> {
     return new Promise(resolve => {
       this.socket.emit(
-        "replies",
+        "reply",
         { pastContext, contextType },
-        (response: RepliesResponse) => {
+        (response: ReplyResponse) => {
           if (!response) {
             resolve(null);
           }
