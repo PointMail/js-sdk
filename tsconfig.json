@@ -22,7 +22,8 @@
     "scripts",
     "acceptance-tests",
     "webpack",
-    "jest"
+    "jest",
+    "src/index-umd.ts"
   ],
   "include": ["src"]
 }
