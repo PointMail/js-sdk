@@ -1,4 +1,6 @@
-import * as io from "socket.io-client";
+import * as ioProxy from "socket.io-client";
+const io: SocketIOClientStatic = (ioProxy as any).default || ioProxy;
+
 /**
  * Suggestion metadata
  */
