@@ -67,7 +67,7 @@ const emit = jest.fn().mockImplementation((channel, data, callback) => {
     return mockChosenSuggestions(callback);
   } else if (channel === "set-context") {
     mockSetContext(callback);
-  } else if (channel === "replies") {
+  } else if (channel === "reply") {
     mockReplies(data, callback);
   }
 });

@@ -65,8 +65,7 @@ test("Set Gmail Context", async () => {
 
 test("Get replies", async () => {
   const context = { pastContext: "hello", contextType: "text" };
-  await expect(
-    api.getReplies(context.pastContext, context.contextType)
-  ).resolves.toHaveLength(replies.length);
+  const result = await api.getReplies(context.pastContext, context.contextType);
+  expect(result[0].replies).toHaveLength(3);
   expect(mockReplies).toBeCalled();
 });
