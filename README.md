@@ -38,6 +38,7 @@ const authCode = (await response.json()).jwt;
 
 Your client can start using the Point API once it has a valid auth code.
 
+#### `searchSuggestions`
 Use the `searchSuggestions` function to get a list of Autocomplete suggestions. You can pass in _seed text_ to filter for suggestions that include specific words:
 
 ```js
@@ -49,6 +50,7 @@ api.searchSuggestions((seedText = "I can"));
 // [{suggestion: "I can call you later today.", "type": "suggestion", "userAdded": false}, ...]
 ```
 
+#### `setContext`
 You can also set the _context_ to refine Autocomplete suggestions. The _context_ refers to a message that you're responding to, such as an email that you have received. Once the _context_ has been set, `searchSuggestions` may return an entirely different list of suggestions:
 
 ```js
@@ -61,6 +63,7 @@ api.searchSuggestions((seedText = "I can"));
 // [{suggestion: "I can get it to you this afternoon.", "type": "suggestion", "userAdded": false}, ...]
 ```
 
+#### `getReplies`
 Point API also provides Reply suggestions for responding to entire messages (currently in beta). Use the `getReplies` function to receive Reply suggestions. You can play around with this feature [here](https://jsfiddle.net/thesiti92/1v736cpt/6/).  
 _Note: this function will also set the past `context` for the whole session_
 
@@ -98,6 +101,7 @@ Example:
 ];
 ```
 
+#### `reportChosenSuggestion`
 You can also help us train our models by reporting suggestions that you have chosen ([Reference](#reportchosensuggestion))
 
 ```js
