@@ -1,3 +1,8 @@
-import PointApi, { SuggestionMeta, ReplyMeta } from "./main";
+import PointApi, {
+  SuggestionMeta,
+  ReplyMeta,
+  SuggestionsResponse,
+  ReplyResponse
+} from "./main";
 export default PointApi;
-export { SuggestionMeta, ReplyMeta };
+export { SuggestionMeta, ReplyMeta, SuggestionsResponse, ReplyResponse };

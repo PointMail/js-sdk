@@ -19,15 +19,15 @@ export interface ReplyMeta {
   type: string;
 }
 
-interface SuggestionsResponse {
+export interface SuggestionsResponse {
   suggestions: SuggestionMeta[];
   seedText: string;
-  timestamp: string;
+  responseId: string;
 }
 
-interface ReplyResponse {
+export interface ReplyResponse {
   replies: ReplyMeta[];
-  timestamp: string;
+  responseId: string;
 }
 
 /**
@@ -48,7 +48,7 @@ export default class PointApi {
   constructor(emailAddress: string, authCode: string, keywordSearch = false) {
     this.emailAddress = emailAddress;
     this.authCode = authCode;
-    this.socket = io("https://v1.pointapi.com", {
+    this.socket = io("http://localhost:5000", {
       query: {
         emailAddress: this.emailAddress,
         keywordSearch
@@ -70,40 +70,39 @@ export default class PointApi {
   public searchSuggestions(
     seedText: string,
     currentContext?: string
-  ): Promise<SuggestionMeta[] | null> {
+  ): Promise<SuggestionsResponse | null> {
     return new Promise(resolve => {
       this.socket.emit(
         "suggestions",
         { seedText: seedText.trim(), currentContext },
         (response: SuggestionsResponse) => {
-          if (!response) {
+          if (
+            !response ||
+            !response.suggestions ||
+            !response.suggestions.length
+          ) {
             resolve(null);
           }
-          const { suggestions } = response;
-          if (!suggestions || !suggestions.length) {
-            resolve(null);
-          }
-          resolve(suggestions);
+          resolve(response);
         }
       );
     });
   }
 
   /**
-   *  Tell the PointApi what suggestion was chosen to improve its model
+   *  Give feedback on Point Api's suggestions
    */
-  public async reportChosenSuggestion(
-    seedText: string,
-    displayedSuggestions: SuggestionMeta[],
-    chosenSuggestion: SuggestionMeta,
-    currentContext: string
+  public async giveFeedback(
+    responseId: string,
+    suggestion: SuggestionMeta,
+    type: "positive" | "negative"
   ): Promise<void> {
     this.socket.emit(
-      "chosen-suggestions",
-      { seedText, displayedSuggestions, chosenSuggestion, currentContext },
+      "feedback",
+      { responseId, suggestion, type },
       (response: { timestamp: string; status: string }) => {
         if (!response || response.status !== "success") {
-          throw new Error("Could not recore chosen suggestion");
+          throw new Error("Could not record feedback");
         }
       }
     );
@@ -128,20 +127,16 @@ export default class PointApi {
   public getReplies(
     pastContext: string,
     contextType: string
-  ): Promise<ReplyMeta[] | null> {
+  ): Promise<ReplyResponse | null> {
     return new Promise(resolve => {
       this.socket.emit(
         "reply",
         { pastContext, contextType },
         (response: ReplyResponse) => {
-          if (!response) {
+          if (!response || !response.replies || !response.replies.length) {
             resolve(null);
           }
-          const { replies } = response;
-          if (!replies || !replies.length) {
-            resolve(null);
-          }
-          resolve(replies);
+          resolve(response);
         }
       );
     });

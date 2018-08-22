@@ -2,7 +2,7 @@ import PointApi from "./../src/main";
 import {
   suggestions,
   testResponse,
-  mockChosenSuggestions,
+  mockGiveFeedback,
   mockSuggestions,
   mockSetContext,
   mockReplies,
@@ -44,14 +44,14 @@ describe("Query suggestions", () => {
 
 test("Chosen suggestions tracking", async () => {
   await expect(
-    api.reportChosenSuggestion("hello", suggestions, suggestions[2], "")
+    api.giveFeedback("", suggestions[0], "positive")
   ).resolves.toBeUndefined();
-  expect(mockChosenSuggestions).toBeCalled();
+  expect(mockGiveFeedback).toBeCalled();
   await expect(
-    api.reportChosenSuggestion("hello", suggestions, suggestions[2], "")
+    api.giveFeedback("", suggestions[0], "positive")
   ).rejects.toThrow();
   await expect(
-    api.reportChosenSuggestion("hello", suggestions, suggestions[2], "")
+    api.giveFeedback("", suggestions[0], "positive")
   ).rejects.toThrow();
 });
 
