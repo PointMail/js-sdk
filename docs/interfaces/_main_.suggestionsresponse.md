@@ -24,7 +24,7 @@
 
 **● seedText**: *`string`*
 
-*Defined in [main.ts:22](https://github.com/PointMail/point-api/blob/91b8ebf/src/main.ts#L22)*
+*Defined in [main.ts:24](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L24)*
 
 ___
 <a id="suggestions"></a>
@@ -33,16 +33,16 @@ ___
 
 **● suggestions**: *[SuggestionMeta](_main_.suggestionmeta.md)[]*
 
-*Defined in [main.ts:21](https://github.com/PointMail/point-api/blob/91b8ebf/src/main.ts#L21)*
+*Defined in [main.ts:23](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L23)*
 
 ___
 <a id="timestamp"></a>
 
 ###  timestamp
 
-**● timestamp**: *`number`*
+**● timestamp**: *`string`*
 
-*Defined in [main.ts:23](https://github.com/PointMail/point-api/blob/91b8ebf/src/main.ts#L23)*
+*Defined in [main.ts:25](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L25)*
 
 ___
 

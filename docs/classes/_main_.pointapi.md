@@ -23,7 +23,7 @@ Point Websockets Api Instance
 ### Methods
 
 * [getReplies](_main_.pointapi.md#getreplies)
-* [reportChosenSuggestion](_main_.pointapi.md#reportchosensuggestion)
+* [giveFeedback](_main_.pointapi.md#givefeedback)
 * [searchSuggestions](_main_.pointapi.md#searchsuggestions)
 * [setContext](_main_.pointapi.md#setcontext)
 
@@ -37,7 +37,7 @@ Point Websockets Api Instance
 
 ⊕ **new PointApi**(emailAddress: *`string`*, authCode: *`string`*, keywordSearch?: *`boolean`*): [PointApi](_main_.pointapi.md)
 
-*Defined in [main.ts:40](https://github.com/PointMail/point-api/blob/91b8ebf/src/main.ts#L40)*
+*Defined in [main.ts:42](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L42)*
 
 **Parameters:**
 
@@ -59,7 +59,7 @@ ___
 
 **● authCode**: *`string`*
 
-*Defined in [main.ts:38](https://github.com/PointMail/point-api/blob/91b8ebf/src/main.ts#L38)*
+*Defined in [main.ts:40](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L40)*
 
 Auth Code key of Point client
 
@@ -70,7 +70,7 @@ ___
 
 **● emailAddress**: *`string`*
 
-*Defined in [main.ts:36](https://github.com/PointMail/point-api/blob/91b8ebf/src/main.ts#L36)*
+*Defined in [main.ts:38](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L38)*
 
 Email address of Point user
 
@@ -81,7 +81,7 @@ ___
 
 **● socket**: *`Socket`*
 
-*Defined in [main.ts:40](https://github.com/PointMail/point-api/blob/91b8ebf/src/main.ts#L40)*
+*Defined in [main.ts:42](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L42)*
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 ▸ **getReplies**(pastContext: *`string`*, contextType: *`string`*): `Promise`< [ReplyMeta](../interfaces/_main_.replymeta.md)[] &#124; `null`>
 
-*Defined in [main.ts:126](https://github.com/PointMail/point-api/blob/91b8ebf/src/main.ts#L126)*
+*Defined in [main.ts:127](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L127)*
 
 Get reply suggestions given some recieved text
 
@@ -107,24 +107,23 @@ Get reply suggestions given some recieved text
 **Returns:** `Promise`< [ReplyMeta](../interfaces/_main_.replymeta.md)[] &#124; `null`>
 
 ___
-<a id="reportchosensuggestion"></a>
+<a id="givefeedback"></a>
 
-###  reportChosenSuggestion
+###  giveFeedback
 
-▸ **reportChosenSuggestion**(seedText: *`string`*, displayedSuggestions: *[SuggestionMeta](../interfaces/_main_.suggestionmeta.md)[]*, chosenSuggestion: *[SuggestionMeta](../interfaces/_main_.suggestionmeta.md)*, currentContext: *`string`*): `Promise`<`void`>
+▸ **giveFeedback**(responseId: *`string`*, suggestion: *[SuggestionMeta](../interfaces/_main_.suggestionmeta.md)*, type: * "positive" &#124; "negative"*): `Promise`<`void`>
 
-*Defined in [main.ts:93](https://github.com/PointMail/point-api/blob/91b8ebf/src/main.ts#L93)*
+*Defined in [main.ts:95](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L95)*
 
-Tell the PointApi what suggestion was chosen to improve its model
+Give feedback on Point Api's suggestions
 
 **Parameters:**
 
 | Param | Type |
 | ------ | ------ |
-| seedText | `string` |
-| displayedSuggestions | [SuggestionMeta](../interfaces/_main_.suggestionmeta.md)[] |
-| chosenSuggestion | [SuggestionMeta](../interfaces/_main_.suggestionmeta.md) |
-| currentContext | `string` |
+| responseId | `string` |
+| suggestion | [SuggestionMeta](../interfaces/_main_.suggestionmeta.md) |
+| type |  "positive" &#124; "negative"|
 
 **Returns:** `Promise`<`void`>
 
@@ -135,7 +134,7 @@ ___
 
 ▸ **searchSuggestions**(seedText: *`string`*, currentContext?: * `undefined` &#124; `string`*): `Promise`< [SuggestionMeta](../interfaces/_main_.suggestionmeta.md)[] &#124; `null`>
 
-*Defined in [main.ts:68](https://github.com/PointMail/point-api/blob/91b8ebf/src/main.ts#L68)*
+*Defined in [main.ts:70](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L70)*
 
 Query PointApi with seed text to get predicted suggestions
 
@@ -156,7 +155,7 @@ ___
 
 ▸ **setContext**(pastContext: *`string`*, contextType: *`string`*): `Promise`<`string`>
 
-*Defined in [main.ts:112](https://github.com/PointMail/point-api/blob/91b8ebf/src/main.ts#L112)*
+*Defined in [main.ts:113](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L113)*
 
 Set the context of the autocomplete session
 

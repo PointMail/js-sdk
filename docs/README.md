@@ -296,6 +296,7 @@ replies: `string[]` A list of suggested replies for the prompt
 ### External modules
 
 * ["index"](modules/_index_.md)
+* ["index-umd"](modules/_index_umd_.md)
 * ["main"](modules/_main_.md)
 
 ---

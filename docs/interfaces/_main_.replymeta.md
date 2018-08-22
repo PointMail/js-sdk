@@ -26,7 +26,7 @@ Reply metadata
 
 **● prompt**: *`string`*
 
-*Defined in [main.ts:15](https://github.com/PointMail/point-api/blob/91b8ebf/src/main.ts#L15)*
+*Defined in [main.ts:17](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L17)*
 
 ___
 <a id="replies"></a>
@@ -35,7 +35,7 @@ ___
 
 **● replies**: *`string`[]*
 
-*Defined in [main.ts:16](https://github.com/PointMail/point-api/blob/91b8ebf/src/main.ts#L16)*
+*Defined in [main.ts:18](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L18)*
 
 ___
 <a id="type"></a>
@@ -44,7 +44,7 @@ ___
 
 **● type**: *`string`*
 
-*Defined in [main.ts:17](https://github.com/PointMail/point-api/blob/91b8ebf/src/main.ts#L17)*
+*Defined in [main.ts:19](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L19)*
 
 ___
 
