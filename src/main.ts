@@ -120,24 +120,22 @@ export default class PointApi {
   /**
    *  Set the context of the autocomplete session
    */
-  public setContext(
+  public async setContext(
     pastContext: string,
     contextType: ContextType = "text"
-  ): Promise<string> {
-    return new Promise(resolve => {
-      this.socket.emit(
-        "set-context",
-        { pastContext, contextType },
-        (response: { message: string; status: string }) => {
-          if (!response || response.status !== "success") {
-            if (response.message) {
-              throw new Error(response.message);
-            }
-            throw new Error("Could not set context");
+  ): Promise<void> {
+    this.socket.emit(
+      "set-context",
+      { pastContext, contextType },
+      (response: { message: string; status: string }) => {
+        if (!response || response.status !== "success") {
+          if (response.message) {
+            throw new Error(response.message);
           }
+          throw new Error("Could not set context");
         }
-      );
-    });
+      }
+    );
   }
   /**
    *  Get reply suggestions given some recieved text
