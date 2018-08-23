@@ -21,7 +21,7 @@
   "unpkg": "dist/index.js",
   "scripts": {
     "test": "jest",
-    "build": "tsc",
+    "build": "tsc && npm run build-umd",
     "build-umd": "parcel build src/index-umd.ts --global PointApi --out-file index.js",
     "gen-docs": "typedoc --out docs src --theme markdown",
     "publish": "npm run build-umd && npm run build && npm publish --access public"
