@@ -26,7 +26,7 @@ describe("Query suggestions", () => {
   test("Returns results correctly", async () => {
     const seedText = "hello123";
     const result = await api.searchSuggestions(seedText);
-    expect(result).toHaveLength(3);
+    expect(result.suggestions).toHaveLength(3);
     expect(mockSuggestions.mock.calls[0][0]).toHaveProperty(
       "seedText",
       seedText
@@ -63,9 +63,9 @@ test("Set Gmail Context", async () => {
   expect(mockSetContext).toBeCalled();
 });
 
-test("Get replies", async () => {
+test("Gets replies", async () => {
   const context = { pastContext: "hello", contextType: "text" };
   const result = await api.getReplies(context.pastContext, context.contextType);
-  expect(result[0].replies).toHaveLength(3);
+  expect(result.replies[0].replies).toHaveLength(3);
   expect(mockReplies).toBeCalled();
 });

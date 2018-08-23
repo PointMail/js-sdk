@@ -28,7 +28,7 @@ export const testResponse = {
   },
   repliesResponse: {
     replies,
-    timestamp: null
+    responseId: "1234"
   }
 };
 
