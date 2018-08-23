@@ -13,7 +13,7 @@ Reply metadata
 ### Properties
 
 * [prompt](_main_.replymeta.md#prompt)
-* [replies](_main_.replymeta.md#replies)
+* [suggestions](_main_.replymeta.md#suggestions)
 * [type](_main_.replymeta.md#type)
 
 ---
@@ -26,16 +26,16 @@ Reply metadata
 
 **● prompt**: *`string`*
 
-*Defined in [main.ts:17](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L17)*
+*Defined in [main.ts:19](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L19)*
 
 ___
-<a id="replies"></a>
+<a id="suggestions"></a>
 
-###  replies
+###  suggestions
 
-**● replies**: *`string`[]*
+**● suggestions**: *`string`[]*
 
-*Defined in [main.ts:18](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L18)*
+*Defined in [main.ts:20](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L20)*
 
 ___
 <a id="type"></a>
@@ -44,7 +44,7 @@ ___
 
 **● type**: *`string`*
 
-*Defined in [main.ts:19](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L19)*
+*Defined in [main.ts:21](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L21)*
 
 ___
 

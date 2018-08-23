@@ -1,6 +1,8 @@
 import * as ioProxy from "socket.io-client";
 const io: SocketIOClientStatic = (ioProxy as any).default || ioProxy;
 
+type ContextTypes = "text" | "gmail";
+
 /**
  * Suggestion metadata
  */
@@ -15,7 +17,7 @@ export interface SuggestionMeta {
  */
 export interface ReplyMeta {
   prompt: string;
-  replies: string[];
+  suggestions: string[];
   type: string;
 }
 
@@ -48,7 +50,7 @@ export default class PointApi {
   constructor(emailAddress: string, authCode: string, keywordSearch = false) {
     this.emailAddress = emailAddress;
     this.authCode = authCode;
-    this.socket = io("http://localhost:5000", {
+    this.socket = io("https://dev.pointapi.com", {
       query: {
         emailAddress: this.emailAddress,
         keywordSearch
@@ -67,7 +69,7 @@ export default class PointApi {
    * @param seedText The text to base suggestion predictions off of
    * @returns A list of the predicted suggestion objects
    */
-  public searchSuggestions(
+  public autocomplete(
     seedText: string,
     currentContext?: string
   ): Promise<SuggestionsResponse | null> {
@@ -92,7 +94,7 @@ export default class PointApi {
   /**
    *  Give feedback on Point Api's suggestions
    */
-  public async giveFeedback(
+  public async feedback(
     responseId: string,
     suggestion: SuggestionMeta,
     type: "positive" | "negative"
@@ -110,7 +112,10 @@ export default class PointApi {
   /**
    *  Set the context of the autocomplete session
    */
-  public setContext(pastContext: string, contextType: string): Promise<string> {
+  public setContext(
+    pastContext: string,
+    contextType: ContextTypes = "text"
+  ): Promise<string> {
     return new Promise(resolve => {
       this.socket.emit(
         "set-context",
@@ -124,9 +129,9 @@ export default class PointApi {
   /**
    *  Get reply suggestions given some recieved text
    */
-  public getReplies(
+  public reply(
     pastContext: string,
-    contextType: string
+    contextType: ContextTypes = "text"
   ): Promise<ReplyResponse | null> {
     return new Promise(resolve => {
       this.socket.emit(

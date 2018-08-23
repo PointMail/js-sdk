@@ -38,20 +38,20 @@ const authCode = (await response.json()).jwt;
 
 Your client can start using the Point API once it has a valid auth code.
 
-#### `searchSuggestions`
-Use the `searchSuggestions` function to get a list of Autocomplete suggestions. You can pass in _seed text_ to filter for suggestions that include specific words:
+#### `autocomplete`
+Use the `autocomplete` function to get a list of Autocomplete suggestions. You can pass in _seed text_ to filter for suggestions that include specific words:
 
 ```js
 const api = new PointApi("<EMAIL_ADDRESS>", "<AUTH_CODE>");
 // A websockets connection is automatically established on api init
 
 // Get Autocomplete suggestions with the seed text "I can"
-api.searchSuggestions((seedText = "I can"));
+api.autocomplete((seedText = "I can"));
 // [{suggestion: "I can call you later today.", "type": "suggestion", "userAdded": false}, ...]
 ```
 
 #### `setContext`
-You can also set the _context_ to refine Autocomplete suggestions. The _context_ refers to a message that you're responding to, such as an email that you have received. Once the _context_ has been set, `searchSuggestions` may return an entirely different list of suggestions:
+You can also set the _context_ to refine Autocomplete suggestions. The _context_ refers to a message that you're responding to, such as an email that you have received. Once the _context_ has been set, `autocomplete` may return an entirely different list of suggestions:
 
 ```js
 // Set context
@@ -59,17 +59,17 @@ api.setContext(
   (pastContext = "Hey Alex, when can you send me the slide deck?"),
   (contextType = "text")
 );
-api.searchSuggestions((seedText = "I can"));
+api.autocomplete((seedText = "I can"));
 // [{suggestion: "I can get it to you this afternoon.", "type": "suggestion", "userAdded": false}, ...]
 ```
 
-#### `getReplies`
-Point API also provides Reply suggestions for responding to entire messages (currently in beta). Use the `getReplies` function to receive Reply suggestions. You can play around with this feature [here](https://jsfiddle.net/thesiti92/1v736cpt/6/).  
+#### `reply`
+Point API also provides Reply suggestions for responding to entire messages (currently in beta). Use the `reply` function to receive Reply suggestions. You can play around with this feature [here](https://jsfiddle.net/thesiti92/1v736cpt/6/).  
 _Note: this function will also set the past `context` for the whole session_
 
 ```js
 // Get Reply suggestions just as you would set the past context
-api.getReplies(
+api.reply(
   (pastContext = "How are you?"), 
   (contextType = "text")
 );
@@ -133,7 +133,7 @@ Point Websockets Api Instance
 
 #### Methods
 
-- [searchSuggestions](README.md#searchsuggestions)
+- [autocomplete](README.md#autocomplete)
 
 ---
 
@@ -179,11 +179,11 @@ Email address of Point user
 
 ### Methods
 
-<a id="searchsuggestions"></a>
+<a id="autocomplete"></a>
 
-#### searchSuggestions
+#### autocomplete
 
-▸ **searchSuggestions**(seedText: _`string`_): `Promise`< `Array`<[SuggestionMeta](README.md#suggestionmeta)> &#124; `null`>
+▸ **autocomplete**(seedText: _`string`_): `Promise`< `Array`<[SuggestionMeta](README.md#suggestionmeta)> &#124; `null`>
 
 Query PointApi with seed text to get predicted suggestions
 
@@ -242,11 +242,11 @@ Set the context of the autocomplete session
 
 ---
 
-<a id="getreplies"></a>
+<a id="reply"></a>
 
-#### getReplies
+#### reply
 
-▸ **getReplies**(pastContext: _`string`_, contextType: _`string`_): `Promise`< [ReplyMeta](../interfaces/_main_.replymeta.md)[] &#124; `null`>
+▸ **reply**(pastContext: _`string`_, contextType: _`string`_): `Promise`< [ReplyMeta](../interfaces/_main_.replymeta.md)[] &#124; `null`>
 
 _Defined in [main.ts:126](https://github.com/PointMail/point-api/blob/a8b2956/src/main.ts#L126)_
 

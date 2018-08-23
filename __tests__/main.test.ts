@@ -2,7 +2,7 @@ import PointApi from "./../src/main";
 import {
   suggestions,
   testResponse,
-  mockGiveFeedback,
+  mockfeedback,
   mockSuggestions,
   mockSetContext,
   mockReplies,
@@ -25,7 +25,7 @@ test("Inits PointApi object correctly", () => {
 describe("Query suggestions", () => {
   test("Returns results correctly", async () => {
     const seedText = "hello123";
-    const result = await api.searchSuggestions(seedText);
+    const result = await api.autocomplete(seedText);
     expect(result.suggestions).toHaveLength(3);
     expect(mockSuggestions.mock.calls[0][0]).toHaveProperty(
       "seedText",
@@ -34,38 +34,34 @@ describe("Query suggestions", () => {
   });
   test("Bad responses", async () => {
     suggestionsResponse.suggestions = [];
-    expect(await api.searchSuggestions("hello")).toBeNull();
+    expect(await api.autocomplete("hello")).toBeNull();
     suggestionsResponse.suggestions = null;
-    expect(await api.searchSuggestions("hello")).toBeNull();
+    expect(await api.autocomplete("hello")).toBeNull();
     delete testResponse.suggestionsResponse;
-    expect(await api.searchSuggestions("hello")).toBeNull();
+    expect(await api.autocomplete("hello")).toBeNull();
   });
 });
 
 test("Chosen suggestions tracking", async () => {
   await expect(
-    api.giveFeedback("", suggestions[0], "positive")
+    api.feedback("", suggestions[0], "positive")
   ).resolves.toBeUndefined();
-  expect(mockGiveFeedback).toBeCalled();
+  expect(mockfeedback).toBeCalled();
   await expect(
-    api.giveFeedback("", suggestions[0], "positive")
+    api.feedback("", suggestions[0], "positive")
   ).rejects.toThrow();
   await expect(
-    api.giveFeedback("", suggestions[0], "positive")
+    api.feedback("", suggestions[0], "positive")
   ).rejects.toThrow();
 });
 
 test("Set Gmail Context", async () => {
-  const context = { pastContext: "hello", contextType: "gmail" };
-  await expect(
-    api.setContext(context.pastContext, context.contextType)
-  ).resolves.toEqual("success");
+  await expect(api.setContext("hello", "gmail")).resolves.toEqual("success");
   expect(mockSetContext).toBeCalled();
 });
 
 test("Gets replies", async () => {
-  const context = { pastContext: "hello", contextType: "text" };
-  const result = await api.getReplies(context.pastContext, context.contextType);
-  expect(result.replies[0].replies).toHaveLength(3);
+  const result = await api.reply("hello", "text");
+  expect(result.replies[0].suggestions).toHaveLength(3);
   expect(mockReplies).toBeCalled();
 });

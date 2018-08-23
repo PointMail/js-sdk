@@ -11,7 +11,7 @@
 ### Properties
 
 * [replies](_main_.replyresponse.md#replies)
-* [timestamp](_main_.replyresponse.md#timestamp)
+* [responseId](_main_.replyresponse.md#responseid)
 
 ---
 
@@ -23,16 +23,16 @@
 
 **● replies**: *[ReplyMeta](_main_.replymeta.md)[]*
 
-*Defined in [main.ts:29](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L29)*
+*Defined in [main.ts:31](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L31)*
 
 ___
-<a id="timestamp"></a>
+<a id="responseid"></a>
 
-###  timestamp
+###  responseId
 
-**● timestamp**: *`string`*
+**● responseId**: *`string`*
 
-*Defined in [main.ts:30](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L30)*
+*Defined in [main.ts:32](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L32)*
 
 ___
 

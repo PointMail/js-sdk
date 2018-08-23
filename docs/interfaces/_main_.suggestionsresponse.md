@@ -10,21 +10,30 @@
 
 ### Properties
 
+* [responseId](_main_.suggestionsresponse.md#responseid)
 * [seedText](_main_.suggestionsresponse.md#seedtext)
 * [suggestions](_main_.suggestionsresponse.md#suggestions)
-* [timestamp](_main_.suggestionsresponse.md#timestamp)
 
 ---
 
 ## Properties
 
+<a id="responseid"></a>
+
+###  responseId
+
+**● responseId**: *`string`*
+
+*Defined in [main.ts:27](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L27)*
+
+___
 <a id="seedtext"></a>
 
 ###  seedText
 
 **● seedText**: *`string`*
 
-*Defined in [main.ts:24](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L24)*
+*Defined in [main.ts:26](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L26)*
 
 ___
 <a id="suggestions"></a>
@@ -33,16 +42,7 @@ ___
 
 **● suggestions**: *[SuggestionMeta](_main_.suggestionmeta.md)[]*
 
-*Defined in [main.ts:23](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L23)*
-
-___
-<a id="timestamp"></a>
-
-###  timestamp
-
-**● timestamp**: *`string`*
-
-*Defined in [main.ts:25](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L25)*
+*Defined in [main.ts:25](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L25)*
 
 ___
 

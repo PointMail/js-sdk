@@ -15,11 +15,28 @@
 * [SuggestionMeta](../interfaces/_main_.suggestionmeta.md)
 * [SuggestionsResponse](../interfaces/_main_.suggestionsresponse.md)
 
+### Type aliases
+
+* [ContextTypes](_main_.md#contexttypes)
+
 ### Variables
 
 * [io](_main_.md#io)
 
 ---
+
+## Type aliases
+
+<a id="contexttypes"></a>
+
+###  ContextTypes
+
+**ΤContextTypes**: * "text" &#124; "gmail"
+*
+
+*Defined in [main.ts:4](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L4)*
+
+___
 
 ## Variables
 
@@ -29,7 +46,7 @@
 
 **● io**: *`SocketIOClientStatic`* =  (ioProxy as any).default || ioProxy
 
-*Defined in [main.ts:2](https://github.com/PointMail/point-api/blob/f8bda98/src/main.ts#L2)*
+*Defined in [main.ts:2](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L2)*
 
 ___
 
