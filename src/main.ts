@@ -1,7 +1,7 @@
 import * as ioProxy from "socket.io-client";
 const io: SocketIOClientStatic = (ioProxy as any).default || ioProxy;
 
-type ContextTypes = "text" | "gmail";
+export type ContextType = "text" | "gmail";
 
 /**
  * Suggestion metadata
@@ -114,7 +114,7 @@ export default class PointApi {
    */
   public setContext(
     pastContext: string,
-    contextType: ContextTypes = "text"
+    contextType: ContextType = "text"
   ): Promise<string> {
     return new Promise(resolve => {
       this.socket.emit(
@@ -131,7 +131,7 @@ export default class PointApi {
    */
   public reply(
     pastContext: string,
-    contextType: ContextTypes = "text"
+    contextType: ContextType = "text"
   ): Promise<ReplyResponse | null> {
     return new Promise(resolve => {
       this.socket.emit(

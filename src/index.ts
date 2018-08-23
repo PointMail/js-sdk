@@ -2,7 +2,14 @@ import PointApi, {
   SuggestionMeta,
   ReplyMeta,
   SuggestionsResponse,
-  ReplyResponse
+  ReplyResponse,
+  ContextType
 } from "./main";
 export default PointApi;
-export { SuggestionMeta, ReplyMeta, SuggestionsResponse, ReplyResponse };
+export {
+  SuggestionMeta,
+  ReplyMeta,
+  SuggestionsResponse,
+  ReplyResponse,
+  ContextType
+};
