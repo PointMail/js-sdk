@@ -24,7 +24,7 @@
 
 **● responseId**: *`string`*
 
-*Defined in [main.ts:27](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L27)*
+*Defined in [main.ts:32](https://github.com/PointMail/point-api/blob/d8bea08/src/main.ts#L32)*
 
 ___
 <a id="seedtext"></a>
@@ -33,7 +33,7 @@ ___
 
 **● seedText**: *`string`*
 
-*Defined in [main.ts:26](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L26)*
+*Defined in [main.ts:31](https://github.com/PointMail/point-api/blob/d8bea08/src/main.ts#L31)*
 
 ___
 <a id="suggestions"></a>
@@ -42,7 +42,7 @@ ___
 
 **● suggestions**: *[SuggestionMeta](_main_.suggestionmeta.md)[]*
 
-*Defined in [main.ts:25](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L25)*
+*Defined in [main.ts:30](https://github.com/PointMail/point-api/blob/d8bea08/src/main.ts#L30)*
 
 ___
 

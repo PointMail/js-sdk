@@ -10,6 +10,7 @@
 
 ### Interfaces
 
+* [Reply](../interfaces/_main_.reply.md)
 * [ReplyMeta](../interfaces/_main_.replymeta.md)
 * [ReplyResponse](../interfaces/_main_.replyresponse.md)
 * [SuggestionMeta](../interfaces/_main_.suggestionmeta.md)
@@ -17,7 +18,7 @@
 
 ### Type aliases
 
-* [ContextTypes](_main_.md#contexttypes)
+* [ContextType](_main_.md#contexttype)
 
 ### Variables
 
@@ -27,14 +28,14 @@
 
 ## Type aliases
 
-<a id="contexttypes"></a>
+<a id="contexttype"></a>
 
-###  ContextTypes
+###  ContextType
 
-**ΤContextTypes**: * "text" &#124; "gmail"
+**ΤContextType**: * "text" &#124; "gmail"
 *
 
-*Defined in [main.ts:4](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L4)*
+*Defined in [main.ts:4](https://github.com/PointMail/point-api/blob/d8bea08/src/main.ts#L4)*
 
 ___
 
@@ -46,7 +47,7 @@ ___
 
 **● io**: *`SocketIOClientStatic`* =  (ioProxy as any).default || ioProxy
 
-*Defined in [main.ts:2](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L2)*
+*Defined in [main.ts:2](https://github.com/PointMail/point-api/blob/d8bea08/src/main.ts#L2)*
 
 ___
 

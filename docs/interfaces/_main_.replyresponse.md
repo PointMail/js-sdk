@@ -23,7 +23,7 @@
 
 **● replies**: *[ReplyMeta](_main_.replymeta.md)[]*
 
-*Defined in [main.ts:31](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L31)*
+*Defined in [main.ts:36](https://github.com/PointMail/point-api/blob/d8bea08/src/main.ts#L36)*
 
 ___
 <a id="responseid"></a>
@@ -32,7 +32,7 @@ ___
 
 **● responseId**: *`string`*
 
-*Defined in [main.ts:32](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L32)*
+*Defined in [main.ts:37](https://github.com/PointMail/point-api/blob/d8bea08/src/main.ts#L37)*
 
 ___
 

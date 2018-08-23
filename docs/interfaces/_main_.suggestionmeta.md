@@ -26,7 +26,7 @@ Suggestion metadata
 
 **● suggestion**: *`string`*
 
-*Defined in [main.ts:10](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L10)*
+*Defined in [main.ts:10](https://github.com/PointMail/point-api/blob/d8bea08/src/main.ts#L10)*
 
 ___
 <a id="type"></a>
@@ -35,7 +35,7 @@ ___
 
 **● type**: *`string`*
 
-*Defined in [main.ts:12](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L12)*
+*Defined in [main.ts:12](https://github.com/PointMail/point-api/blob/d8bea08/src/main.ts#L12)*
 
 ___
 <a id="useradded"></a>
@@ -44,7 +44,7 @@ ___
 
 **● userAdded**: *`boolean`*
 
-*Defined in [main.ts:11](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L11)*
+*Defined in [main.ts:11](https://github.com/PointMail/point-api/blob/d8bea08/src/main.ts#L11)*
 
 ___
 

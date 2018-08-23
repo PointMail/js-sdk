@@ -18,7 +18,7 @@
 
 **● PointApi**: *`any`* =  require("./main").default
 
-*Defined in [index-umd.ts:3](https://github.com/PointMail/point-api/blob/d0fa166/src/index-umd.ts#L3)*
+*Defined in [index-umd.ts:3](https://github.com/PointMail/point-api/blob/d8bea08/src/index-umd.ts#L3)*
 
 ___
 

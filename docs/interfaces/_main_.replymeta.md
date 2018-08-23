@@ -26,16 +26,16 @@ Reply metadata
 
 **● prompt**: *`string`*
 
-*Defined in [main.ts:19](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L19)*
+*Defined in [main.ts:19](https://github.com/PointMail/point-api/blob/d8bea08/src/main.ts#L19)*
 
 ___
 <a id="suggestions"></a>
 
 ###  suggestions
 
-**● suggestions**: *`string`[]*
+**● suggestions**: *[Reply](_main_.reply.md)[]*
 
-*Defined in [main.ts:20](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L20)*
+*Defined in [main.ts:20](https://github.com/PointMail/point-api/blob/d8bea08/src/main.ts#L20)*
 
 ___
 <a id="type"></a>
@@ -44,7 +44,7 @@ ___
 
 **● type**: *`string`*
 
-*Defined in [main.ts:21](https://github.com/PointMail/point-api/blob/d0fa166/src/main.ts#L21)*
+*Defined in [main.ts:21](https://github.com/PointMail/point-api/blob/d8bea08/src/main.ts#L21)*
 
 ___
 
