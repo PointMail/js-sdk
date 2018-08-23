@@ -44,14 +44,14 @@ describe("Query suggestions", () => {
 
 test("Chosen suggestions tracking", async () => {
   await expect(
-    api.feedback("", suggestions[0], "positive")
+    api.feedback("", suggestions[0].suggestion, "positive")
   ).resolves.toBeUndefined();
   expect(mockfeedback).toBeCalled();
   await expect(
-    api.feedback("", suggestions[0], "positive")
+    api.feedback("", suggestions[0].suggestion, "positive")
   ).rejects.toThrow();
   await expect(
-    api.feedback("", suggestions[0], "positive")
+    api.feedback("", suggestions[0].suggestion, "positive")
   ).rejects.toThrow();
 });
 

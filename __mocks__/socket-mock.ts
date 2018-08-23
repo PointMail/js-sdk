@@ -60,7 +60,7 @@ export const mockReplies = jest
   );
 
 const emit = jest.fn().mockImplementation((channel, data, callback) => {
-  if (channel === "suggestions") {
+  if (channel === "autocomplete") {
     mockSuggestions(data, callback);
   } else if (channel === "feedback") {
     return mockfeedback(callback);
