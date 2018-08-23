@@ -56,7 +56,7 @@ test("Chosen suggestions tracking", async () => {
 });
 
 test("Set Gmail Context", async () => {
-  await expect(api.setContext("hello", "gmail")).resolves.toEqual("success");
+  await api.setContext("hello", "gmail");
   expect(mockSetContext).toBeCalled();
 });
 
