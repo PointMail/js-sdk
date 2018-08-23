@@ -17,8 +17,13 @@ export interface SuggestionMeta {
  */
 export interface ReplyMeta {
   prompt: string;
-  suggestions: string[];
+  suggestions: Reply[];
   type: string;
+}
+
+interface Reply {
+  text: string;
+  confidence: number;
 }
 
 export interface SuggestionsResponse {
@@ -75,7 +80,7 @@ export default class PointApi {
   ): Promise<SuggestionsResponse | null> {
     return new Promise(resolve => {
       this.socket.emit(
-        "suggestions",
+        "autocomplete",
         { seedText: seedText.trim(), currentContext },
         (response: SuggestionsResponse) => {
           if (
@@ -96,12 +101,12 @@ export default class PointApi {
    */
   public async feedback(
     responseId: string,
-    suggestion: SuggestionMeta,
+    suggestionText: string | string[],
     type: "positive" | "negative"
   ): Promise<void> {
     this.socket.emit(
       "feedback",
-      { responseId, suggestion, type },
+      { responseId, text: suggestionText, type },
       (response: { timestamp: string; status: string }) => {
         if (!response || response.status !== "success") {
           throw new Error("Could not record feedback");
