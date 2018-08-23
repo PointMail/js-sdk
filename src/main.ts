@@ -55,7 +55,7 @@ export default class PointApi {
   constructor(emailAddress: string, authCode: string, keywordSearch = false) {
     this.emailAddress = emailAddress;
     this.authCode = authCode;
-    this.socket = io("https://dev.pointapi.com", {
+    this.socket = io("https://v1.pointapi.com", {
       query: {
         emailAddress: this.emailAddress,
         keywordSearch
@@ -107,8 +107,11 @@ export default class PointApi {
     this.socket.emit(
       "feedback",
       { responseId, text: suggestionText, type },
-      (response: { timestamp: string; status: string }) => {
+      (response: { message: string; status: string }) => {
         if (!response || response.status !== "success") {
+          if (response.message) {
+            throw new Error(response.message);
+          }
           throw new Error("Could not record feedback");
         }
       }
@@ -125,8 +128,13 @@ export default class PointApi {
       this.socket.emit(
         "set-context",
         { pastContext, contextType },
-        (response: { timestamp: string; status: string }) => {
-          resolve(response.status);
+        (response: { message: string; status: string }) => {
+          if (!response || response.status !== "success") {
+            if (response.message) {
+              throw new Error(response.message);
+            }
+            throw new Error("Could not set context");
+          }
         }
       );
     });
