@@ -40,16 +40,16 @@ const authCode = (await response.json()).jwt;
 
 Your client can start using the Point API once it has a valid auth code.
 
-#### `searchSuggestions`
-Use the `searchSuggestions` function to get a list of Autocomplete suggestions. You can pass in _seed text_ to filter for suggestions that include specific words:
+#### `autocomplete`
+Use the `autocomplete` function to get a list of Autocomplete suggestions. You can pass in _seed text_ to filter for suggestions that include specific words:
 
 ```js
 const api = new PointApi("<EMAIL_ADDRESS>", "<AUTH_CODE>");
 // A websockets connection is automatically established on api init
 
 // Get Autocomplete suggestions with the seed text "I can"
-api.searchSuggestions((seedText = "I can"));
-// [{suggestion: "I can call you later today.", "type": "suggestion", "userAdded": false}, ...]
+api.autocomplete("I can");
+// { responseId: "12345", suggestions: [{suggestion: "I can call you later today.", "type": "suggestion", "userAdded": false}, ...]}
 ```
 
 #### `setContext`
@@ -59,10 +59,10 @@ You can also set the _context_ to refine Autocomplete suggestions. The _context_
 // Set context
 api.setContext("Hey Alex, when can you send me the slide deck?");
 api.autocomplete("I can");
-// [{suggestion: "I can get it to you this afternoon.", "type": "suggestion", "userAdded": false}, ...]
+// { responseId: "12345", suggestions: [{suggestion: "I can get it to you this afternoon.", "type": "suggestion", "userAdded": false}, ...]}
 ```
 
-#### `getReplies`
+#### `reply`
 Point API also provides Reply suggestions for responding to entire messages (currently in beta). Use the `getReplies` function to receive Reply suggestions. You can play around with this feature [here](https://jsfiddle.net/thesiti92/1v736cpt/6/).  
 _Note: this function will also set the past `context` for the whole session_
 
@@ -99,8 +99,8 @@ Example:
 ]};
 ```
 
-#### `reportChosenSuggestion`
-You can also help us train our models by reporting suggestions that you have chosen ([Reference](#reportchosensuggestion))
+#### `feedback`
+You can also help us train our models by reporting user feedback such as chosen suggestions
 
 ```js
 api.feedback("response_id", "I'm doing okay, what about you?", "positive");
