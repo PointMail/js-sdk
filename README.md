@@ -5,6 +5,8 @@
 [![npm](https://img.shields.io/npm/l/@point-api/js-sdk.svg)](https://www.npmjs.com/package/@point-api/js-sdk) [![Build Status](https://travis-ci.com/PointMail/js-sdk.svg?branch=master)](https://travis-ci.com/PointMail/js-sdk)  
 [![forthebadge](https://forthebadge.com/images/badges/fo-shizzle.svg)](https://forthebadge.com)
 
+[Getting Started](https://docs.pointapi.com/docs/getting-started)  
+
 ## Installation
 
 `npm install @point-api/js-sdk`
@@ -38,41 +40,35 @@ const authCode = (await response.json()).jwt;
 
 Your client can start using the Point API once it has a valid auth code.
 
-#### `autocomplete`
-Use the `autocomplete` function to get a list of Autocomplete suggestions. You can pass in _seed text_ to filter for suggestions that include specific words:
+#### `searchSuggestions`
+Use the `searchSuggestions` function to get a list of Autocomplete suggestions. You can pass in _seed text_ to filter for suggestions that include specific words:
 
 ```js
 const api = new PointApi("<EMAIL_ADDRESS>", "<AUTH_CODE>");
 // A websockets connection is automatically established on api init
 
 // Get Autocomplete suggestions with the seed text "I can"
-api.autocomplete((seedText = "I can"));
+api.searchSuggestions((seedText = "I can"));
 // [{suggestion: "I can call you later today.", "type": "suggestion", "userAdded": false}, ...]
 ```
 
 #### `setContext`
-You can also set the _context_ to refine Autocomplete suggestions. The _context_ refers to a message that you're responding to, such as an email that you have received. Once the _context_ has been set, `autocomplete` may return an entirely different list of suggestions:
+You can also set the _context_ to refine Autocomplete suggestions. The _context_ refers to a message that you're responding to, such as an email that you have received. Once the _context_ has been set, `searchSuggestions` may return an entirely different list of suggestions:
 
 ```js
 // Set context
-api.setContext(
-  (pastContext = "Hey Alex, when can you send me the slide deck?"),
-  (contextType = "text")
-);
-api.autocomplete((seedText = "I can"));
+api.setContext("Hey Alex, when can you send me the slide deck?");
+api.autocomplete("I can");
 // [{suggestion: "I can get it to you this afternoon.", "type": "suggestion", "userAdded": false}, ...]
 ```
 
-#### `reply`
-Point API also provides Reply suggestions for responding to entire messages (currently in beta). Use the `reply` function to receive Reply suggestions. You can play around with this feature [here](https://jsfiddle.net/thesiti92/1v736cpt/6/).  
+#### `getReplies`
+Point API also provides Reply suggestions for responding to entire messages (currently in beta). Use the `getReplies` function to receive Reply suggestions. You can play around with this feature [here](https://jsfiddle.net/thesiti92/1v736cpt/6/).  
 _Note: this function will also set the past `context` for the whole session_
 
 ```js
-// Get Reply suggestions just as you would set the past context
-api.reply(
-  (pastContext = "How are you?"), 
-  (contextType = "text")
-);
+// Get replies just as you would set the past context:
+api.reply("How are you?");
 ```
 
 Point finds "prompts" in your context and suggest up to 3 replies for each prompt. It also includes a "confidence" field in each reply suggestion, ranging from a score of 1 (possibly correct) to 3 (very likely correct). This reveals how certain we are about the accuracy of our suggestions.
@@ -80,10 +76,12 @@ Point finds "prompts" in your context and suggest up to 3 replies for each promp
 Example:
 ```js
 // If multiple prompts are detected, replies will be generated for all of them and returned in a list
-[
+{
+  responseId: "response_id",
+  replies: [
   {
     prompt: "How are you?",
-    replies: [
+    suggestions: [
       {
         confidence: 3,
         text: "I'm doing okay, what about you?"
@@ -98,42 +96,33 @@ Example:
       }
     ]
   }
-];
+]};
 ```
 
 #### `reportChosenSuggestion`
 You can also help us train our models by reporting suggestions that you have chosen ([Reference](#reportchosensuggestion))
 
 ```js
-api.reportChosenSuggestion(
-    seedText="I can",
-    displayedSuggestions=[
-    	{suggestion: "I can do whatever's best for you.", ...},
-    	{suggestion: "I can get it to you this afternoon.", ...},
-    	...
-    ],
-    chosenSuggestion={suggestion: "I can get it to you this afternoon.", ...}
-  )
+api.feedback("response_id", "I'm doing okay, what about you?", "positive");
 ```
 
 ## Documentation
-
 ### Class: PointApi
 
 Point Websockets Api Instance
 
-- [constructor](README.md#constructor)
+- [constructor](#constructor)
 
 #### Properties
 
-- [apiKey](README.md#apikey)
-- [emailAddress](README.md#emailaddress)
-- [socket](README.md#socket)
-- [suggestions](README.md#suggestions)
+- [apiKey](#apikey)
+- [emailAddress](#emailaddress)
+- [socket](#socket)
+- [suggestions](#suggestions)
 
 #### Methods
 
-- [autocomplete](README.md#autocomplete)
+- [autocomplete](#autocomplete)
 
 ---
 
@@ -141,7 +130,7 @@ Point Websockets Api Instance
 
 <a id="constructor"></a>
 
-**new PointApi**(emailAddress: _`string`_, apiKey: _`string`_, keywordSearch?: _`boolean`_): [PointApi](README.md)
+**new PointApi**(emailAddress: _`string`_, apiKey: _`string`_, keywordSearch?: _`boolean`_): PointApi
 
 **Parameters:**
 
@@ -151,7 +140,7 @@ Point Websockets Api Instance
 | apiKey                        | `string`  | API key of Point client     |
 | `Default value` keywordSearch | `boolean` | false                       |
 
-**Returns:** [PointApi](README.md)
+**Returns:** PointApi
 
 ---
 
@@ -183,39 +172,36 @@ Email address of Point user
 
 #### autocomplete
 
-▸ **autocomplete**(seedText: _`string`_): `Promise`< `Array`<[SuggestionMeta](README.md#suggestionmeta)> &#124; `null`>
+▸ **autocomplete**(seedText: _`string`_): `Promise`< [AutocompleteResponse](#autocomplete-response) &#124; `null`>
 
 Query PointApi with seed text to get predicted suggestions
 
 **Parameters:**
 
-| Param    | Type     | Description                                    |
-| -------- | -------- | ---------------------------------------------- |
-| seedText | `string` | The text to base suggestion predictions off of |
+| Param                     | Type                        | Description                                    |
+| ------------------------- | --------------------------- | ---------------------------------------------- |
+| seedText                  | `string`                    | The text to base suggestion predictions off of |
+| `Optional` currentContext | `undefined` &#124; `string` |
 
-**Returns:** `Promise`< `Array`<[SuggestionMeta](README.md#suggestionmeta)> &#124; `null`>
-A list of the predicted suggestion objects
+**Returns:** `Promise`< [AutocompleteResponse](#autocomplete-response) | `null`>
 
 ---
 
-<a id="reportchosensuggestion"></a>
+<a id="feedback"></a>
 
-#### reportChosenSuggestion
+### feedback
 
-▸ **reportChosenSuggestion**(seedText: _`string`_, displayedSuggestions: _[SuggestionMeta](../interfaces/\_main_.suggestionmeta.md)[]_, chosenSuggestion: _[SuggestionMeta](../interfaces/_main_.suggestionmeta.md)_, currentContext: _`string`\_): `Promise`<`void`>
+▸ **feedback**(responseId: _`string`_, suggestion: _ `string` &#124; `string`[]_, type: _ "positive" &#124; "negative"_): `Promise`<`void`>
 
-_Defined in [main.ts:83](https://github.com/PointMail/point-api/blob/1073414/src/main.ts#L83)_
-
-Tell the PointApi what suggestion was chosen to improve its model
+Give feedback on Point Api's suggestions
 
 **Parameters:**
 
-| Param                | Type                                                       |
-| -------------------- | ---------------------------------------------------------- |
-| seedText             | `string`                                                   |
-| displayedSuggestions | [SuggestionMeta](../interfaces/_main_.suggestionmeta.md)[] |
-| chosenSuggestion     | [SuggestionMeta](../interfaces/_main_.suggestionmeta.md)   |
-| currentContext       | `string`                                                   |
+| Param      | Type                         |
+| ---------- | ---------------------------- |
+| responseId | `string`                     |
+| suggestion | `string` &#124; `string`[]   |
+| type       | "positive" &#124; "negative" |
 
 **Returns:** `Promise`<`void`>
 
@@ -226,8 +212,6 @@ Tell the PointApi what suggestion was chosen to improve its model
 #### setContext
 
 ▸ **setContext**(pastContext: _`string`_, contextType: _`string`_): `Promise`<`string`>
-
-_Defined in [main.ts:102](https://github.com/PointMail/point-api/blob/1073414/src/main.ts#L102)_
 
 Set the context of the autocomplete session
 
@@ -246,52 +230,66 @@ Set the context of the autocomplete session
 
 #### reply
 
-▸ **reply**(pastContext: _`string`_, contextType: _`string`_): `Promise`< [ReplyMeta](../interfaces/_main_.replymeta.md)[] &#124; `null`>
-
-_Defined in [main.ts:126](https://github.com/PointMail/point-api/blob/a8b2956/src/main.ts#L126)_
+▸ **reply**(pastContext: _`string`_, contextType: _`string`_): `Promise`< [ReplyResponse](#reply-response) &#124; `null`>
 
 Get reply suggestions given some recieved text
 
 **Parameters:**
 
-| Param       | Type     |
-| ----------- | -------- |
-| pastContext | `string` |
-| contextType | `string` |
+| Param                       | Type                                            | Default value    |
+| --------------------------- | ----------------------------------------------- | ---------------- |
+| pastContext                 | `string`                                        | -                |
+| `Default value` contextType | [ContextType](../modules/_main_.md#contexttype) | &quot;text&quot; |
 
-**Returns:** `Promise`< [ReplyMeta](../interfaces/_main_.replymeta.md)[] &#124; `null`>
+**Returns:** `Promise`< [ReplyResponse](#reply-response) &#124; `null`>
 
----
+### Types:
 
-<a id="suggestionmeta"></a>
+<a id="reply-type"></a>
 
-### Object: SuggestionMeta
+**Reply**
 
-Suggestion with metadata recieved from Point API
+#### Properties:
 
-##### Type declaration
+**● confidence**: _`number`_  
+**● text**: _`string`_
 
-suggestion: `string` The suggestion text
+<a id="reply-meta"></a>
 
-type: `string` What kind of a suggestion it is (ie. `"suggestion"` is just text or `"calendar"` would be interactive)
+**ReplyMeta**
 
-userAdded: `boolean` Whether a user manually added the suggestion to their profile
+#### Properties:
 
----
+**● prompt**: _`string`_  
+**● suggestions**: _Reply[]_  
+**● type**: _`string`_
 
-<a id="replymeta"></a>
+<a id="reply-response"></a>
 
-### Object: ReplyMeta
+**ReplyResponse**
 
-All of the replies for a detected prompt
+#### Properties:
 
-##### Type declaration
+**● replies**: _ReplyMeta[]_  
+**● responseId**: _`string`_
 
-prompt: `string` The detected prompt to reply to
+<a id="suggestion-meta"></a>
 
-type: `string` What kind of prompt we detect (ie. `What is your phone number?` would be a `PhoneNumberRequest` prompt )
+**SuggestionMeta**
 
-replies: `string[]` A list of suggested replies for the prompt
+#### Properties:
+
+**● suggestion**: _`string`_  
+**● type**: _`string`_  
+**● userAdded**: _`boolean`_
+
+<a id="autocomplete-response"></a>
+
+**AutocompleteResponse**
+
+**● responseId**: _`string`_  
+**● seedText**: _`string`_  
+**● suggestions**: _SuggestionMeta[]_
 
 ---
 
