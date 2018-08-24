@@ -1,7 +1,7 @@
 import PointApi, {
   SuggestionMeta,
   ReplyMeta,
-  SuggestionsResponse,
+  AutocompleteResponse,
   ReplyResponse,
   ContextType
 } from "./main";
@@ -9,7 +9,7 @@ export default PointApi;
 export {
   SuggestionMeta,
   ReplyMeta,
-  SuggestionsResponse,
+  AutocompleteResponse,
   ReplyResponse,
   ContextType
 };

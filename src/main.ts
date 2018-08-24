@@ -26,7 +26,7 @@ interface Reply {
   confidence: number;
 }
 
-export interface SuggestionsResponse {
+export interface AutocompleteResponse {
   suggestions: SuggestionMeta[];
   seedText: string;
   responseId: string;
@@ -77,12 +77,12 @@ export default class PointApi {
   public autocomplete(
     seedText: string,
     currentContext?: string
-  ): Promise<SuggestionsResponse | null> {
+  ): Promise<AutocompleteResponse | null> {
     return new Promise(resolve => {
       this.socket.emit(
         "autocomplete",
         { seedText: seedText.trim(), currentContext },
-        (response: SuggestionsResponse) => {
+        (response: AutocompleteResponse) => {
           if (
             !response ||
             !response.suggestions ||
