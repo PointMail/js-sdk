@@ -55,7 +55,9 @@ export default class PointApi {
   constructor(emailAddress: string, authCode: string, keywordSearch = false) {
     this.emailAddress = emailAddress;
     this.authCode = authCode;
+
     this.socket = io("https://v1.pointapi.com", {
+      reconnection: false,
       query: {
         emailAddress: this.emailAddress,
         keywordSearch
@@ -68,6 +70,9 @@ export default class PointApi {
         }
       }
     });
+    this.socket.on("disconnect", (reason: any) => {
+      this.socket.connect();
+    });
   }
   /**
    *  Query PointApi with seed text to get predicted suggestions
@@ -78,7 +83,10 @@ export default class PointApi {
     seedText: string,
     currentContext?: string
   ): Promise<AutocompleteResponse | null> {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
+      if (this.socket.disconnected) {
+        reject("Socket is disconnected");
+      }
       this.socket.emit(
         "autocomplete",
         { seedText: seedText.trim(), currentContext },
@@ -144,7 +152,10 @@ export default class PointApi {
     pastContext: string,
     contextType: ContextType = "text"
   ): Promise<ReplyResponse | null> {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
+      if (this.socket.disconnected) {
+        reject("Socket is disconnected");
+      }
       this.socket.emit(
         "reply",
         { pastContext, contextType },
