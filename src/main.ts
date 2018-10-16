@@ -45,6 +45,8 @@ export default class PointApi {
   public readonly emailAddress: string;
   /** Auth Code key of Point client */
   public readonly authCode: string;
+  /** API URL */
+  public readonly apiUrl: string;
   /** @private SocketIO instance used to interact with Point API */
   private socket: SocketIOClient.Socket;
 
@@ -52,11 +54,12 @@ export default class PointApi {
    * @param  emailAddress Email address of Point user
    * @param  authCode Auth code of Point client
    */
-  constructor(emailAddress: string, authCode: string, keywordSearch = false) {
+  constructor(emailAddress: string, authCode: string, apiUrl = "https://v1.pointapi.com", keywordSearch = false) {
     this.emailAddress = emailAddress;
     this.authCode = authCode;
+    this.apiUrl = apiUrl;
 
-    this.socket = io("https://v1.pointapi.com", {
+    this.socket = io(this.apiUrl, {
       reconnection: false,
       query: {
         emailAddress: this.emailAddress,
