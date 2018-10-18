@@ -24,7 +24,8 @@
     "build": "tsc && npm run build-umd",
     "build-umd": "parcel build src/index-umd.ts --global PointApi --out-file index.js",
     "gen-docs": "typedoc --out docs src --theme markdown",
-    "publish": "npm run build-umd && npm run build && npm publish --access public"
+    "publish": "npm run build-umd && npm run build && npm publish --access public && npm run push-to-site",
+    "push-to-site": "aws s3 cp ./dist/index.js s3://point-api-website/api.js"
   },
   "author": "Alex Iansiti <alex@pointapi.com>",
   "license": "MIT",
