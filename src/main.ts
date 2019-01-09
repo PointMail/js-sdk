@@ -59,6 +59,7 @@ export default class PointApi {
     authCode: string,
     apiUrl = "https://v1.pointapi.com",
     keywordSearch = false
+
   ) {
     this.emailAddress = emailAddress;
     this.authCode = authCode;
