@@ -54,7 +54,12 @@ export default class PointApi {
    * @param  emailAddress Email address of Point user
    * @param  authCode Auth code of Point client
    */
-  constructor(emailAddress: string, authCode: string, apiUrl = "https://v1.pointapi.com", keywordSearch = false) {
+  constructor(
+    emailAddress: string,
+    authCode: string,
+    keywordSearch = false,
+    apiUrl = "https://v1.pointapi.com"
+  ) {
     this.emailAddress = emailAddress;
     this.authCode = authCode;
     this.apiUrl = apiUrl;
