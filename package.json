@@ -34,6 +34,7 @@
     "@types/socket.io-client": "^1.4.32",
     "envify": "^4.1.0",
     "jest": "^23.0.1",
+    "merge": ">=1.2.1",
     "parcel-bundler": ">=1.10.0",
     "ts-jest": "^22.4.6",
     "tslint": "^5.10.0",
