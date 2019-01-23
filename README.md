@@ -65,10 +65,10 @@ api.autocomplete("I can");
 
 #### `reply`
 Point API also provides Reply suggestions for responding to entire messages (currently in beta). Use the `getReplies` function to receive Reply suggestions. You can play around with this feature [here](https://jsfiddle.net/thesiti92/1v736cpt/6/).  
-_Note: this function will also set the past `context` for the whole session_
+_Note: this function will also set the `previousMessage` for the whole session_
 
 ```js
-// Get replies just as you would set the past context:
+// Get replies just as you would set the previousMessage:
 api.reply("How are you?");
 ```
 
@@ -131,7 +131,7 @@ Point Websockets Api Instance
 
 <a id="constructor"></a>
 
-**new PointApi**(emailAddress: _`string`_, apiKey: _`string`_, keywordSearch?: _`boolean`_): PointApi
+**new PointApi**(emailAddress: _`string`_, apiKey: _`string`_, searchType?: _`boolean`_): PointApi
 
 **Parameters:**
 
@@ -139,7 +139,7 @@ Point Websockets Api Instance
 | ----------------------------- | --------- | --------------------------- |
 | emailAddress                  | `string`  | Email address of Point user |
 | apiKey                        | `string`  | API key of Point client     |
-| `Default value` keywordSearch | `boolean` | false                       |
+| `Default value` searchType | `boolean` | false                       |
 
 **Returns:** PointApi
 
@@ -212,16 +212,16 @@ Give feedback on Point Api's suggestions
 
 #### setContext
 
-▸ **setContext**(pastContext: _`string`_, contextType: _`string`_): `Promise`<`string`>
+▸ **setContext**(previousMessage: _`string`_, contextType: _`string`_): `Promise`<`string`>
 
 Set the context of the autocomplete session
 
 **Parameters:**
 
-| Param       | Type     |
-| ----------- | -------- |
-| pastContext | `string` |
-| contextType | `string` |
+| Param           | Type     |
+| -----------     | -------- |
+| previousMessage | `string` |
+| contextType     | `string` |
 
 **Returns:** `Promise`<`string`>
 
@@ -231,7 +231,7 @@ Set the context of the autocomplete session
 
 #### reply
 
-▸ **reply**(pastContext: _`string`_, contextType: _`string`_): `Promise`< [ReplyResponse](#reply-response) &#124; `null`>
+▸ **reply**(previousMessage: _`string`_, contextType: _`string`_): `Promise`< [ReplyResponse](#reply-response) &#124; `null`>
 
 Get reply suggestions given some recieved text
 
@@ -239,7 +239,7 @@ Get reply suggestions given some recieved text
 
 | Param                       | Type                                            | Default value    |
 | --------------------------- | ----------------------------------------------- | ---------------- |
-| pastContext                 | `string`                                        | -                |
+| previousMessage             | `string`                                        | -                |
 | `Default value` contextType | [ContextType](../modules/_main_.md#contexttype) | &quot;text&quot; |
 
 **Returns:** `Promise`< [ReplyResponse](#reply-response) &#124; `null`>
