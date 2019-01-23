@@ -1,6 +1,6 @@
 {
   "name": "@point-api/js-sdk",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Javascript SDK for Point API",
   "repository": "github:PointMail/js-sdk",
   "homepage": "https://docs.pointapi.com",
@@ -34,7 +34,8 @@
     "@types/socket.io-client": "^1.4.32",
     "envify": "^4.1.0",
     "jest": "^23.0.1",
-    "parcel-bundler": "^1.9.7",
+    "merge": ">=1.2.1",
+    "parcel-bundler": ">=1.10.0",
     "ts-jest": "^22.4.6",
     "tslint": "^5.10.0",
     "tslint-config-prettier": "^1.13.0",

@@ -57,8 +57,8 @@ export default class PointApi {
   constructor(
     emailAddress: string,
     authCode: string,
-    apiUrl = "https://v1.pointapi.com",
-    keywordSearch = false
+    searchType = "standard",
+    apiUrl = "https://v1.pointapi.com"
 
   ) {
     this.emailAddress = emailAddress;
@@ -69,7 +69,7 @@ export default class PointApi {
       reconnection: false,
       query: {
         emailAddress: this.emailAddress,
-        keywordSearch
+        searchType
       },
       transportOptions: {
         polling: {
@@ -138,12 +138,12 @@ export default class PointApi {
    *  Set the context of the autocomplete session
    */
   public async setContext(
-    pastContext: string,
+    previousMessage: string,
     contextType: ContextType = "text"
   ): Promise<void> {
     this.socket.emit(
       "set-context",
-      { pastContext, contextType },
+      { previousMessage, contextType },
       (response: { message: string; status: string }) => {
         if (!response || response.status !== "success") {
           if (response.message) {
@@ -158,7 +158,7 @@ export default class PointApi {
    *  Get reply suggestions given some recieved text
    */
   public reply(
-    pastContext: string,
+    previousMessage: string,
     contextType: ContextType = "text"
   ): Promise<ReplyResponse | null> {
     return new Promise((resolve, reject) => {
@@ -167,7 +167,7 @@ export default class PointApi {
       }
       this.socket.emit(
         "reply",
-        { pastContext, contextType },
+        { previousMessage, contextType },
         (response: ReplyResponse) => {
           if (!response || !response.replies || !response.replies.length) {
             resolve(null);

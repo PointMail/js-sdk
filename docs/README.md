@@ -62,7 +62,7 @@ You can also set the _context_ to refine Autocomplete suggestions. The _context_
 ```js
 // Set context
 api.setContext(
-  (pastContext = "Hey Alex, when can you send me the slide deck?"),
+  (previousMessage = "Hey Alex, when can you send me the slide deck?"),
   (contextType = "text")
 );
 api.autocomplete((seedText = "I can"));
@@ -72,12 +72,12 @@ api.autocomplete((seedText = "I can"));
 #### `reply`
 
 Point API also provides Reply suggestions for responding to entire messages (currently in beta). Use the `reply` function to receive Reply suggestions. You can play around with this feature [here](https://jsfiddle.net/thesiti92/1v736cpt/6/).  
-_Note: this function will also set the past `context` for the whole session_
+_Note: this function will also set the `previousMessage` for the whole session_
 
 ```js
-// Get Reply suggestions just as you would set the past context
+// Get Reply suggestions just as you would set the previousMessage
 api.reply(
-  (pastContext = "How are you?"), 
+  (previousMessage = "How are you?"), 
   (contextType = "text")
 );
 ```
@@ -149,7 +149,7 @@ Point Websockets Api Instance
 
 #### constructor
 
-**new PointApi**(emailAddress: _`string`_, apiKey: _`string`_, keywordSearch?: _`boolean`_): [PointApi](README.md)
+**new PointApi**(emailAddress: _`string`_, apiKey: _`string`_, searchType?: _`boolean`_): [PointApi](README.md)
 
 **Parameters:**
 
@@ -171,7 +171,7 @@ apiKey
 
 API key of Point client
 
-`Default value` keywordSearch
+`Default value` searchType
 
 `boolean`
 
@@ -261,7 +261,7 @@ currentContext
 
 #### setContext
 
-▸ **setContext**(pastContext: _`string`_, contextType: _`string`_): `Promise`<`string`>
+▸ **setContext**(previousMessage: _`string`_, contextType: _`string`_): `Promise`<`string`>
 
 _Defined in [main.ts:102](https://github.com/PointMail/point-api/blob/1073414/src/main.ts#L102)_
 
@@ -273,7 +273,7 @@ Param
 
 Type
 
-pastContext
+previousMessage
 
 `string`
 
@@ -287,7 +287,7 @@ contextType
 
 #### reply
 
-▸ **reply**(pastContext: _`string`_, contextType: _`string`_): `Promise`< [ReplyMeta](../interfaces/_main_.replymeta.md)\[\] | `null`>
+▸ **reply**(previousMessage: _`string`_, contextType: _`string`_): `Promise`< [ReplyMeta](../interfaces/_main_.replymeta.md)\[\] | `null`>
 
 _Defined in [main.ts:126](https://github.com/PointMail/point-api/blob/a8b2956/src/main.ts#L126)_
 
@@ -299,7 +299,7 @@ Param
 
 Type
 
-pastContext
+previousMessage
 
 `string`
 
