@@ -35,7 +35,7 @@ Point Websockets Api Instance
 
 ###  constructor
 
-⊕ **new PointApi**(emailAddress: *`string`*, authCode: *`string`*, keywordSearch?: *`boolean`*): [PointApi](_main_.pointapi.md)
+⊕ **new PointApi**(emailAddress: *`string`*, authCode: *`string`*, searchType?: *`boolean`*): [PointApi](_main_.pointapi.md)
 
 *Defined in [main.ts:49](https://github.com/PointMail/point-api/blob/d8bea08/src/main.ts#L49)*
 
@@ -45,7 +45,7 @@ Point Websockets Api Instance
 | ------ | ------ | ------ | ------ |
 | emailAddress | `string` | - |  Email address of Point user |
 | authCode | `string` | - |  Auth code of Point client |
-| `Default value` keywordSearch | `boolean` | false |
+| `Default value` searchType | `boolean` | false |
 
 **Returns:** [PointApi](_main_.pointapi.md)
 
@@ -133,7 +133,7 @@ ___
 
 ###  reply
 
-▸ **reply**(pastContext: *`string`*, contextType?: *[ContextType](../modules/_main_.md#contexttype)*): `Promise`< [ReplyResponse](../interfaces/_main_.replyresponse.md) &#124; `null`>
+▸ **reply**(previousMessage: *`string`*, contextType?: *[ContextType](../modules/_main_.md#contexttype)*): `Promise`< [ReplyResponse](../interfaces/_main_.replyresponse.md) &#124; `null`>
 
 *Defined in [main.ts:137](https://github.com/PointMail/point-api/blob/d8bea08/src/main.ts#L137)*
 
@@ -143,7 +143,7 @@ Get reply suggestions given some recieved text
 
 | Param | Type | Default value |
 | ------ | ------ | ------ |
-| pastContext | `string` | - |
+| previousMessage | `string` | - |
 | `Default value` contextType | [ContextType](../modules/_main_.md#contexttype) | &quot;text&quot; |
 
 **Returns:** `Promise`< [ReplyResponse](../interfaces/_main_.replyresponse.md) &#124; `null`>
@@ -153,7 +153,7 @@ ___
 
 ###  setContext
 
-▸ **setContext**(pastContext: *`string`*, contextType?: *[ContextType](../modules/_main_.md#contexttype)*): `Promise`<`string`>
+▸ **setContext**(previousMessage: *`string`*, contextType?: *[ContextType](../modules/_main_.md#contexttype)*): `Promise`<`string`>
 
 *Defined in [main.ts:120](https://github.com/PointMail/point-api/blob/d8bea08/src/main.ts#L120)*
 
@@ -163,7 +163,7 @@ Set the context of the autocomplete session
 
 | Param | Type | Default value |
 | ------ | ------ | ------ |
-| pastContext | `string` | - |
+| previousMessage | `string` | - |
 | `Default value` contextType | [ContextType](../modules/_main_.md#contexttype) | &quot;text&quot; |
 
 **Returns:** `Promise`<`string`>
