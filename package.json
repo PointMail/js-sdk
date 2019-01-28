@@ -1,6 +1,6 @@
 {
   "name": "@point-api/js-sdk",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Javascript SDK for Point API",
   "repository": "github:PointMail/js-sdk",
   "homepage": "https://docs.pointapi.com",

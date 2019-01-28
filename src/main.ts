@@ -8,6 +8,7 @@ export type ContextType = "text" | "gmail";
  */
 export interface SuggestionMeta {
   suggestion: string;
+  expandedSuggestion: string;
   userAdded: boolean;
   type: string;
 }
@@ -83,6 +84,7 @@ export default class PointApi {
       this.socket.connect();
     });
   }
+
   /**
    *  Query PointApi with seed text to get predicted suggestions
    * @param seedText The text to base suggestion predictions off of
@@ -99,6 +101,35 @@ export default class PointApi {
       this.socket.emit(
         "autocomplete",
         { seedText: seedText.trim(), currentContext },
+        (response: AutocompleteResponse) => {
+          if (
+            !response ||
+            !response.suggestions ||
+            !response.suggestions.length
+          ) {
+            resolve(null);
+          }
+          resolve(response);
+        }
+      );
+    });
+  }
+
+  /**
+   *  Query PointApi with a hotkey trigger to get a full hotkey suggestion
+   * @param trigger String that is a shortcut for the full hotkey text 
+   * @returns A list of the predicted suggestion objects
+   */
+  public hotkey(
+    trigger: string,
+  ): Promise<AutocompleteResponse | null> {
+    return new Promise((resolve, reject) => {
+      if (this.socket.disconnected) {
+        reject("Socket is disconnected");
+      }
+      this.socket.emit(
+        "hotkey",
+        { trigger: trigger },
         (response: AutocompleteResponse) => {
           if (
             !response ||
@@ -134,6 +165,7 @@ export default class PointApi {
       }
     );
   }
+
   /**
    *  Set the context of the autocomplete session
    */
@@ -154,6 +186,7 @@ export default class PointApi {
       }
     );
   }
+
   /**
    *  Get reply suggestions given some recieved text
    */
