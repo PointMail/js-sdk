@@ -89,6 +89,10 @@ export default class PointApi {
       this.reconnectCount = 0;
     });
     this.socket.on("disconnect", (reason: any) => {
+      // If client was the one that disconnected,
+      // don't reconnect automatically
+      if (reason === "io client disconnect") return;
+
       // Try to reconnect maxReconnect times using exponentially
       // growing delays starting from 100ms
       if (this.reconnectCount < this.maxReconnects) {
