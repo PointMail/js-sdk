@@ -106,6 +106,13 @@ export default class PointApi {
   }
 
   /**
+   * Disconnects from the Point API manually
+   */
+  public disconnect(): void {
+    this.socket.disconnect();
+  }
+
+  /**
    *  Query PointApi with seed text to get predicted suggestions
    * @param seedText The text to base suggestion predictions off of
    * @returns A list of the predicted suggestion objects
