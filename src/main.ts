@@ -51,6 +51,12 @@ export default class PointApi {
   /** @private SocketIO instance used to interact with Point API */
   private socket: SocketIOClient.Socket;
 
+  /** @private Reconnect counter  */
+  private reconnectCount: number = 0;
+
+  /** @private Max reconnect attempts  */
+  private readonly maxReconnects: number = 10;
+
   /**
    * @param  emailAddress Email address of Point user
    * @param  authCode Auth code of Point client
@@ -60,7 +66,6 @@ export default class PointApi {
     authCode: string,
     searchType = "standard",
     apiUrl = "https://v1.pointapi.com"
-
   ) {
     this.emailAddress = emailAddress;
     this.authCode = authCode;
@@ -80,9 +85,31 @@ export default class PointApi {
         }
       }
     });
-    this.socket.on("disconnect", (reason: any) => {
-      this.socket.connect();
+    this.socket.on("connect", () => {
+      this.reconnectCount = 0;
     });
+    this.socket.on("disconnect", (reason: any) => {
+      // If client was the one that disconnected,
+      // don't reconnect automatically
+      if (reason === "io client disconnect") return;
+
+      // Try to reconnect maxReconnect times using exponentially
+      // growing delays starting from 100ms
+      if (this.reconnectCount < this.maxReconnects) {
+        const delay = 100 * Math.pow(2, this.reconnectCount);
+        this.reconnectCount++;
+        setTimeout(() => {
+          this.socket.connect();
+        }, delay);
+      }
+    });
+  }
+
+  /**
+   * Disconnects from the Point API manually
+   */
+  public disconnect(): void {
+    this.socket.disconnect();
   }
 
   /**
