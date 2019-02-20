@@ -46,6 +46,8 @@ export default class PointApi {
   public readonly emailAddress: string;
   /** Auth code (JWT) provider */
   public authCode: () => string;
+  /** Search type */
+  public searchType: string;
   /** API URL */
   public readonly apiUrl: string;
   /** @private SocketIO instance used to interact with Point API */
@@ -69,13 +71,23 @@ export default class PointApi {
   ) {
     this.emailAddress = emailAddress;
     this.authCode = authCode;
+    this.searchType = searchType;
     this.apiUrl = apiUrl;
+
+    this.reconnect();
+  }
+
+  /**
+   * Reconnects to the Point API socket.io
+   */
+  public reconnect(): void {
+    this.disconnect();
 
     this.socket = io(this.apiUrl, {
       reconnection: false,
       query: {
         emailAddress: this.emailAddress,
-        searchType
+        searchType: this.searchType
       },
       transportOptions: {
         polling: {
@@ -85,9 +97,11 @@ export default class PointApi {
         }
       }
     });
+
     this.socket.on("connect", () => {
       this.reconnectCount = 0;
     });
+    
     this.socket.on("disconnect", (reason: any) => {
       // If client was the one that disconnected,
       // don't reconnect automatically
@@ -99,7 +113,7 @@ export default class PointApi {
         const delay = 100 * Math.pow(2, this.reconnectCount);
         this.reconnectCount++;
         setTimeout(() => {
-          this.socket.connect();
+          this.reconnect();
         }, delay);
       }
     });
@@ -109,7 +123,9 @@ export default class PointApi {
    * Disconnects from the Point API manually
    */
   public disconnect(): void {
-    this.socket.disconnect();
+    if (this.socket != null) {
+      this.socket.disconnect();
+    }
   }
 
   /**
