@@ -44,8 +44,8 @@ export interface ReplyResponse {
 export default class PointApi {
   /** Email address of Point user */
   public readonly emailAddress: string;
-  /** Auth Code key of Point client */
-  public readonly authCode: string;
+  /** Auth code (JWT) provider */
+  public authCode: () => string;
   /** API URL */
   public readonly apiUrl: string;
   /** @private SocketIO instance used to interact with Point API */
@@ -59,11 +59,11 @@ export default class PointApi {
 
   /**
    * @param  emailAddress Email address of Point user
-   * @param  authCode Auth code of Point client
+   * @param  authCode Auth code (JWT) provider
    */
   constructor(
     emailAddress: string,
-    authCode: string,
+    authCode: () => string,
     searchType = "standard",
     apiUrl = "https://v1.pointapi.com"
   ) {
@@ -80,7 +80,7 @@ export default class PointApi {
       transportOptions: {
         polling: {
           extraHeaders: {
-            Authorization: "Bearer " + this.authCode
+            Authorization: "Bearer " + this.authCode()
           }
         }
       }
