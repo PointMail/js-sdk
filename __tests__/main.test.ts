@@ -10,7 +10,9 @@ import {
 } from "../__mocks__/socket-mock";
 const { suggestionsResponse } = testResponse;
 const emailAddress = "aiansiti@college.harvard.edu";
-const authCode = "authcode1234";
+const authCode = () => {
+  return "authcode1234";
+};
 jest.mock(
   "socket.io-client",
   () => require.requireActual("../__mocks__/socket-mock").default
