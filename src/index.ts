@@ -1,15 +1,4 @@
-import PointApi, {
-  SuggestionMeta,
-  ReplyMeta,
-  AutocompleteResponse,
-  ReplyResponse,
-  ContextType
-} from "./main";
+import PointApi, { Account, ErrorResponse, Subscription } from "./main";
+import { Suggestion, Hotkey } from "./customSuggestions";
 export default PointApi;
-export {
-  SuggestionMeta,
-  ReplyMeta,
-  AutocompleteResponse,
-  ReplyResponse,
-  ContextType
-};
+export { Account, ErrorResponse, Subscription, Suggestion, Hotkey };
