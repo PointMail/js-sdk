@@ -1,4 +1,5 @@
 import CustomSuggestionsApiModule from "./customSuggestions";
+import AutocompleteSession from "./autocompleteSession";
 
 export interface ErrorResponse {
   error: string;
@@ -71,6 +72,15 @@ export default class PointApi {
   public async getAccountInfo(): Promise<Account> {
     await this.refreshJwtToken();
     return this.account;
+  }
+
+  public initAutocompleteSession(): AutocompleteSession {
+    return new AutocompleteSession(
+      this.emailAddress,
+      () => this.jwt as string,
+      "standard",
+      this.apiUrl
+    );
   }
 
   public async authFetch(method: string, url: string, data?: object) {

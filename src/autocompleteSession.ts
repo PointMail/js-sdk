@@ -41,7 +41,7 @@ export interface ReplyResponse {
 /**
  * Point Websockets Api Instance
  */
-export default class PointApi {
+export default class AutocompleteSession {
   /** Email address of Point user */
   public readonly emailAddress: string;
   /** Auth code (JWT) provider */
