@@ -35,6 +35,9 @@ export default class InteractionsApiModule {
 
   /** Make authenticated request to custom suggestions api */
   private async authFetch(method: string, data?: object) {
-    return (await this.api.authFetch(method, this.url, data)).json();
+    const headers = {
+      "Content-Type": "application/json"
+    };
+    return (await this.api.authFetch(method, this.url, data, headers)).json();
   }
 }

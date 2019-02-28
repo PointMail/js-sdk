@@ -99,7 +99,7 @@ export default class PointApi {
     );
   }
 
-  public async authFetch(method: string, url: string, data?: object) {
+  public async authFetch(method: string, url: string, data?: object, headers?: object) {
     if (!this.jwt) {
       await this.refreshJwtToken();
     }
@@ -112,7 +112,8 @@ export default class PointApi {
       method,
       body,
       headers: {
-        Authorization: `Bearer ${jwt}`
+        Authorization: `Bearer ${jwt}`,
+        ...headers
       }
     });
 
