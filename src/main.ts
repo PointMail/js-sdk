@@ -60,6 +60,8 @@ export default class PointApi {
     // Init API submodules
     this.customSuggestions = new CustomSuggestionsApiModule(this);
     this.interactions = new InteractionsApiModule(this);
+
+    this.refreshJwtToken();
   }
 
   public setCredentials(emailAddress: string, apiKey: string) {
@@ -70,16 +72,25 @@ export default class PointApi {
     if (this.jwtRenewTimeoutId) {
       clearTimeout(this.jwtRenewTimeoutId);
     }
+
+    this.refreshJwtToken();
   }
 
   public async getAccountInfo(): Promise<Account> {
-    await this.refreshJwtToken();
+    if (!this.jwt) {
+      await this.refreshJwtToken();
+    }
+
     return this.account;
   }
 
   public initAutocompleteSession(
     searchType: string = "standard"
   ): AutocompleteSession {
+    if (!this.jwt) {
+      this.refreshJwtToken();
+    }
+
     return new AutocompleteSession(
       this.emailAddress,
       () => this.jwt as string,
