@@ -74,11 +74,13 @@ export default class PointApi {
     return this.account;
   }
 
-  public initAutocompleteSession(): AutocompleteSession {
+  public initAutocompleteSession(
+    searchType: string = "standard"
+  ): AutocompleteSession {
     return new AutocompleteSession(
       this.emailAddress,
       () => this.jwt as string,
-      "standard",
+      searchType,
       this.apiUrl
     );
   }
