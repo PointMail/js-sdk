@@ -15,8 +15,13 @@ export default class InteractionsApiModule {
     this.api = api;
   }
 
-  public async emailSent() : Promise<StatusResponse> {
-      return this.authFetch("POST", {})
+  public async emailSent(messageId: string): Promise<StatusResponse> {
+    return this.authFetch("POST", {
+      type: "emailSent",
+      data: {
+        messageId
+      }
+    });
   }
 
   /** Make authenticated request to custom suggestions api */
