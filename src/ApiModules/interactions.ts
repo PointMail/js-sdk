@@ -15,12 +15,21 @@ export default class InteractionsApiModule {
     this.api = api;
   }
 
+  public async draftDiscarded(): Promise<StatusResponse> {
+    return this.storeInteraction("draftDiscarded");
+  }
+
   public async emailSent(messageId: string): Promise<StatusResponse> {
+    return this.storeInteraction("emailSent", { messageId });
+  }
+
+  private async storeInteraction(
+    type: string,
+    data?: object
+  ): Promise<StatusResponse> {
     return this.authFetch("POST", {
-      type: "emailSent",
-      data: {
-        messageId
-      }
+      type,
+      data
     });
   }
 
