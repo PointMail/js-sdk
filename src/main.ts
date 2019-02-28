@@ -1,5 +1,6 @@
 import CustomSuggestionsApiModule from "./customSuggestions";
 import AutocompleteSession from "./autocompleteSession";
+import InteractionsApiModule from "./interactions";
 
 export interface ErrorResponse {
   error: string;
@@ -28,6 +29,7 @@ export default class PointApi {
   public readonly apiUrl: string;
 
   public readonly customSuggestions: CustomSuggestionsApiModule;
+  public readonly interactions: InteractionsApiModule;
 
   public account: Account;
 
@@ -57,6 +59,7 @@ export default class PointApi {
 
     // Init API submodules
     this.customSuggestions = new CustomSuggestionsApiModule(this);
+    this.interactions = new InteractionsApiModule(this);
   }
 
   public setCredentials(emailAddress: string, apiKey: string) {
