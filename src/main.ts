@@ -1,6 +1,6 @@
-import CustomSuggestionsApiModule from "./customSuggestions";
-import AutocompleteSession from "./autocompleteSession";
-import InteractionsApiModule from "./interactions";
+import CustomSuggestionsApiModule from "./ApiModules/customSuggestions";
+import AutocompleteSession from "./ApiModules/autocompleteSession";
+import InteractionsApiModule from "./ApiModules/interactions";
 
 export interface ErrorResponse {
   error: string;
