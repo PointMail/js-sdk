@@ -1,256 +1,121 @@
-import * as ioProxy from "socket.io-client";
-const io: SocketIOClientStatic = (ioProxy as any).default || ioProxy;
+import AutocompleteSession from "./ApiModules/autocompleteSession";
+import PointApiBase from "./pointApiBase";
 
-export type ContextType = "text" | "gmail";
-
-/**
- * Suggestion metadata
- */
-export interface SuggestionMeta {
-  suggestion: string;
-  expandedSuggestion: string;
-  userAdded: boolean;
-  type: string;
+export interface ErrorResponse {
+  error: string;
 }
 
-/**
- * Reply metadata
- */
-export interface ReplyMeta {
-  prompt: string;
-  suggestions: Reply[];
-  type: string;
+export interface Account {
+  name: string;
+  emailAddress: string;
+  subscription: Subscription;
 }
 
-interface Reply {
-  text: string;
-  confidence: number;
-}
-
-export interface AutocompleteResponse {
-  suggestions: SuggestionMeta[];
-  seedText: string;
-  responseId: string;
-}
-
-export interface ReplyResponse {
-  replies: ReplyMeta[];
-  responseId: string;
+export interface Subscription {
+  membershipType: string;
+  isActive: boolean;
+  expirationDate: number | null;
 }
 
 /**
  * Point Websockets Api Instance
  */
-export default class PointApi {
-  /** Email address of Point user */
-  public readonly emailAddress: string;
-  /** Auth code (JWT) provider */
-  public authCode: () => string;
-  /** Search type */
-  public searchType: string;
-  /** API URL */
-  public readonly apiUrl: string;
-  /** @private SocketIO instance used to interact with Point API */
-  private socket: SocketIOClient.Socket;
+export default class PointApi extends PointApiBase {
+  /** User's API Key */
+  private apiKey: string;
 
-  /** @private Reconnect counter  */
-  private reconnectCount: number = 0;
-
-  /** @private Max reconnect attempts  */
-  private readonly maxReconnects: number = 10;
+  /** Active JWT */
+  private jwt: string | null;
+  private jwtRenewTimeoutId: NodeJS.Timer;
 
   /**
-   * @param  emailAddress Email address of Point user
-   * @param  authCode Auth code (JWT) provider
+   *
+   * @param emailAddress Email address of Point user account
+   * @param apiKey User's API Key
+   * @param apiUrl Point API URL
    */
   constructor(
     emailAddress: string,
-    authCode: () => string,
-    searchType = "standard",
-    apiUrl = "https://v1.pointapi.com"
+    apiKey: string,
+    apiUrl: string = "https://v1.pointapi.com"
   ) {
+    super(emailAddress, apiUrl);
+    this.apiKey = apiKey;
+
+    this.jwt = null;
+
+    this.refreshJwtToken();
+  }
+
+  public setCredentials(emailAddress: string, apiKey: string) {
     this.emailAddress = emailAddress;
-    this.authCode = authCode;
-    this.searchType = searchType;
-    this.apiUrl = apiUrl;
+    this.apiKey = apiKey;
 
-    this.reconnect();
-  }
-
-  /**
-   * Reconnects to the Point API socket.io
-   */
-  public reconnect(): void {
-    this.disconnect();
-
-    this.socket = io(this.apiUrl, {
-      reconnection: false,
-      query: {
-        emailAddress: this.emailAddress,
-        searchType: this.searchType
-      },
-      transportOptions: {
-        polling: {
-          extraHeaders: {
-            Authorization: "Bearer " + this.authCode()
-          }
-        }
-      }
-    });
-
-    this.socket.on("connect", () => {
-      this.reconnectCount = 0;
-    });
-    
-    this.socket.on("disconnect", (reason: any) => {
-      // If client was the one that disconnected,
-      // don't reconnect automatically
-      if (reason === "io client disconnect") return;
-
-      // Try to reconnect maxReconnect times using exponentially
-      // growing delays starting from 100ms
-      if (this.reconnectCount < this.maxReconnects) {
-        const delay = 100 * Math.pow(2, this.reconnectCount);
-        this.reconnectCount++;
-        setTimeout(() => {
-          this.reconnect();
-        }, delay);
-      }
-    });
-  }
-
-  /**
-   * Disconnects from the Point API manually
-   */
-  public disconnect(): void {
-    if (this.socket != null) {
-      this.socket.disconnect();
+    this.jwt = null;
+    if (this.jwtRenewTimeoutId) {
+      clearTimeout(this.jwtRenewTimeoutId);
     }
+
+    this.refreshJwtToken();
   }
 
-  /**
-   *  Query PointApi with seed text to get predicted suggestions
-   * @param seedText The text to base suggestion predictions off of
-   * @returns A list of the predicted suggestion objects
-   */
-  public autocomplete(
-    seedText: string,
-    currentContext?: string
-  ): Promise<AutocompleteResponse | null> {
-    return new Promise((resolve, reject) => {
-      if (this.socket.disconnected) {
-        reject("Socket is disconnected");
-      }
-      this.socket.emit(
-        "autocomplete",
-        { seedText: seedText.trim(), currentContext },
-        (response: AutocompleteResponse) => {
-          if (
-            !response ||
-            !response.suggestions ||
-            !response.suggestions.length
-          ) {
-            resolve(null);
-          }
-          resolve(response);
-        }
-      );
-    });
-  }
+  public initAutocompleteSession(
+    searchType: string = "standard"
+  ): AutocompleteSession {
+    if (!this.jwt) {
+      this.refreshJwtToken();
+    }
 
-  /**
-   *  Query PointApi with a hotkey trigger to get a full hotkey suggestion
-   * @param trigger String that is a shortcut for the full hotkey text 
-   * @returns A list of the predicted suggestion objects
-   */
-  public hotkey(
-    trigger: string,
-  ): Promise<AutocompleteResponse | null> {
-    return new Promise((resolve, reject) => {
-      if (this.socket.disconnected) {
-        reject("Socket is disconnected");
-      }
-      this.socket.emit(
-        "hotkey",
-        { trigger: trigger },
-        (response: AutocompleteResponse) => {
-          if (
-            !response ||
-            !response.suggestions ||
-            !response.suggestions.length
-          ) {
-            resolve(null);
-          }
-          resolve(response);
-        }
-      );
-    });
-  }
-
-  /**
-   *  Give feedback on Point Api's suggestions
-   */
-  public async feedback(
-    responseId: string,
-    suggestionText: string | string[],
-    type: "positive" | "negative"
-  ): Promise<void> {
-    this.socket.emit(
-      "feedback",
-      { responseId, text: suggestionText, type },
-      (response: { message: string; status: string }) => {
-        if (!response || response.status !== "success") {
-          if (response.message) {
-            throw new Error(response.message);
-          }
-          throw new Error("Could not record feedback");
-        }
-      }
+    return new AutocompleteSession(
+      this.emailAddress,
+      () => this.jwt as string,
+      searchType,
+      this.apiUrl
     );
   }
 
-  /**
-   *  Set the context of the autocomplete session
-   */
-  public async setContext(
-    previousMessage: string,
-    contextType: ContextType = "text"
-  ): Promise<void> {
-    this.socket.emit(
-      "set-context",
-      { previousMessage, contextType },
-      (response: { message: string; status: string }) => {
-        if (!response || response.status !== "success") {
-          if (response.message) {
-            throw new Error(response.message);
-          }
-          throw new Error("Could not set context");
-        }
-      }
-    );
+  public async authFetch(
+    method: string,
+    url: string,
+    data?: object,
+    headers?: object
+  ) {
+    if (!this.jwt) {
+      await this.refreshJwtToken();
+    }
+
+    const { jwt } = this;
+
+    const authHeaders = {
+      Authorization: `Bearer ${jwt}`,
+      ...headers
+    };
+    return super.authFetch(method, url, data, authHeaders);
   }
 
-  /**
-   *  Get reply suggestions given some recieved text
-   */
-  public reply(
-    previousMessage: string,
-    contextType: ContextType = "text"
-  ): Promise<ReplyResponse | null> {
-    return new Promise((resolve, reject) => {
-      if (this.socket.disconnected) {
-        reject("Socket is disconnected");
+  public async refreshJwtToken(autoRenew: boolean = true) {
+    const { emailAddress, apiUrl, apiKey } = this;
+    const response = await (await fetch(
+      `${apiUrl}/auth?emailAddress=${emailAddress}`,
+      {
+        headers: {
+          Authorization: `Bearer ${apiKey}`
+        },
+        method: "POST"
       }
-      this.socket.emit(
-        "reply",
-        { previousMessage, contextType },
-        (response: ReplyResponse) => {
-          if (!response || !response.replies || !response.replies.length) {
-            resolve(null);
-          }
-          resolve(response);
-        }
-      );
-    });
+    )).json();
+
+    this.jwt = await response.jwt;
+
+    if (autoRenew) {
+      if (this.jwtRenewTimeoutId) {
+        clearTimeout(this.jwtRenewTimeoutId);
+      }
+
+      // Renew JWT 5 seconds before it's exipration
+      this.jwtRenewTimeoutId = setTimeout(async () => {
+        await this.refreshJwtToken();
+      }, response.expiresAt - Date.now() - 5000);
+    }
   }
 }
