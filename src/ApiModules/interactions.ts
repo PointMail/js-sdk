@@ -15,29 +15,23 @@ export default class InteractionsApiModule {
     this.api = api;
   }
 
-  public async draftDiscarded(): Promise<StatusResponse> {
-    return this.storeInteraction("draftDiscarded");
+  public async draftDiscarded() {
+    this.storeInteraction("draftDiscarded");
   }
 
-  public async emailSent(messageId: string): Promise<StatusResponse> {
-    return this.storeInteraction("emailSent", { messageId });
+  public async emailSent(messageId: string) {
+    this.storeInteraction("emailSent", { messageId });
   }
 
-  private async storeInteraction(
-    type: string,
-    data?: object
-  ): Promise<StatusResponse> {
-    return this.authFetch("POST", {
-      type,
-      data
-    });
+  private async storeInteraction(type: string, data?: object) {
+    this.authFetch("POST", { type, data });
   }
 
-  /** Make authenticated request to custom suggestions api */
+  /** Make authenticated request to interactions api */
   private async authFetch(method: string, data?: object) {
     const headers = {
       "Content-Type": "application/json"
     };
-    return (await this.api.authFetch(method, this.url, data, headers)).json();
+    await this.api.authFetch(method, this.url, data, headers);
   }
 }
