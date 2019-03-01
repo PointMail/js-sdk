@@ -1,6 +1,5 @@
-import CustomSuggestionsApiModule from "./ApiModules/customSuggestions";
 import AutocompleteSession from "./ApiModules/autocompleteSession";
-import InteractionsApiModule from "./ApiModules/interactions";
+import PointApiBase from "./pointApiBase";
 
 export interface ErrorResponse {
   error: string;
@@ -21,18 +20,7 @@ export interface Subscription {
 /**
  * Point Websockets Api Instance
  */
-export default class PointApi {
-  /** Email address of Point user account */
-  public emailAddress: string;
-
-  /** Point API URL */
-  public readonly apiUrl: string;
-
-  public readonly customSuggestions: CustomSuggestionsApiModule;
-  public readonly interactions: InteractionsApiModule;
-
-  public account: Account;
-
+export default class PointApi extends PointApiBase {
   /** User's API Key */
   private apiKey: string;
 
@@ -51,15 +39,10 @@ export default class PointApi {
     apiKey: string,
     apiUrl: string = "https://v1.pointapi.com"
   ) {
-    this.emailAddress = emailAddress;
+    super(emailAddress, apiUrl);
     this.apiKey = apiKey;
-    this.apiUrl = apiUrl;
 
     this.jwt = null;
-
-    // Init API submodules
-    this.customSuggestions = new CustomSuggestionsApiModule(this);
-    this.interactions = new InteractionsApiModule(this);
 
     this.refreshJwtToken();
   }
@@ -99,25 +82,23 @@ export default class PointApi {
     );
   }
 
-  public async authFetch(method: string, url: string, data?: object, headers?: object) {
+  public async authFetch(
+    method: string,
+    url: string,
+    data?: object,
+    headers?: object
+  ) {
     if (!this.jwt) {
       await this.refreshJwtToken();
     }
 
-    const { emailAddress, apiUrl, jwt } = this;
-    const body = data ? JSON.stringify(data) : undefined;
-    const fullUrl = `${apiUrl}${url}?emailAddress=${emailAddress}`;
+    const { jwt } = this;
 
-    const response = await fetch(fullUrl, {
-      method,
-      body,
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        ...headers
-      }
-    });
-
-    return response;
+    const authHeaders = {
+      Authorization: `Bearer ${jwt}`,
+      ...headers
+    };
+    return super.authFetch(method, url, data, authHeaders);
   }
 
   public async refreshJwtToken(autoRenew: boolean = true) {

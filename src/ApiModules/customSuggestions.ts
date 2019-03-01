@@ -1,4 +1,4 @@
-import PointApi from "src";
+import PointApiBase from "../pointApiBase";
 
 /** Result of a GET request to api */
 interface GetResponse {
@@ -26,11 +26,11 @@ export interface Hotkey {
 
 /** Class to keep track of api credentials and make requests to the custom suggestions api */
 export default class CustomSuggestionsApiModule {
-  private readonly api: PointApi;
+  private readonly api: PointApiBase;
 
   private readonly url: string = "/extension/custom";
 
-  constructor(api: PointApi) {
+  constructor(api: PointApiBase) {
     this.api = api;
   }
 

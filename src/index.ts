@@ -1,4 +1,6 @@
 import PointApi, { ErrorResponse, Account, Subscription } from "./main";
+import PointApiBase from "./pointApiBase";
+
 import AutocompleteSession, {
   ContextType,
   SuggestionMeta,
@@ -17,6 +19,7 @@ import InteractionsApiModule, {
 } from "./ApiModules/interactions";
 
 export default PointApi;
+export { PointApiBase };
 export { ErrorResponse, Account, Subscription };
 export {
   AutocompleteSession,
