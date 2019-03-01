@@ -17,8 +17,6 @@ export default class PointApiBase {
   public readonly customSuggestions: CustomSuggestionsApiModule;
   public readonly interactions: InteractionsApiModule;
 
-  public account: Account;
-
   /**
    *
    * @param emailAddress Email address of Point user account
@@ -38,10 +36,7 @@ export default class PointApiBase {
   }
 
   public async getAccountInfo(): Promise<Account> {
-    // FIXME implement this when we have /account endpoint
-    throw new Error(
-      "No account info without API_KEY until we have a separate endpoint"
-    );
+    return (await this.authFetch("GET", "/account")).json();
   }
 
   public initAutocompleteSession(

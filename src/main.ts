@@ -59,14 +59,6 @@ export default class PointApi extends PointApiBase {
     this.refreshJwtToken();
   }
 
-  public async getAccountInfo(): Promise<Account> {
-    if (!this.jwt) {
-      await this.refreshJwtToken();
-    }
-
-    return this.account;
-  }
-
   public initAutocompleteSession(
     searchType: string = "standard"
   ): AutocompleteSession {
@@ -114,11 +106,6 @@ export default class PointApi extends PointApiBase {
     )).json();
 
     this.jwt = await response.jwt;
-    this.account = {
-      name: await response.name,
-      emailAddress: await response.emailAddress,
-      subscription: await response.subscription
-    };
 
     if (autoRenew) {
       if (this.jwtRenewTimeoutId) {
