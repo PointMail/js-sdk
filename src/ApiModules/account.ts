@@ -1,10 +1,6 @@
 import PointApiBase from "../pointApiBase";
 
-export enum SearchType {
-  standard,
-  keyword,
-  hybrid
-}
+export type SearchType = "standard" | "keyword" | "hybrid";
 
 export interface Account {
   emailAddress: string;
