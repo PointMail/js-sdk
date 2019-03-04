@@ -1,7 +1,8 @@
 import CustomSuggestionsApiModule from "./ApiModules/customSuggestions";
 import AutocompleteSession from "./ApiModules/autocompleteSession";
 import InteractionsApiModule from "./ApiModules/interactions";
-import { Account } from "./main";
+import { Account } from "./ApiModules/account";
+import AccountApiModule from "./ApiModules/account";
 
 /**
  * Point Websockets Api Instance that uses a single JWT
@@ -14,6 +15,7 @@ export default class PointApiBase {
   /** Point API URL */
   public readonly apiUrl: string;
 
+  public readonly account: AccountApiModule;
   public readonly customSuggestions: CustomSuggestionsApiModule;
   public readonly interactions: InteractionsApiModule;
 
@@ -31,11 +33,13 @@ export default class PointApiBase {
     this.apiUrl = apiUrl;
 
     // Init API submodules
+    this.account = new AccountApiModule(this);
     this.customSuggestions = new CustomSuggestionsApiModule(this);
     this.interactions = new InteractionsApiModule(this);
   }
 
   public async getAccountInfo(): Promise<Account> {
+    // getAccountInfo() is deprecated. Use account.get()
     return (await this.authFetch("GET", "/account")).json();
   }
 

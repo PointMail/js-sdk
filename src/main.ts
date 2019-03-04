@@ -5,20 +5,8 @@ export interface ErrorResponse {
   error: string;
 }
 
-export interface Account {
-  name: string;
-  emailAddress: string;
-  subscription: Subscription;
-}
-
-export interface Subscription {
-  membershipType: string;
-  isActive: boolean;
-  expirationDate: number | null;
-}
-
 /**
- * Point Websockets Api Instance
+ * Point Api Instance
  */
 export default class PointApi extends PointApiBase {
   /** User's API Key */
