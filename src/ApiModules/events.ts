@@ -18,7 +18,10 @@ export default class EventsApiModule {
   }
 
   private async storeEvent(type: string, data?: object) {
-    this.fetch("POST", { type, data });
+    const headers = {
+      "Content-Type": "application/json"
+    };
+    this.fetch("POST", { type, data }, headers);
   }
 
   /** Make unauthenticated request to events api */
