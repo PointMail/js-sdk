@@ -21,6 +21,8 @@ import CustomSuggestionsApiModule, {
   Hotkey
 } from "./ApiModules/customSuggestions";
 
+import Events from "./ApiModules/events";
+
 import InteractionsApiModule, {
   StatusResponse
 } from "./ApiModules/interactions";
@@ -38,5 +40,6 @@ export {
   ReplyResponse
 };
 export { CustomSuggestionsApiModule, Suggestion, Hotkey };
+export { Events };
 export { InteractionsApiModule, StatusResponse };
 export * from "./main";
