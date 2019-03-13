@@ -89,7 +89,8 @@ export default class PointApi extends PointApiBase {
         headers: {
           Authorization: `Bearer ${apiKey}`
         },
-        method: "POST"
+        method: "POST",
+        credentials: "include"
       }
     )).json();
 
