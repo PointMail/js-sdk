@@ -76,7 +76,8 @@ export default class PointApiBase {
     const response = await fetch(fullUrl, {
       method,
       body,
-      headers
+      headers,
+      credentials: "include"
     });
 
     return response;
