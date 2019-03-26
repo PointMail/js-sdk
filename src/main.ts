@@ -31,8 +31,6 @@ export default class PointApi extends PointApiBase {
     this.apiKey = apiKey;
 
     this.jwt = null;
-
-    this.refreshJwtToken();
   }
 
   public setCredentials(emailAddress: string, apiKey: string) {
