@@ -79,31 +79,53 @@ export default class PointApi extends PointApiBase {
     return super.authFetch(method, url, data, authHeaders);
   }
 
-  public async refreshJwtToken(autoRenew: boolean = true) {
+  public async refreshJwtToken(autoRenew: boolean = true, retryCount: number = 0) {
     const { emailAddress, apiUrl, apiKey } = this;
-    const response = await (await fetch(
-      `${apiUrl}/auth?emailAddress=${emailAddress}`,
-      {
-        headers: {
-          Authorization: `Bearer ${apiKey}`
-        },
-        method: "POST",
-        credentials: "include"
+
+    try {
+      const response = await fetch(
+        `${apiUrl}/auth?emailAddress=${emailAddress}`,
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`
+          },
+          method: "POST",
+          credentials: "include"
+        }
+      );
+
+      if (response.ok) {
+        const responseJson = await response.json();
+
+        this.jwt = await responseJson.jwt;
+
+        if (autoRenew) {
+          if (this.jwtRenewTimeoutId) {
+            clearInterval(this.jwtRenewTimeoutId);
+          }
+
+          // Renew JWT 5 seconds before it's exipration
+          this.jwtRenewTimeoutId = setInterval(async () => {
+            clearInterval(this.jwtRenewTimeoutId);
+            await this.refreshJwtToken();
+          }, responseJson.expiresAt - Date.now() - 5000);
+        }
+      } else {
+        // Server returned an error
+        if (response.status >= 500 && retryCount < 10) {
+          // Retry /auth after some delay
+          const delay = Math.pow(2, retryCount) * 500;
+          await new Promise(r => setTimeout(r, delay))
+          await this.refreshJwtToken(true, retryCount + 1);
+        }
       }
-    )).json();
-
-    this.jwt = await response.jwt;
-
-    if (autoRenew) {
-      if (this.jwtRenewTimeoutId) {
-        clearInterval(this.jwtRenewTimeoutId);
+    } catch (e) {
+      if (retryCount < 10) {
+        // Retry /auth after some delay
+        const delay = Math.pow(2, retryCount) * 500;
+        await new Promise(r => setTimeout(r, delay));
+        await this.refreshJwtToken(true, retryCount + 1);
       }
-
-      // Renew JWT 5 seconds before it's exipration
-      this.jwtRenewTimeoutId = setInterval(async () => {
-        clearInterval(this.jwtRenewTimeoutId);
-        await this.refreshJwtToken();
-      }, response.expiresAt - Date.now() - 5000);
     }
   }
 }
