@@ -39,7 +39,7 @@ export default class PointApi extends PointApiBase {
 
     this.jwt = null;
     if (this.jwtRenewTimeoutId) {
-      clearTimeout(this.jwtRenewTimeoutId);
+      clearInterval(this.jwtRenewTimeoutId);
     }
 
     this.refreshJwtToken();
@@ -96,11 +96,12 @@ export default class PointApi extends PointApiBase {
 
     if (autoRenew) {
       if (this.jwtRenewTimeoutId) {
-        clearTimeout(this.jwtRenewTimeoutId);
+        clearInterval(this.jwtRenewTimeoutId);
       }
 
       // Renew JWT 5 seconds before it's exipration
-      this.jwtRenewTimeoutId = setTimeout(async () => {
+      this.jwtRenewTimeoutId = setInterval(async () => {
+        clearInterval(this.jwtRenewTimeoutId);
         await this.refreshJwtToken();
       }, response.expiresAt - Date.now() - 5000);
     }
