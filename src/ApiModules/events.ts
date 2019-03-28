@@ -16,42 +16,44 @@ export default class EventsApiModule {
   }
 
   public async scribeInstalled(id: string) {
-    this.storeEvent("scribeInstalled", { id });
+    this.storeEvent("scribeInstalled", id);
   }
 
   public async scribeUninstalled(id: string) {
-    this.storeEvent("scribeUninstalled", { id });
+    this.storeEvent("scribeUninstalled", id);
   }
 
   public async paymentInfoFreeTrialShown(id: string) {
-    this.storeEvent("paymentInfoFreeTrialShown", { id });
+    this.storeEvent("paymentInfoFreeTrialShown", id);
   }
 
   public async paymentFailure(id: string) {
-    this.storeEvent("paymentFailure", { id });
+    this.storeEvent("paymentFailure", id);
   }
 
   public async paymentOpened(id: string) {
-    this.storeEvent("paymentOpened", { id });
+    this.storeEvent("paymentOpened", id);
   }
 
   public async paymentSuccess(id: string) {
-    this.storeEvent("paymentSuccess", { id });
+    this.storeEvent("paymentSuccess", id);
   }
 
-  private async storeEvent(type: string, data: object) {
+  private async storeEvent(type: string, trackingId: string, data?: object) {
     const headers = {
       "Content-Type": "application/json"
     };
 
+    const payload = { type, trackingId, data };
+
     if (this.emailAddress) {
-      data["emailAddress"] = this.emailAddress;
+      payload["emailAddress"] = this.emailAddress;
     }
 
-    this.fetch("POST", { type, data }, headers);
+    this.fetch("POST", payload, headers);
   }
 
-  /** Make unauthenticated request to events api */
+  /** Make unauthenticated request to Events API Resource */
   private async fetch(
     method: string,
     data?: object,
