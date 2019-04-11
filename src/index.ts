@@ -17,8 +17,9 @@ import AutocompleteSession, {
 } from "./ApiModules/autocompleteSession";
 
 import CustomSuggestionsApiModule, {
-  Suggestion,
-  Hotkey
+  Blacklist,
+  Hotkey,
+  Suggestion
 } from "./ApiModules/customSuggestions";
 
 import Events from "./ApiModules/events";
@@ -39,7 +40,7 @@ export {
   AutocompleteResponse,
   ReplyResponse
 };
-export { CustomSuggestionsApiModule, Suggestion, Hotkey };
+export { CustomSuggestionsApiModule, Blacklist, Hotkey, Suggestion };
 export { Events };
 export { InteractionsApiModule, StatusResponse };
 export * from "./main";

@@ -2,13 +2,23 @@ import PointApiBase from "../pointApiBase";
 
 /** Result of a GET request to api */
 interface GetResponse {
+  blacklistEnabled: boolean;
+  blacklist: Blacklist[];
+  suggestionsEnabled: boolean;
   suggestions: Suggestion[];
+  hotkeysEnabled: boolean;
   hotkeys: Hotkey[];
 }
 
 /** Result containing just a status field */
 interface StatusResponse {
   status: string;
+}
+
+/** Blacklisted suggestion object */
+export interface Blacklist {
+  id: string;
+  text: string;
 }
 
 /** Custom suggestion object. Adds custom suggestion text to the dropdown */
