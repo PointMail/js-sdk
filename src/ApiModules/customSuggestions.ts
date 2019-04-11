@@ -1,7 +1,7 @@
 import PointApiBase from "../pointApiBase";
 
 /** Result of a GET request to api */
-interface GetResponse {
+export interface GetResponse {
   blacklistEnabled: boolean;
   blacklist: Blacklist[];
   suggestionsEnabled: boolean;
