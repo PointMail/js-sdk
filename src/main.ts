@@ -68,6 +68,9 @@ export default class PointApi extends PointApiBase {
   ) {
     if (!this.jwt) {
       await this.refreshJwtToken();
+      if (!this.jwt) {
+        throw new Error("Unauthorized");
+      }
     }
 
     const { jwt } = this;
@@ -110,8 +113,12 @@ export default class PointApi extends PointApiBase {
           }, responseJson.expiresAt - Date.now() - 5000);
         }
       } else {
-        // Server returned an error
-        if (response.status >= 500 && retryCount < 10) {
+        if (response.status === 401) {
+          // Unauthorized (wrong token, invalid user, etc.)
+          this.jwt = null;
+        }
+        else if (response.status >= 500 && retryCount < 10) {
+          // Server returned an internal error
           // Retry /auth after some delay
           const delay = Math.pow(2, retryCount) * 500;
           await new Promise(r => setTimeout(r, delay))
