@@ -2,11 +2,7 @@ import PointApiBase from "../pointApiBase";
 
 /** Result of a GET request to api */
 export interface GetResponse {
-  blacklistEnabled: boolean;
-  blacklist: Blacklist[];
-  suggestionsEnabled: boolean;
   suggestions: Suggestion[];
-  hotkeysEnabled: boolean;
   hotkeys: Hotkey[];
 }
 
