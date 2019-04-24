@@ -23,6 +23,10 @@ export default class EventsApiModule {
     this.storeEvent("scribeUninstalled", id);
   }
 
+  public async signInWithGoogle(id: string) {
+    this.storeEvent("singInWithGoogle", id);
+  }
+
   public async paymentInfoFreeTrialShown(id: string) {
     this.storeEvent("paymentInfoFreeTrialShown", id);
   }
