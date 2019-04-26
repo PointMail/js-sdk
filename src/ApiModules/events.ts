@@ -16,27 +16,31 @@ export default class EventsApiModule {
   }
 
   public async scribeInstalled(id: string) {
-    this.storeEvent("scribeInstalled", id);
+    await this.storeEvent("scribeInstalled", id);
   }
 
   public async scribeUninstalled(id: string) {
-    this.storeEvent("scribeUninstalled", id);
+    await this.storeEvent("scribeUninstalled", id);
+  }
+
+  public async signInWithGoogle(id: string) {
+    await this.storeEvent("signInWithGoogle", id);
   }
 
   public async paymentInfoFreeTrialShown(id: string) {
-    this.storeEvent("paymentInfoFreeTrialShown", id);
+    await this.storeEvent("paymentInfoFreeTrialShown", id);
   }
 
   public async paymentFailure(id: string) {
-    this.storeEvent("paymentFailure", id);
+    await this.storeEvent("paymentFailure", id);
   }
 
   public async paymentOpened(id: string) {
-    this.storeEvent("paymentOpened", id);
+    await this.storeEvent("paymentOpened", id);
   }
 
   public async paymentSuccess(id: string) {
-    this.storeEvent("paymentSuccess", id);
+    await this.storeEvent("paymentSuccess", id);
   }
 
   private async storeEvent(type: string, trackingId: string, data?: object) {
@@ -50,7 +54,7 @@ export default class EventsApiModule {
       payload["emailAddress"] = this.emailAddress;
     }
 
-    this.fetch("POST", payload, headers);
+    await this.fetch("POST", payload, headers);
   }
 
   /** Make unauthenticated request to Events API Resource */

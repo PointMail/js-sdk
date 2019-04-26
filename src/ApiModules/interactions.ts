@@ -16,15 +16,15 @@ export default class InteractionsApiModule {
   }
 
   public async draftDiscarded() {
-    this.storeInteraction("draftDiscarded");
+    await this.storeInteraction("draftDiscarded");
   }
 
   public async emailSent(messageId: string) {
-    this.storeInteraction("emailSent", { messageId });
+    await this.storeInteraction("emailSent", { messageId });
   }
 
   private async storeInteraction(type: string, data?: object) {
-    this.authFetch("POST", { type, data });
+    await this.authFetch("POST", { type, data });
   }
 
   /** Make authenticated request to interactions api */
