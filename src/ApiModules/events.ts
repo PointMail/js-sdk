@@ -23,6 +23,10 @@ export default class EventsApiModule {
     await this.storeEvent("scribeUninstalled", id);
   }
 
+  public async acceptedToS(id: string) {
+    await this.storeEvent("acceptedToS", id);
+  }
+
   public async signInWithGoogle(id: string) {
     await this.storeEvent("signInWithGoogle", id);
   }
