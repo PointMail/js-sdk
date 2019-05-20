@@ -23,6 +23,22 @@ export default class InteractionsApiModule {
     await this.storeInteraction("emailSent", { messageId });
   }
 
+  public async hotkeyMenuOpened() {
+    await this.storeInteraction("hotkeyMenuOpened");
+  }
+
+  public async hotkeyMenuClosed() {
+    await this.storeInteraction("hotkeyMenuClosed");
+  }
+
+  public async hotkeyCopied(trigger: string) {
+    await this.storeInteraction("hotkeyCopied", { trigger });
+  }
+
+  public async hotkeyIconMoved() {
+    await this.storeInteraction("hotkeyIconMoved");
+  }
+
   private async storeInteraction(type: string, data?: object) {
     await this.authFetch("POST", { type, data });
   }
