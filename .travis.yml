@@ -1,11 +1,26 @@
 language: node_js
 node_js:
-  - "10.3"
-before_install:
-  - npm i -g npm@6.4.0
+- '10.3'
 cache:
   directories:
-    - "node_modules"
+  - node_modules
 notifications:
-  slack:
-    pointapi:Sjvqcwm25jFhXxEdZirCDqRk
+  slack: pointapi:Sjvqcwm25jFhXxEdZirCDqRk
+before_install:
+- npm i -g npm@6.9.0
+install:
+- npm ci
+script:
+- npm test
+before_deploy:
+- npm run build
+deploy:
+  provider: npm
+  email: przemek@pkuczynski.pl
+  tag: next
+  api_key:
+    secure: X1iCf9byvtm6xJdxFLPthVIXGb+hllxP8yZhMRx9haGoreFjb1tpnqfGhqHMuI4OyV6/wtIvSVi4gpRAwqLX1WYFSuYMTi5nqtC+e1aaRkmMneJ+SjNdYwI2mz7LG7z7LRK7Krqxu04dmkrPwaH/UJWIhuH15HoDGXPcOMvgmpgwpHgQHAQh+osoo8dRhV0s8y1Xg9yv/AaW17+T3Ax/SXINSBO2zAm1GiH5S55dL0f6T5fLT4QbJr/gN7MRT5U8XxJex9+cXaKYhqU0ZW3hxps4kd7PS+Rg+U1UwLG0ShyKmeh9e7nLNqqZGhXB/TizifedKREdiBdpbwJBCv4g4FU0t0GPJV20Gz7hUwJAsUCg09LcuME4ftNJ1gCzL4x+W1f68o21/VR1TQWvKQL+/dlCQy90XMZvsA1z15BOiH2ZL25NPVMlRdmNhlviryyB1NUWx8PGm1qsJIKikEPFFAVQxh4keeTEwIIYIYDhVNsCWJa+QfUQmW3gI/K0mgziMkRQxoa78G731jYwoNjE4uFlZXA01voafupm9JuWPeuhKAWuoxI4a3feJk2YQwVQ5wR7SrvJhgM0wUmImsMsFzAjqjKR3apar4oOpQr7y5xmAqeNnPZ/YZ0hc6yJrOrIrPnhtjFGrEuRZABbJOk1JNtc179Mfl4MrIVZ9aIuJUA=
+  on:
+    repo: PointMail/js-sdk
+    branch: master
+    tags: true

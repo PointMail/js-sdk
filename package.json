@@ -23,6 +23,7 @@
     "test": "jest",
     "build": "tsc && npm run build-umd",
     "build-umd": "parcel build src/index-umd.ts --global PointApi --out-file index.js",
+    "release": "npm version patch -m \"Bumping to %s\" && git push origin master --tags",
     "gen-docs": "typedoc --out docs src --theme markdown",
     "publish": "npm run build-umd && npm run build && npm publish --access public && npm run push-to-site",
     "push-to-site": "aws s3 cp ./dist/index.js s3://point-api-website/api.js"
@@ -66,5 +67,8 @@
   },
   "browserslist": [
     "last 1 Chrome version"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
