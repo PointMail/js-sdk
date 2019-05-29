@@ -60,7 +60,7 @@ export default class CustomSuggestionsApiModule {
     newText: string,
     oldTrigger?: string,
     newTrigger?: string
-  ): Promise<GetResponse> {
+  ): Promise<StatusResponse> {
     return this.authFetch("PUT", {type, oldText, newText, oldTrigger, newTrigger})
   }
 
