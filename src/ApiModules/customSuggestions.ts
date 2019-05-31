@@ -54,6 +54,16 @@ export default class CustomSuggestionsApiModule {
     return this.authFetch("DELETE", { text, trigger, type });
   }
 
+  public async edit(
+    type:string,
+    oldText: string,
+    newText: string,
+    oldTrigger?: string,
+    newTrigger?: string
+  ): Promise<StatusResponse> {
+    return this.authFetch("PUT", {type, oldText, newText, oldTrigger, newTrigger})
+  }
+
   /** Add a custom suggestion or hotkey */
   public async add(
     text: string,
