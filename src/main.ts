@@ -1,5 +1,6 @@
 import AutocompleteSession from "./ApiModules/autocompleteSession";
 import PointApiBase from "./pointApiBase";
+import AuthManager from "./authManager";
 
 export interface ErrorResponse {
   error: string;
@@ -9,12 +10,7 @@ export interface ErrorResponse {
  * Point Api Instance
  */
 export default class PointApi extends PointApiBase {
-  /** User's API Key */
-  private apiKey: string;
-
-  /** Active JWT */
-  private jwt: string | null;
-  private jwtRenewTimeoutId: NodeJS.Timer;
+  private authManager: AuthManager;
 
   /**
    *
@@ -28,33 +24,20 @@ export default class PointApi extends PointApiBase {
     apiUrl: string = "https://v1.pointapi.com"
   ) {
     super(emailAddress, apiUrl);
-    this.apiKey = apiKey;
 
-    this.jwt = null;
+    this.authManager = new AuthManager(emailAddress, apiKey, apiUrl);
   }
 
   public setCredentials(emailAddress: string, apiKey: string) {
-    this.emailAddress = emailAddress;
-    this.apiKey = apiKey;
-
-    this.jwt = null;
-    if (this.jwtRenewTimeoutId) {
-      clearTimeout(this.jwtRenewTimeoutId);
-    }
-
-    this.refreshJwtToken();
+    this.authManager.setCredentials(emailAddress, apiKey);
   }
 
   public initAutocompleteSession(
     searchType: string = "standard"
   ): AutocompleteSession {
-    if (!this.jwt) {
-      this.refreshJwtToken();
-    }
-
     return new AutocompleteSession(
       this.emailAddress,
-      () => this.jwt as string,
+      this.authManager,
       searchType,
       this.apiUrl
     );
@@ -66,72 +49,12 @@ export default class PointApi extends PointApiBase {
     data?: object,
     headers?: object
   ) {
-    if (!this.jwt) {
-      await this.refreshJwtToken();
-      if (!this.jwt) {
-        throw new Error("Unauthorized");
-      }
-    }
-
-    const { jwt } = this;
+    const jwt = await this.authManager.getJwt();
 
     const authHeaders = {
       Authorization: `Bearer ${jwt}`,
       ...headers
     };
     return super.authFetch(method, url, data, authHeaders);
-  }
-
-  public async refreshJwtToken(autoRenew: boolean = true, retryCount: number = 0) {
-    const { emailAddress, apiUrl, apiKey } = this;
-
-    try {
-      const response = await fetch(
-        `${apiUrl}/auth?emailAddress=${emailAddress}`,
-        {
-          headers: {
-            Authorization: `Bearer ${apiKey}`
-          },
-          method: "POST",
-          credentials: "include"
-        }
-      );
-
-      if (response.ok) {
-        const responseJson = await response.json();
-
-        this.jwt = await responseJson.jwt;
-
-        if (autoRenew) {
-          if (this.jwtRenewTimeoutId) {
-            clearTimeout(this.jwtRenewTimeoutId);
-          }
-
-          // Renew JWT 5 seconds before it's exipration
-          this.jwtRenewTimeoutId = setTimeout(async () => {
-            await this.refreshJwtToken();
-          }, responseJson.expiresAt - Date.now() - 5000);
-        }
-      } else {
-        if (response.status === 401) {
-          // Unauthorized (wrong token, invalid user, etc.)
-          this.jwt = null;
-        }
-        else if (response.status >= 500 && retryCount < 10) {
-          // Server returned an internal error
-          // Retry /auth after some delay
-          const delay = Math.pow(2, retryCount) * 500;
-          await new Promise(r => setTimeout(r, delay))
-          await this.refreshJwtToken(true, retryCount + 1);
-        }
-      }
-    } catch (e) {
-      if (retryCount < 10) {
-        // Retry /auth after some delay
-        const delay = Math.pow(2, retryCount) * 500;
-        await new Promise(r => setTimeout(r, delay));
-        await this.refreshJwtToken(true, retryCount + 1);
-      }
-    }
   }
 }
