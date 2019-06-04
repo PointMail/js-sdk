@@ -104,8 +104,13 @@ export default class AutocompleteSession {
 
     this.socket.on("disconnect", (reason: any) => {
       // If client was the one that disconnected,
-      // don't reconnect automatically
+      // don't reconnect automatically.
       if (reason === "io client disconnect") return;
+
+      // If server was the one that disconnected,
+      // the authentication credentials are probably
+      // invalid. Don't reconnect automatically.
+      if (reason === "io server disconnect") return;
 
       // Try to reconnect maxReconnect times using exponentially
       // growing delays starting from 100ms
