@@ -21,7 +21,6 @@ const apiSession = api.initAutocompleteSession();
 
 test("Inits PointApi object correctly", () => {
   expect(api.emailAddress).toEqual(emailAddress);
-  expect(api.apiKey).toEqual(apiKey);
 });
 
 describe("Query suggestions", () => {
