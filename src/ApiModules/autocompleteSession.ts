@@ -74,8 +74,6 @@ export default class AutocompleteSession {
     this.authManager = authManager;
     this.searchType = searchType;
     this.apiUrl = apiUrl;
-
-    this.reconnect();
   }
 
   /**
@@ -141,6 +139,7 @@ export default class AutocompleteSession {
       this.socket.disconnect();
     }
 
+    debugger;
     this.authManager.offJwtChange(this.onJwtChange);
   }
 

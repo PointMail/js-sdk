@@ -1,4 +1,4 @@
-import PointApi from "./../src/main";
+import PointApi from "../main";
 import {
   suggestions,
   testResponse,
@@ -11,13 +11,14 @@ import {
 const { suggestionsResponse } = testResponse;
 const emailAddress = "aiansiti@college.harvard.edu";
 const apiKey = "authcode1234";
+jest.mock("../authManager");
 jest.mock(
   "socket.io-client",
   () => require.requireActual("../__mocks__/socket-mock").default
 );
 process.env.REACT_APP_BASE_URI = "localhost:5000";
 const api = new PointApi(emailAddress, apiKey);
-const apiSession = api.initAutocompleteSession();
+const apiSessionPromise = api.initAutocompleteSession();
 
 test("Inits PointApi object correctly", () => {
   expect(api.emailAddress).toEqual(emailAddress);
@@ -25,8 +26,11 @@ test("Inits PointApi object correctly", () => {
 
 describe("Query suggestions", () => {
   test("Returns results correctly", async () => {
+    const apiSession = await apiSessionPromise;
+
     const seedText = "hello123";
     const result = await apiSession.autocomplete(seedText);
+    expect(result).toBeDefined();
     expect(result.suggestions).toHaveLength(3);
     expect(mockSuggestions.mock.calls[0][0]).toHaveProperty(
       "seedText",
@@ -34,6 +38,8 @@ describe("Query suggestions", () => {
     );
   });
   test("Bad responses", async () => {
+    const apiSession = await apiSessionPromise;
+
     suggestionsResponse.suggestions = [];
     expect(await apiSession.autocomplete("hello")).toBeNull();
     suggestionsResponse.suggestions = null;
@@ -44,6 +50,8 @@ describe("Query suggestions", () => {
 });
 
 test("Chosen suggestions tracking", async () => {
+  const apiSession = await apiSessionPromise;
+
   await expect(
     apiSession.feedback("", suggestions[0].suggestion, "positive")
   ).resolves.toBeUndefined();
@@ -57,11 +65,15 @@ test("Chosen suggestions tracking", async () => {
 });
 
 test("Set Gmail Context", async () => {
+  const apiSession = await apiSessionPromise;
+
   await apiSession.setContext("hello", "gmail");
   expect(mockSetContext).toBeCalled();
 });
 
 test("Gets replies", async () => {
+  const apiSession = await apiSessionPromise;
+
   const result = await apiSession.reply("hello", "text");
   expect(result.replies[0].suggestions).toHaveLength(3);
   expect(mockReplies).toBeCalled();

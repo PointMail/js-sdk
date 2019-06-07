@@ -1,0 +1,13 @@
+const onJwtChange = jest.fn();
+const offJwtChange = jest.fn();
+
+const MockAuthManager = {
+  onJwtChange: jest.fn(),
+  offJwtChange: jest.fn(),
+}
+
+const constructor = () => MockAuthManager;
+
+export default constructor;
+// console.log(AuthManager);
+// AuthManager.default.mockImplementation(() => MockAuthManager);

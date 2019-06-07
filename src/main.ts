@@ -32,15 +32,19 @@ export default class PointApi extends PointApiBase {
     this.authManager.setCredentials(emailAddress, apiKey);
   }
 
-  public initAutocompleteSession(
+  public async initAutocompleteSession(
     searchType: string = "standard"
-  ): AutocompleteSession {
-    return new AutocompleteSession(
+  ): Promise<AutocompleteSession> {
+    const session = new AutocompleteSession(
       this.emailAddress,
       this.authManager,
       searchType,
       this.apiUrl
     );
+
+    await session.reconnect();
+
+    return session;
   }
 
   public async authFetch(
