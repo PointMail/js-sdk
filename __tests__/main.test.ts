@@ -1,4 +1,4 @@
-import PointApi from "../main";
+import PointApi from "../src/main";
 import {
   suggestions,
   testResponse,
@@ -6,12 +6,11 @@ import {
   mockSuggestions,
   mockSetContext,
   mockReplies,
-  replies
 } from "../__mocks__/socket-mock";
 const { suggestionsResponse } = testResponse;
 const emailAddress = "aiansiti@college.harvard.edu";
 const apiKey = "authcode1234";
-jest.mock("../authManager");
+jest.mock("../src/authManager");
 jest.mock(
   "socket.io-client",
   () => require.requireActual("../__mocks__/socket-mock").default

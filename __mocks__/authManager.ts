@@ -2,8 +2,8 @@ const onJwtChange = jest.fn();
 const offJwtChange = jest.fn();
 
 const MockAuthManager = {
-  onJwtChange: jest.fn(),
-  offJwtChange: jest.fn(),
+  onJwtChange,
+  offJwtChange,
 }
 
 const constructor = () => MockAuthManager;
