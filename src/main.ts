@@ -32,8 +32,37 @@ export default class PointApi extends PointApiBase {
     this.authManager.setCredentials(emailAddress, apiKey);
   }
 
-  public async initAutocompleteSession(
-    searchType: string = "standard"
+  /**
+   * @deprecated Please use initAutocompleteSessionAsync() method instead.
+   * 
+   * Initializes a new autocomplete session. 
+   * This method doesn't track if the session has finished connection init.
+   * 
+   * @param searchType how to search for matching suggestions (standard, keyword, hybdrid)
+   */
+  public initAutocompleteSession(
+    searchType: string
+  ): AutocompleteSession {
+    const session = new AutocompleteSession(
+      this.emailAddress,
+      this.authManager,
+      searchType,
+      this.apiUrl
+    );
+
+    session.reconnect();
+
+    return session;
+  }
+
+
+  /** 
+   * Initializes a new autocomplete session. A promise will return if connection is successfully made.
+   * 
+   * @param searchType how to search for matching suggestions (standard, keyword, hybdrid)
+   */
+  public async initAutocompleteSessionAsync(
+    searchType: string
   ): Promise<AutocompleteSession> {
     const session = new AutocompleteSession(
       this.emailAddress,

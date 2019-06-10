@@ -1,5 +1,5 @@
 import * as ioProxy from "socket.io-client";
-import AuthManager from "src/authManager";
+import AuthManager from "../authManager";
 const io: SocketIOClientStatic = (ioProxy as any).default || ioProxy;
 
 export type ContextType = "text" | "gmail";
@@ -139,7 +139,6 @@ export default class AutocompleteSession {
       this.socket.disconnect();
     }
 
-    debugger;
     this.authManager.offJwtChange(this.onJwtChange);
   }
 
