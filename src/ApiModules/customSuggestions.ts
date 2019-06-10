@@ -28,7 +28,7 @@ export interface Hotkey {
   id: string;
   trigger: string;
   text: string;
-  type: string; //generated vs custom
+  type: "generated" | "custom"; // generated vs custom
 }
 
 /** Class to keep track of api credentials and make requests to the custom suggestions api */
