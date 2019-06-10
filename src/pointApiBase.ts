@@ -38,14 +38,15 @@ export default class PointApiBase {
 
   public async getAccountInfo(): Promise<Account> {
     // getAccountInfo() is deprecated. Use account.get()
-    return (await this.authFetch("GET", "/account")).json();
+    return (await this.authFetch("GET", "/account", false)).json();
   }
 
   public async authFetch(
     method: string,
     url: string,
+    mustBeActive: boolean,
     data?: object,
-    headers?: Record<string, string>
+    headers?: Record<string, string>,
   ) {
     return this.fetch(method, url, data, headers);
   }
