@@ -39,6 +39,22 @@ export default class InteractionsApiModule {
     await this.storeInteraction("hotkeyIconMoved");
   }
 
+  public async tutorialOpened() {
+    await this.storeInteraction("tutorialOpened");
+  }
+
+  public async tutorialStepViewed(step: number, stepText?: string) {
+    await this.storeInteraction("tutorialStepViewed", {step, stepText});
+  }
+
+  public async tutorialFinished() {
+    await this.storeInteraction("tutorialFinished");
+  }
+
+  public async tutorialClosed() {
+    await this.storeInteraction("tutorialClosed");
+  }
+
   private async storeInteraction(type: string, data?: object) {
     await this.authFetch("POST", { type, data });
   }
