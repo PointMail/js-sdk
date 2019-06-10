@@ -1,12 +1,10 @@
 import CustomSuggestionsApiModule from "./ApiModules/customSuggestions";
-import AutocompleteSession from "./ApiModules/autocompleteSession";
 import InteractionsApiModule from "./ApiModules/interactions";
 import { Account } from "./ApiModules/account";
 import AccountApiModule from "./ApiModules/account";
 
 /**
- * Point Websockets Api Instance that uses a single JWT
- * and no API key
+ * Point API instance without authorization manager.
  */
 export default class PointApiBase {
   /** Email address of Point user account */
@@ -41,17 +39,6 @@ export default class PointApiBase {
   public async getAccountInfo(): Promise<Account> {
     // getAccountInfo() is deprecated. Use account.get()
     return (await this.authFetch("GET", "/account")).json();
-  }
-
-  public initAutocompleteSession(
-    searchType: string = "standard"
-  ): AutocompleteSession {
-    return new AutocompleteSession(
-      this.emailAddress,
-      () => "" as string,
-      searchType,
-      this.apiUrl
-    );
   }
 
   public async authFetch(

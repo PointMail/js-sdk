@@ -72,9 +72,13 @@ const emit = jest.fn().mockImplementation((channel, data, callback) => {
 });
 const connect = jest.fn();
 const on = jest.fn();
+
 const mockIo = jest.fn().mockReturnValue({
   on,
   connect,
-  emit
+  emit,
+  disconnected: false,
+  connected: true,
 });
+
 export default mockIo;

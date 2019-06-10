@@ -1,4 +1,5 @@
 import * as ioProxy from "socket.io-client";
+import AuthManager from "../authManager";
 const io: SocketIOClientStatic = (ioProxy as any).default || ioProxy;
 
 export type ContextType = "text" | "gmail";
@@ -44,8 +45,8 @@ export interface ReplyResponse {
 export default class AutocompleteSession {
   /** Email address of Point user */
   public readonly emailAddress: string;
-  /** Auth code (JWT) provider */
-  public authCode: () => string;
+  /** AuthManager manages credentials & JWT */
+  public authManager: AuthManager;
   /** Search type */
   public searchType: string;
   /** API URL */
@@ -65,23 +66,25 @@ export default class AutocompleteSession {
    */
   constructor(
     emailAddress: string,
-    authCode: () => string,
+    authManager: AuthManager,
     searchType = "standard",
     apiUrl = "https://v1.pointapi.com"
   ) {
     this.emailAddress = emailAddress;
-    this.authCode = authCode;
+    this.authManager = authManager;
     this.searchType = searchType;
     this.apiUrl = apiUrl;
-
-    this.reconnect();
   }
 
   /**
    * Reconnects to the Point API socket.io
    */
-  public reconnect(): void {
+  public async reconnect(): Promise<void> {
     this.disconnect();
+
+    this.authManager.onJwtChange(this.onJwtChange);
+
+    const jwt = await this.authManager.getJwt();
 
     this.socket = io(this.apiUrl, {
       reconnection: false,
@@ -92,7 +95,7 @@ export default class AutocompleteSession {
       transportOptions: {
         polling: {
           extraHeaders: {
-            Authorization: "Bearer " + this.authCode()
+            Authorization: "Bearer " + jwt
           }
         }
       }
@@ -104,8 +107,13 @@ export default class AutocompleteSession {
 
     this.socket.on("disconnect", (reason: any) => {
       // If client was the one that disconnected,
-      // don't reconnect automatically
+      // don't reconnect automatically.
       if (reason === "io client disconnect") return;
+
+      // If server was the one that disconnected,
+      // the authentication credentials are probably
+      // invalid. Don't reconnect automatically.
+      if (reason === "io server disconnect") return;
 
       // Try to reconnect maxReconnect times using exponentially
       // growing delays starting from 100ms
@@ -124,8 +132,14 @@ export default class AutocompleteSession {
    */
   public disconnect(): void {
     if (this.socket != null) {
+      // Remove event listeners
+      this.socket.removeAllListeners();
+
+      // Close the connection
       this.socket.disconnect();
     }
+
+    this.authManager.offJwtChange(this.onJwtChange);
   }
 
   /**
@@ -170,7 +184,7 @@ export default class AutocompleteSession {
       }
       this.socket.emit(
         "hotkey",
-        { trigger: trigger },
+        { trigger },
         (response: AutocompleteResponse) => {
           if (
             !response ||
@@ -250,5 +264,12 @@ export default class AutocompleteSession {
         }
       );
     });
+  }
+
+  /**
+   * Callback function that handles JWT changed events.
+   */
+  private onJwtChange = (): void => {
+    this.reconnect();
   }
 }
