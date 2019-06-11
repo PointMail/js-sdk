@@ -102,7 +102,7 @@ export default class AuthManager {
 
     try {
       const response = await fetch(
-        `${apiUrl}/auth?emailAddress=${emailAddress}`,
+        `${apiUrl}/auth?init&emailAddress=${emailAddress}`,
         {
           headers: {
             Authorization: `Bearer ${apiKey}`
