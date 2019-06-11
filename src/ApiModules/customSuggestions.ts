@@ -56,13 +56,13 @@ export default class CustomSuggestionsApiModule {
   }
 
   public async edit(
-    type:string,
+    type: string,
     oldText: string,
     newText: string,
     oldTrigger?: string,
     newTrigger?: string
   ): Promise<StatusResponse> {
-    return this.authFetch("PUT", {type, oldText, newText, oldTrigger, newTrigger})
+    return this.authFetch("PUT", { type, oldText, newText, oldTrigger, newTrigger })
   }
 
   /** Add a custom suggestion or hotkey */
@@ -76,6 +76,6 @@ export default class CustomSuggestionsApiModule {
 
   /** Make authenticated request to custom suggestions api */
   private async authFetch(method: string, data?: object) {
-    return (await this.api.authFetch(method, this.url, data)).json();
+    return (await this.api.authFetch(method, this.url, true, data)).json();
   }
 }
