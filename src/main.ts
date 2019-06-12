@@ -29,6 +29,7 @@ export default class PointApi extends PointApiBase {
   }
 
   public setCredentials(emailAddress: string, apiKey: string) {
+    this.emailAddress = emailAddress;
     this.authManager.setCredentials(emailAddress, apiKey);
   }
 
