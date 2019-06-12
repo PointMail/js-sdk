@@ -12,6 +12,7 @@ export interface SuggestionMeta {
   expandedSuggestion: string;
   userAdded: boolean;
   type: string;
+  baseClass: 'suggestion' | 'hotkey';
 }
 
 /**
