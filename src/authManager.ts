@@ -102,7 +102,7 @@ export default class AuthManager {
 
     try {
       const response = await fetch(
-        `${apiUrl}/auth?init&emailAddress=${emailAddress}`,
+        `${apiUrl}/auth?emailAddress=${emailAddress}`,
         {
           headers: {
             Authorization: `Bearer ${apiKey}`
@@ -128,6 +128,12 @@ export default class AuthManager {
             await this.refreshJwtToken();
           }, responseJson.expiresAt - Date.now() - 5000);
         }
+
+        // Last but not least, ask server to initialize for autocomplete
+        if (this.active) {
+          this.initSession();
+        }
+
       } else {
         this.jwt = null;
         this.active = null;
@@ -158,5 +164,24 @@ export default class AuthManager {
 
     // Emit JWT changed event
     this.jwtChangedEmitter.emit('jwt', this.jwt);
+  }
+
+  /**
+   * Calls /init endpoint which is used to speed up session initialization 
+   * for autocomplete. Can be called right after successfull authorization. 
+   */
+  private initSession = async (): Promise<void> => {
+    const { emailAddress, apiUrl, jwt } = this;
+
+    await fetch(
+      `${apiUrl}/init?emailAddress=${emailAddress}`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+        method: "GET",
+        credentials: "include"
+      }
+    );
   }
 }
