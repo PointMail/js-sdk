@@ -10,6 +10,7 @@ import AccountApiModule, {
 
 import AutocompleteSession, {
   ContextType,
+  BaseMeta,
   SuggestionMeta,
   ReplyMeta,
   AutocompleteResponse,
@@ -36,6 +37,7 @@ export { AccountApiModule, Account, Preferences, SearchType, Subscription };
 export {
   AutocompleteSession,
   ContextType,
+  BaseMeta,
   SuggestionMeta,
   ReplyMeta,
   AutocompleteResponse,
