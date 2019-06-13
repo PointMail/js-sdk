@@ -1,4 +1,5 @@
 import PointApiBase from "../pointApiBase";
+import { BaseMeta } from "./autocompleteSession";
 
 /** Result of a GET request to api */
 export interface GetResponse {
@@ -48,21 +49,20 @@ export default class CustomSuggestionsApiModule {
 
   /** Delete a custom suggestion or hotkey */
   public async delete(
-    text: string,
-    type: string,
-    trigger?: string
+    suggestion: BaseMeta
   ): Promise<StatusResponse> {
-    return this.authFetch("DELETE", { text, trigger, type });
+    return this.authFetch("DELETE", { ...suggestion });
   }
 
   public async edit(
-    type: string,
     oldText: string,
-    newText: string,
+    type: string,
+    baseClass: string,
     oldTrigger?: string,
+    newText?: string,
     newTrigger?: string
   ): Promise<StatusResponse> {
-    return this.authFetch("PUT", { type, oldText, newText, oldTrigger, newTrigger })
+    return this.authFetch("PUT", { oldText, type, baseClass, oldTrigger, newText, newTrigger });
   }
 
   /** Add a custom suggestion or hotkey */

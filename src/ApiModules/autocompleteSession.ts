@@ -7,11 +7,16 @@ export type ContextType = "text" | "gmail";
 /**
  * Suggestion metadata
  */
-export interface SuggestionMeta {
+
+export interface BaseMeta {
   suggestion: string;
+  type: string;
+  baseClass: string;
+}
+
+export interface SuggestionMeta extends BaseMeta {
   expandedSuggestion: string;
   userAdded: boolean;
-  type: string;
 }
 
 /**
