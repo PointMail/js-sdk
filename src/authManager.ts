@@ -130,7 +130,9 @@ export default class AuthManager {
         }
 
         // Last but not least, ask server to initialize for autocomplete
-        this.initSession();
+        if (this.active) {
+          this.initSession();
+        }
 
       } else {
         this.jwt = null;
