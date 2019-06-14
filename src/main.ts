@@ -29,6 +29,7 @@ export default class PointApi extends PointApiBase {
   }
 
   public setCredentials(emailAddress: string, apiKey: string) {
+    this.emailAddress = emailAddress;
     this.authManager.setCredentials(emailAddress, apiKey);
   }
 
@@ -76,18 +77,39 @@ export default class PointApi extends PointApiBase {
     return session;
   }
 
+  /**
+   * Fetches the URL from the server endpoint.
+   * 
+   * Param @mustBeActive should be set to @true if the enpoint requires 
+   * an active membership. The method will reject if this flag is @true
+   * and the membership is inactive.
+   * 
+   * @param method HTTP method type
+   * @param url Endpoint URL (e.g. /auth or /account)
+   * @param mustBeActive Whether to check membership
+   * @param data Payload for the body of the request (e.g. in POST)
+   * @param headers Headers to add to the request
+   */
   public async authFetch(
     method: string,
     url: string,
+    mustBeActive: boolean,
     data?: object,
-    headers?: object
+    headers?: object,
   ) {
     const jwt = await this.authManager.getJwt();
+    
+    // Check if the membership is active if `mustBeActive` is true
+    if (mustBeActive && !(await this.authManager.isActive())) {
+      throw new Error("Trying to fetch active users only endpoint with "
+        + "an inactive account");
+    }
 
     const authHeaders = {
       Authorization: `Bearer ${jwt}`,
       ...headers
     };
-    return super.authFetch(method, url, data, authHeaders);
+
+    return super.authFetch(method, url, mustBeActive, data, authHeaders);
   }
 }

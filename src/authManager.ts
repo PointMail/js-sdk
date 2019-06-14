@@ -9,6 +9,9 @@ export default class AuthManager {
   private jwt: Promise<string> | null;
   private jwtRenewTimeoutId: NodeJS.Timer;
 
+  // True if the user is an active member
+  private active: boolean | null;
+
   private jwtChangedEmitter: EventEmitter;
 
   /**
@@ -35,6 +38,7 @@ export default class AuthManager {
     this.apiKey = apiKey;
 
     this.jwt = null;
+    this.active = null;
     if (this.jwtRenewTimeoutId) {
       clearTimeout(this.jwtRenewTimeoutId);
     }
@@ -42,6 +46,14 @@ export default class AuthManager {
     this.refreshJwtToken();
   }
 
+  /**
+   * Returns JWT token. 
+   * 
+   * If the token hasn't been fetched yet the method will fetch it from 
+   * the server by caliing /auth endpoint.
+   * 
+   * @returns JWT string
+   */
   public getJwt = async (): Promise<string> => {
     if (!this.jwt) {
       await this.refreshJwtToken();
@@ -52,6 +64,18 @@ export default class AuthManager {
     }
 
     return this.jwt;
+  }
+
+  /**
+   * Returns True if the account (membership) is active, 
+   * False if it's inactive or the server responded with an error.
+   */
+  public isActive = async (): Promise<boolean> => {
+    if (!this.active) {
+      await this.refreshJwtToken();
+    }
+
+    return !!this.active;
   }
 
   /**
@@ -91,7 +115,8 @@ export default class AuthManager {
       if (response.ok) {
         const responseJson = await response.json();
 
-        this.jwt = await responseJson.jwt;
+        this.jwt = responseJson.jwt;
+        this.active = responseJson.subscription.isActive;
 
         if (autoRenew) {
           if (this.jwtRenewTimeoutId) {
@@ -103,10 +128,19 @@ export default class AuthManager {
             await this.refreshJwtToken();
           }, responseJson.expiresAt - Date.now() - 5000);
         }
+
+        // Last but not least, ask server to initialize for autocomplete
+        if (this.active) {
+          this.initSession();
+        }
+
       } else {
+        this.jwt = null;
+        this.active = null;
+
         if (response.status === 401) {
           // Unauthorized (wrong token, invalid user, etc.)
-          this.jwt = null;
+          // Don't retry.
         }
         else if (response.status >= 500 && retryCount < 10) {
           // Server returned an internal error
@@ -117,6 +151,9 @@ export default class AuthManager {
         }
       }
     } catch (e) {
+      this.jwt = null;
+      this.active = null;
+
       if (retryCount < 10) {
         // Retry /auth after some delay
         const delay = Math.pow(2, retryCount) * 500;
@@ -127,5 +164,24 @@ export default class AuthManager {
 
     // Emit JWT changed event
     this.jwtChangedEmitter.emit('jwt', this.jwt);
+  }
+
+  /**
+   * Calls /init endpoint which is used to speed up session initialization 
+   * for autocomplete. Can be called right after successfull authorization. 
+   */
+  private initSession = async (): Promise<void> => {
+    const { emailAddress, apiUrl, jwt } = this;
+
+    await fetch(
+      `${apiUrl}/init?emailAddress=${emailAddress}`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+        method: "GET",
+        credentials: "include"
+      }
+    );
   }
 }

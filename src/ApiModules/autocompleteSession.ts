@@ -7,11 +7,16 @@ export type ContextType = "text" | "gmail";
 /**
  * Suggestion metadata
  */
-export interface SuggestionMeta {
+
+export interface BaseMeta {
   suggestion: string;
+  type: string;
+  baseClass: string;
+}
+
+export interface SuggestionMeta extends BaseMeta {
   expandedSuggestion: string;
   userAdded: boolean;
-  type: string;
 }
 
 /**
@@ -81,6 +86,12 @@ export default class AutocompleteSession {
    */
   public async reconnect(): Promise<void> {
     this.disconnect();
+
+    // Check if the account is active
+    if (!await this.authManager.isActive()) {
+      throw new Error("Trying to init autocomplete session with "
+        + "an inactive account");
+    }
 
     this.authManager.onJwtChange(this.onJwtChange);
 
@@ -152,7 +163,7 @@ export default class AutocompleteSession {
     currentContext?: string
   ): Promise<AutocompleteResponse | null> {
     return new Promise((resolve, reject) => {
-      if (this.socket.disconnected) {
+      if (!this.socket || this.socket.disconnected) {
         reject("Socket is disconnected");
       }
       this.socket.emit(
@@ -179,7 +190,7 @@ export default class AutocompleteSession {
    */
   public hotkey(trigger: string): Promise<AutocompleteResponse | null> {
     return new Promise((resolve, reject) => {
-      if (this.socket.disconnected) {
+      if (!this.socket || this.socket.disconnected) {
         reject("Socket is disconnected");
       }
       this.socket.emit(
@@ -272,7 +283,7 @@ export default class AutocompleteSession {
     contextType: ContextType = "text"
   ): Promise<ReplyResponse | null> {
     return new Promise((resolve, reject) => {
-      if (this.socket.disconnected) {
+      if (!this.socket || this.socket.disconnected) {
         reject("Socket is disconnected");
       }
       this.socket.emit(
