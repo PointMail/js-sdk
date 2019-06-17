@@ -210,6 +210,28 @@ export default class AutocompleteSession {
     });
   }
 
+  public variable(placeholder: string): Promise<AutocompleteResponse | null> {
+    return new Promise((resolve, reject) => {
+      if (this.socket.disconnected) {
+        reject("Socket is disconnected");
+      }
+      this.socket.emit(
+        "variable",
+        { placeholder: placeholder },
+        (response: AutocompleteResponse) => {
+          if (
+            !response ||
+            !response.suggestions ||
+            !response.suggestions.length
+          ) {
+            resolve(null);
+          }
+          resolve(response);
+        }
+      );
+    });
+  }
+
   /**
    *  Give feedback on Point Api's suggestions
    */
