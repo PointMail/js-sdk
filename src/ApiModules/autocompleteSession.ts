@@ -12,6 +12,7 @@ export interface BaseMeta {
   suggestion: string;
   type: string;
   baseClass: string;
+  placeholder?: string;
 }
 
 export interface SuggestionMeta extends BaseMeta {
