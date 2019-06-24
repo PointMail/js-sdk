@@ -21,7 +21,6 @@ process.env.REACT_APP_BASE_URI = "localhost:5000";
 const api = new PointApi(emailAddress, apiKey);
 const apiSessionPromise = api.initAutocompleteSessionAsync('standard');
 
-
 beforeEach(() => {
   AuthManager.mockClear();
   mockOnJwtChange.mockClear();
