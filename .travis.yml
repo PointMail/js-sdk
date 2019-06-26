@@ -1,11 +1,39 @@
 language: node_js
 node_js:
-  - "10.3"
-before_install:
-  - npm i -g npm@6.4.0
-cache:
-  directories:
-    - "node_modules"
+- '10.3'
+cache: npm
 notifications:
-  slack:
-    pointapi:Sjvqcwm25jFhXxEdZirCDqRk
+  slack: pointapi:Sjvqcwm25jFhXxEdZirCDqRk
+before_install:
+- npm i -g npm@6.9.0
+install:
+- npm ci
+jobs:
+  include:
+  - stage: test
+    script:
+    - npm test
+    - npm run build
+  - stage: release  # npm release
+    if: branch IN (master, dev)
+    script: 
+    - echo "Deploying to npm.."
+    - npm run build
+    - bash ./scripts/release.sh  # Bump version
+    deploy:
+    - provider: npm
+      email: $NPMJS_EMAIL
+      api_key: $NPMJS_ACCESS_TOKEN
+      tag: latest
+      skip_cleanup: true
+      on:
+        repo: PointMail/js-sdk
+        branch: master
+    - provider: npm
+      email: $NPMJS_EMAIL
+      api_key: $NPMJS_ACCESS_TOKEN
+      tag: dev
+      skip_cleanup: true
+      on:
+        repo: PointMail/js-sdk
+        branch: dev
