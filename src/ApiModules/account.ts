@@ -18,10 +18,8 @@ export interface Subscription {
   dailyLimit: number | null;
   dailyUsage: number;
   expirationDate: number | null;
-  isActive: boolean;
   membershipType: string;
   willRenew: boolean;
-  submittedPaymentInfo: boolean;
 }
 
 /** Class to manage user's Account */
