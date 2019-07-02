@@ -116,7 +116,7 @@ export default class AuthManager {
         const responseJson = await response.json();
 
         this.jwt = responseJson.jwt;
-        this.active = responseJson.subscription.isActive;
+        this.active = responseJson.subscription && true; // set to true as long as we have subscription
 
         if (autoRenew) {
           if (this.jwtRenewTimeoutId) {
