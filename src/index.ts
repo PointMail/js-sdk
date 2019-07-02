@@ -11,6 +11,7 @@ import AccountApiModule, {
 import AutocompleteSession, {
   ContextType,
   BaseMeta,
+  SessionError,
   SuggestionMeta,
   ReplyMeta,
   AutocompleteResponse,
@@ -38,6 +39,7 @@ export {
   AutocompleteSession,
   ContextType,
   BaseMeta,
+  SessionError,
   SuggestionMeta,
   ReplyMeta,
   AutocompleteResponse,

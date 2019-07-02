@@ -45,6 +45,11 @@ export interface ReplyResponse {
   responseId: string;
 }
 
+export interface SessionError {
+  status: "failure";
+  reason: "exceeded_daily_usage_limit" | "expired_membership";
+}
+
 /**
  * Point Websockets Api Instance
  */
@@ -65,6 +70,9 @@ export default class AutocompleteSession {
 
   /** @private Max reconnect attempts  */
   private readonly maxReconnects: number = 10;
+
+  /** Error handler */
+  private onErrorHandler: (error: SessionError) => void;
 
   /**
    * @param  emailAddress Email address of Point user
@@ -117,6 +125,12 @@ export default class AutocompleteSession {
       this.reconnectCount = 0;
     });
 
+    this.socket.on("error", (error: SessionError) => {
+      if (this.onErrorHandler) {
+        this.onErrorHandler(error);
+      }
+    })
+
     this.socket.on("disconnect", (reason: any) => {
       // If client was the one that disconnected,
       // don't reconnect automatically.
@@ -152,6 +166,16 @@ export default class AutocompleteSession {
     }
 
     this.authManager.offJwtChange(this.onJwtChange);
+  }
+
+  /**
+   * Registers error handler callback that will be invoked
+   * on any socket.io session errors sent from the server.
+   * 
+   * @param callback Error callback method
+   */
+  public setOnErrorHandler = (callback: (error: SessionError) => void): void => {
+    this.onErrorHandler = callback;
   }
 
   /**
@@ -218,7 +242,7 @@ export default class AutocompleteSession {
       }
       this.socket.emit(
         "variable",
-        { placeholder: placeholder },
+        { placeholder },
         (response: AutocompleteResponse) => {
           if (
             !response ||
