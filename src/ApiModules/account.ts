@@ -15,6 +15,8 @@ export interface Preferences {
 }
 
 export interface Subscription {
+  dailyLimit: number | null;
+  dailyUsage: number;
   expirationDate: number | null;
   isActive: boolean;
   membershipType: string;
