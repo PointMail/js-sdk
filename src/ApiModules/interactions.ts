@@ -64,6 +64,6 @@ export default class InteractionsApiModule {
     const headers = {
       "Content-Type": "application/json"
     };
-    await this.api.authFetch(method, this.url, false, data, headers);
+    await this.api.authFetch(method, this.url, data, headers);
   }
 }

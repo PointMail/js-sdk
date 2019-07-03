@@ -45,6 +45,6 @@ export default class AccountApiModule {
     const headers = {
       "Content-Type": "application/json"
     };
-    return this.api.authFetch(method, this.url, false, data, headers);
+    return this.api.authFetch(method, this.url, data, headers);
   }
 }

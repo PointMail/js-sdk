@@ -96,12 +96,6 @@ export default class AutocompleteSession {
   public async reconnect(): Promise<void> {
     this.disconnect();
 
-    // Check if the account is active
-    if (!await this.authManager.isActive()) {
-      throw new Error("Trying to init autocomplete session with "
-        + "an inactive account");
-    }
-
     this.authManager.onJwtChange(this.onJwtChange);
 
     const jwt = await this.authManager.getJwt();
