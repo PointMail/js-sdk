@@ -15,11 +15,11 @@ export interface Preferences {
 }
 
 export interface Subscription {
+  dailyLimit: number | null;
+  dailyUsage: number;
   expirationDate: number | null;
-  isActive: boolean;
   membershipType: string;
   willRenew: boolean;
-  submittedPaymentInfo: boolean;
 }
 
 /** Class to manage user's Account */
@@ -45,6 +45,6 @@ export default class AccountApiModule {
     const headers = {
       "Content-Type": "application/json"
     };
-    return this.api.authFetch(method, this.url, false, data, headers);
+    return this.api.authFetch(method, this.url, data, headers);
   }
 }

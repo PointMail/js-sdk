@@ -9,9 +9,6 @@ export default class AuthManager {
   private jwt: Promise<string> | null;
   private jwtRenewTimeoutId: NodeJS.Timer;
 
-  // True if the user is an active member
-  private active: boolean | null;
-
   private jwtChangedEmitter: EventEmitter;
 
   /**
@@ -38,7 +35,6 @@ export default class AuthManager {
     this.apiKey = apiKey;
 
     this.jwt = null;
-    this.active = null;
     if (this.jwtRenewTimeoutId) {
       clearTimeout(this.jwtRenewTimeoutId);
     }
@@ -64,18 +60,6 @@ export default class AuthManager {
     }
 
     return this.jwt;
-  }
-
-  /**
-   * Returns True if the account (membership) is active, 
-   * False if it's inactive or the server responded with an error.
-   */
-  public isActive = async (): Promise<boolean> => {
-    if (!this.active) {
-      await this.refreshJwtToken();
-    }
-
-    return !!this.active;
   }
 
   /**
@@ -116,7 +100,6 @@ export default class AuthManager {
         const responseJson = await response.json();
 
         this.jwt = responseJson.jwt;
-        this.active = responseJson.subscription.isActive;
 
         if (autoRenew) {
           if (this.jwtRenewTimeoutId) {
@@ -130,13 +113,10 @@ export default class AuthManager {
         }
 
         // Last but not least, ask server to initialize for autocomplete
-        if (this.active) {
-          this.initSession();
-        }
+        this.initSession();
 
       } else {
         this.jwt = null;
-        this.active = null;
 
         if (response.status === 401) {
           // Unauthorized (wrong token, invalid user, etc.)
@@ -152,7 +132,6 @@ export default class AuthManager {
       }
     } catch (e) {
       this.jwt = null;
-      this.active = null;
 
       if (retryCount < 10) {
         // Retry /auth after some delay
