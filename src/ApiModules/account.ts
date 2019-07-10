@@ -1,4 +1,4 @@
-import PointApiBase from "../pointApiBase";
+import { PointApi } from "../main";
 
 export type SearchType = "standard" | "keyword" | "hybrid";
 
@@ -24,11 +24,11 @@ export interface Subscription {
 
 /** Class to manage user's Account */
 export default class AccountApiModule {
-  private readonly api: PointApiBase;
+  private readonly api: PointApi;
 
   private readonly url: string = "/account";
 
-  constructor(api: PointApiBase) {
+  constructor(api: PointApi) {
     this.api = api;
   }
 

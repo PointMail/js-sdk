@@ -1,7 +1,20 @@
 import { EventEmitter } from "events";
 
-export default class AuthManager {
+export interface AuthManager {
+  setCredentials: (
+    emailAddress: string,
+    apiKey: string
+  ) => void;
+  getJwt: () => Promise<string>;
+  onJwtChange: (
+    listener: (jwt: string | null) => void
+  ) => void;
+  offJwtChange: (
+    listener: (jwt: string | null) => void
+  ) => void;
+}
 
+export default class AuthManagerImpl implements AuthManager {
   private emailAddress: string;
   private apiKey: string;
   private apiUrl: string;

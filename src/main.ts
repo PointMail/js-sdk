@@ -1,15 +1,65 @@
-import AutocompleteSession from "./ApiModules/autocompleteSession";
-import PointApiBase from "./pointApiBase";
-import AuthManager from "./authManager";
+import AccountApiModule from "./ApiModules/account";
+import AutocompleteSessionImpl, { AutocompleteSession } from "./ApiModules/autocompleteSession";
+import CustomSuggestionsApiModule from "./ApiModules/customSuggestions";
+import InteractionsApiModule from "./ApiModules/interactions";
+import AuthManagerImpl, { AuthManager } from "./authManager";
 
 export interface ErrorResponse {
   error: string;
 }
 
 /**
+ * Point API base interface
+ */
+export interface PointApi {
+  /** Email address of Point user account */
+  emailAddress: string;
+
+  /** Point API URL */
+  readonly apiUrl: string;
+
+  /**
+   * API submodules
+   */
+  readonly account: AccountApiModule;
+  readonly customSuggestions: CustomSuggestionsApiModule;
+  readonly interactions: InteractionsApiModule;
+
+  setCredentials: (emailAddress: string, apiKey: string) => void;
+
+  initAutocompleteSession: (searchType: string) => AutocompleteSession;
+  initAutocompleteSessionAsync: (searchType: string) => Promise<AutocompleteSession>;
+
+  authFetch: (
+    method: string,
+    url: string,
+    data?: object,
+    headers?: Record<string, string>,
+  ) => Promise<Response>
+
+  fetch: (
+    method: string,
+    url: string,
+    data?: object,
+    headers?: Record<string, string>
+  ) => Promise<Response>
+}
+
+
+/**
  * Point Api Instance
  */
-export default class PointApi extends PointApiBase {
+export default class PointApiImpl implements PointApi {
+  /** Email address of Point user account */
+  public emailAddress: string;
+
+  /** Point API URL */
+  public readonly apiUrl: string;
+
+  public readonly account: AccountApiModule;
+  public readonly customSuggestions: CustomSuggestionsApiModule;
+  public readonly interactions: InteractionsApiModule;
+
   private authManager: AuthManager;
 
   /**
@@ -23,9 +73,15 @@ export default class PointApi extends PointApiBase {
     apiKey: string,
     apiUrl: string = "https://v1.pointapi.com"
   ) {
-    super(emailAddress, apiUrl);
+    this.emailAddress = emailAddress;
+    this.apiUrl = apiUrl;
 
-    this.authManager = new AuthManager(emailAddress, apiKey, apiUrl);
+    // Init API submodules
+    this.account = new AccountApiModule(this);
+    this.customSuggestions = new CustomSuggestionsApiModule(this);
+    this.interactions = new InteractionsApiModule(this);
+
+    this.authManager = new AuthManagerImpl(emailAddress, apiKey, apiUrl);
   }
 
   public setCredentials(emailAddress: string, apiKey: string) {
@@ -44,7 +100,7 @@ export default class PointApi extends PointApiBase {
   public initAutocompleteSession(
     searchType: string
   ): AutocompleteSession {
-    const session = new AutocompleteSession(
+    const session = new AutocompleteSessionImpl(
       this.emailAddress,
       this.authManager,
       searchType,
@@ -65,7 +121,7 @@ export default class PointApi extends PointApiBase {
   public async initAutocompleteSessionAsync(
     searchType: string
   ): Promise<AutocompleteSession> {
-    const session = new AutocompleteSession(
+    const session = new AutocompleteSessionImpl(
       this.emailAddress,
       this.authManager,
       searchType,
@@ -98,6 +154,26 @@ export default class PointApi extends PointApiBase {
       ...headers
     };
 
-    return super.authFetch(method, url, data, authHeaders);
+    return this.fetch(method, url, data, authHeaders);
+  }
+
+  public async fetch(
+    method: string,
+    url: string,
+    data?: object,
+    headers?: Record<string, string>
+  ) {
+    const { emailAddress, apiUrl } = this;
+    const body = data ? JSON.stringify(data) : undefined;
+    const fullUrl = `${apiUrl}${url}?emailAddress=${emailAddress}`;
+
+    const response = await fetch(fullUrl, {
+      method,
+      body,
+      headers,
+      credentials: "include"
+    });
+
+    return response;
   }
 }

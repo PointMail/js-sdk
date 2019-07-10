@@ -1,5 +1,5 @@
-import PointApi, { ErrorResponse } from "./main";
-import PointApiBase from "./pointApiBase";
+import PointApiImpl, { PointApi, ErrorResponse } from "./main";
+import PointApiDemo from "./Demo/pointApiDemo";
 
 import AccountApiModule, {
   Account,
@@ -8,7 +8,8 @@ import AccountApiModule, {
   Subscription
 } from "./ApiModules/account";
 
-import AutocompleteSession, {
+import AutocompleteSessionImpl, {
+  AutocompleteSession,
   ContextType,
   BaseMeta,
   SessionError,
@@ -31,12 +32,13 @@ import InteractionsApiModule, {
   StatusResponse
 } from "./ApiModules/interactions";
 
-export default PointApi;
-export { PointApiBase };
-export { ErrorResponse };
+export default PointApiImpl;
+export { PointApiDemo };
+export { PointApi, ErrorResponse };
 export { AccountApiModule, Account, Preferences, SearchType, Subscription };
 export {
   AutocompleteSession,
+  AutocompleteSessionImpl,
   ContextType,
   BaseMeta,
   SessionError,
