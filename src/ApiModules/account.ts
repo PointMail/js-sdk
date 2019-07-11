@@ -10,7 +10,7 @@ export interface Account {
 }
 
 export interface Website {
-  url: string,
+  urls: string[],
   displayName: string,
   dropdownEnabled: boolean
 }
