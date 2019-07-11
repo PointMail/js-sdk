@@ -1,5 +1,5 @@
 import * as ioProxy from "socket.io-client";
-import AuthManager from "../authManager";
+import { AuthManager } from "../authManager";
 const io: SocketIOClientStatic = (ioProxy as any).default || ioProxy;
 
 export type ContextType = "text" | "gmail";
@@ -50,18 +50,47 @@ export interface SessionError {
   reason: "exceeded_daily_usage_limit" | "expired_membership";
 }
 
+export interface AutocompleteSession {
+  reconnect: () => Promise<void>;
+  disconnect: () => void;
+  setOnErrorHandler: (callback: (error: SessionError) => void) => void;
+  autocomplete: (
+    seedText: string,
+    currentContext?: string
+  ) => Promise<AutocompleteResponse | null>;
+  hotkey: (
+    trigger: string
+  ) => Promise<AutocompleteResponse | null>;
+  variable: (
+    placeholder: string
+  ) => Promise<AutocompleteResponse | null>;
+  feedback: (
+    responseId: string,
+    suggestionText: string | string[],
+    type: "positive" | "negative"
+  ) => Promise<void>;
+  setContext: (
+    previousMessage: string,
+    contextType?: ContextType
+  ) => Promise<void>;
+  reply: (
+    previousMessage: string,
+    contextType: ContextType
+  ) => Promise<ReplyResponse | null>;
+}
+
 /**
  * Point Websockets Api Instance
  */
-export default class AutocompleteSession {
+export default class AutocompleteSessionImpl implements AutocompleteSession {
   /** Email address of Point user */
-  public readonly emailAddress: string;
+  private readonly emailAddress: string;
   /** AuthManager manages credentials & JWT */
-  public authManager: AuthManager;
+  private authManager: AuthManager;
   /** Search type */
-  public searchType: string;
+  private searchType: string;
   /** API URL */
-  public readonly apiUrl: string;
+  private readonly apiUrl: string;
   /** @private SocketIO instance used to interact with Point API */
   private socket: SocketIOClient.Socket;
 
