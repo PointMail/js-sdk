@@ -11,14 +11,15 @@ export interface Account {
 
 export interface Website {
   url: string,
+  displayName: string,
   dropdownEnabled: boolean
-  snippetMenuEnabled: boolean
 }
 
 export interface Preferences {
   searchType: SearchType;
   tabCompletion: boolean;
   websites: Website[];
+  snippetMenuEverywhere: boolean;
 }
 
 export interface Subscription {
