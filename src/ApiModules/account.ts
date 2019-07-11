@@ -9,9 +9,16 @@ export interface Account {
   subscription: Subscription;
 }
 
+export interface Website {
+  url: string,
+  dropdownEnabled: boolean
+  snippetMenuEnabled: boolean
+}
+
 export interface Preferences {
   searchType: SearchType;
   tabCompletion: boolean;
+  websites: Website[];
 }
 
 export interface Subscription {
