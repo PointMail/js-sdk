@@ -32,10 +32,10 @@ export default class SuggestionsStore {
   public addHotkey(trigger: string, text: string) {
     this.hotkeys.push({
       suggestion: trigger,
-      type: '',
-      baseClass: '',
+      type: 'custom',
+      baseClass: 'hotkey',
       expandedSuggestion: text,
-      userAdded: false
+      userAdded: true
     });
   }
 }
