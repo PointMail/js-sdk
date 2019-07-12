@@ -44,8 +44,8 @@ export default class AccountApiModule {
     return (await this.authFetch("GET")).json();
   }
 
-  public async setPreferences(preferences: Preferences): Promise<Response> {
-    return this.authFetch("PUT", { preferences });
+  public async setPreference(field:string, newValue:string): Promise<Response> {
+    return this.authFetch("PUT", { 'field': field, 'newValue': newValue });
   }
 
   /** Make authenticated request to interactions api */
