@@ -9,10 +9,25 @@ export interface Account {
   subscription: Subscription;
 }
 
+export interface Website {
+  urls: string[],
+  displayName: string,
+  dropdownEnabled: boolean
+}
+
 export interface Preferences {
   searchType: SearchType;
   tabCompletion: boolean;
+  websites: Website[];
+  snippetMenuEverywhere: boolean;
 }
+
+export type Preference =
+  { field: 'search_type', value: 'standard' | 'keyword' | 'hybrid' } |
+  { field: 'tab_completion', value: boolean } |
+  { field: 'facebook_dropdown', value: boolean } |
+  { field: 'zendesk_dropdown', value: boolean } |
+  { field: 'menu_everywhere', value: boolean };
 
 export interface Subscription {
   dailyLimit: number | null;
@@ -36,8 +51,8 @@ export default class AccountApiModule {
     return (await this.authFetch("GET")).json();
   }
 
-  public async setPreferences(preferences: Preferences): Promise<Response> {
-    return this.authFetch("PUT", { preferences });
+  public async setPreference(preference: Preference): Promise<Response> {
+    return this.authFetch("PUT", preference);
   }
 
   /** Make authenticated request to interactions api */
