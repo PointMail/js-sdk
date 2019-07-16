@@ -51,8 +51,8 @@ export default class AccountApiModule {
     return (await this.authFetch("GET")).json();
   }
 
-  public async setPreference(prefrence: Preference): Promise<Response> {
-    return this.authFetch("PUT", prefrence);
+  public async setPreference(preference: Preference): Promise<Response> {
+    return this.authFetch("PUT", preference);
   }
 
   /** Make authenticated request to interactions api */
