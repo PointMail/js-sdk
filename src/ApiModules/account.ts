@@ -22,6 +22,13 @@ export interface Preferences {
   snippetMenuEverywhere: boolean;
 }
 
+export type Preference =
+  { field: 'search_type', value: 'standard' | 'keyword' | 'hybrid' } |
+  { field: 'tab_completion', value: boolean } |
+  { field: 'facebook_dropdown', value: boolean } |
+  { field: 'zendesk_dropdown', value: boolean } |
+  { field: 'menu_everywhere', value: boolean };
+
 export interface Subscription {
   dailyLimit: number | null;
   dailyUsage: number;
@@ -44,8 +51,8 @@ export default class AccountApiModule {
     return (await this.authFetch("GET")).json();
   }
 
-  public async setPreference(field:string, newValue:string): Promise<Response> {
-    return this.authFetch("PUT", { 'field': field, 'newValue': newValue });
+  public async setPreference(prefrence:Preference): Promise<Response> {
+    return this.authFetch("PUT", prefrence);
   }
 
   /** Make authenticated request to interactions api */
