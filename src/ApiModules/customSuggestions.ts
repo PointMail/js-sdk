@@ -1,4 +1,4 @@
-import PointApiBase from "../pointApiBase";
+import { PointApi } from "../main";
 import { BaseMeta } from "./autocompleteSession";
 
 /** Result of a GET request to api */
@@ -34,11 +34,11 @@ export interface Hotkey {
 
 /** Class to keep track of api credentials and make requests to the custom suggestions api */
 export default class CustomSuggestionsApiModule {
-  private readonly api: PointApiBase;
+  private readonly api: PointApi;
 
   private readonly url: string = "/extension/custom";
 
-  constructor(api: PointApiBase) {
+  constructor(api: PointApi) {
     this.api = api;
   }
 

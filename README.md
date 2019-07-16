@@ -3,10 +3,10 @@
 > Point API's _js-sdk_ provides an easy server-side and client-side interface for Point API.
 
 [![npm](https://img.shields.io/npm/dt/@point-api/js-sdk.svg)](https://www.npmjs.com/package/@point-api/js-sdk)
- [![Build Status](https://travis-ci.com/PointMail/js-sdk.svg?branch=master)](https://travis-ci.com/PointMail/js-sdk)  
+[![Build Status](https://travis-ci.com/PointMail/js-sdk.svg?branch=master)](https://travis-ci.com/PointMail/js-sdk)
 [![forthebadge](https://forthebadge.com/images/badges/fo-shizzle.svg)](https://forthebadge.com)
 
-[Getting Started](https://docs.pointapi.com/docs/getting-started)  
+[Getting Started](https://docs.pointapi.com/docs/getting-started)
 
 ## Installation
 
@@ -108,6 +108,7 @@ api.feedback("response_id", "I'm doing okay, what about you?", "positive");
 ```
 
 ## Documentation
+
 ### Class: PointApi
 
 Point Websockets Api Instance
@@ -135,10 +136,10 @@ Point Websockets Api Instance
 
 **Parameters:**
 
-| Param                         | Type      | Description                 |
-| ----------------------------- | --------- | --------------------------- |
-| emailAddress                  | `string`  | Email address of Point user |
-| apiKey                        | `string`  | API key of Point client     |
+| Param                      | Type      | Description                 |
+| -------------------------- | --------- | --------------------------- |
+| emailAddress               | `string`  | Email address of Point user |
+| apiKey                     | `string`  | API key of Point client     |
 | `Default value` searchType | `boolean` | false                       |
 
 **Returns:** PointApi
@@ -219,7 +220,7 @@ Set the context of the autocomplete session
 **Parameters:**
 
 | Param           | Type     |
-| -----------     | -------- |
+| --------------- | -------- |
 | previousMessage | `string` |
 | contextType     | `string` |
 
@@ -291,6 +292,30 @@ Get reply suggestions given some recieved text
 **● responseId**: _`string`_  
 **● seedText**: _`string`_  
 **● suggestions**: _SuggestionMeta[]_
+
+## Deployment
+
+This library is deployed to [npmjs.com](https://www.npmjs.com/package/@point-api/js-sdk).
+
+Travis CI pipeline is configured to release any code from **master** branch.
+By default the package version is automatically incremented like a patch
+(e.g. from v0.8.1 to v0.8.2). A git tag for corresponding release is created
+and can be seen [here](https://github.com/PointMail/js-sdk/releases).
+
+### Deployment steps
+
+- Before merging to **master** make sure that previous release was merged
+  to **master**. This means that *package.json* has the same version as
+  *latest* in [npmjs.com](https://www.npmjs.com/package/@point-api/js-sdk).
+- If versions differ, look for a git tag for the latest release (e.g. v1.1.23)
+  and include it in the PR.
+- Now you can merge to **master** and a new release should be deployed
+  to **npmjs.com**.
+- If you forget to include latest version, your release will fail. The
+  easiest fix is to create another PR
+  that only includes skipped version changes from version tag (e.g. v1.1.23).
+  After merging in, a new release should be pushed to npmjs.com including
+  all new changes.
 
 ---
 

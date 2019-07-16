@@ -1,4 +1,4 @@
-import PointApiBase from "../pointApiBase";
+import { PointApi } from "../main";
 
 /** Result containing just a status field */
 export interface StatusResponse {
@@ -7,11 +7,11 @@ export interface StatusResponse {
 
 /** Class to keep track of api credentials and make requests to the custom suggestions api */
 export default class InteractionsApiModule {
-  private readonly api: PointApiBase;
+  private readonly api: PointApi;
 
   private readonly url: string = "/interactions";
 
-  constructor(api: PointApiBase) {
+  constructor(api: PointApi) {
     this.api = api;
   }
 
