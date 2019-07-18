@@ -69,9 +69,10 @@ export interface AutocompleteSession {
     suggestionText: string | string[],
     type: "positive" | "negative"
   ) => Promise<void>;
-  setContext: (
-    previousMessage: string,
-    contextType?: ContextType
+  setRealtimeData: (
+    pastContext?: string,
+    pastEmailId?: string,
+    currentContext?: string
   ) => Promise<void>;
   reply: (
     previousMessage: string,
@@ -305,13 +306,14 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
   /**
    *  Set the context of the autocomplete session
    */
-  public async setContext(
-    previousMessage: string,
-    contextType: ContextType = "text"
+  public async setRealtimeData(
+    pastContext: string | undefined,
+    pastEmailId: string | undefined,
+    currentContext: string | undefined
   ): Promise<void> {
     this.socket.emit(
-      "set-context",
-      { previousMessage, contextType },
+      "set-realtime-data",
+      { pastContext, pastEmailId, currentContext },
       (response: { message: string; status: string }) => {
         if (!response || response.status !== "success") {
           if (response.message) {
