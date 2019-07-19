@@ -60,7 +60,10 @@ export default class PointApiImpl implements PointApi {
   public readonly customSuggestions: CustomSuggestionsApiModule;
   public readonly interactions: InteractionsApiModule;
 
-  private authManager: AuthManager;
+  /** Point API version */
+  private readonly ApiVersionAccept: string = 'application/vnd.point.v1';
+
+  private readonly authManager: AuthManager;
 
   /**
    *
@@ -81,7 +84,7 @@ export default class PointApiImpl implements PointApi {
     this.customSuggestions = new CustomSuggestionsApiModule(this);
     this.interactions = new InteractionsApiModule(this);
 
-    this.authManager = new AuthManagerImpl(emailAddress, apiKey, apiUrl);
+    this.authManager = new AuthManagerImpl(emailAddress, apiKey, apiUrl, this.ApiVersionAccept);
   }
 
   public setCredentials(emailAddress: string, apiKey: string) {
@@ -163,14 +166,20 @@ export default class PointApiImpl implements PointApi {
     data?: object,
     headers?: Record<string, string>
   ) {
-    const { emailAddress, apiUrl } = this;
+    const { ApiVersionAccept, emailAddress, apiUrl } = this;
+    
     const body = data ? JSON.stringify(data) : undefined;
     const fullUrl = `${apiUrl}${url}?emailAddress=${emailAddress}`;
+
+    const requestHeaders = {
+      Accept: ApiVersionAccept,
+      ...headers
+    };
 
     const response = await fetch(fullUrl, {
       method,
       body,
-      headers,
+      headers: requestHeaders,
       credentials: "include"
     });
 
