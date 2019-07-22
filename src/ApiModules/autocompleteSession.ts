@@ -212,10 +212,8 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
       // Close the connection
       this.socket.disconnect();
 
-      for (const socket of Object.values(this.versionedSockets)) {
-        socket.removeAllListeners();
-        socket.disconnect()
-      }
+      // Clear socket dict - should already be disconnected since they share
+      // a connection with the default socket
       this.versionedSockets = {}
     }
 
