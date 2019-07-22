@@ -116,7 +116,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
     authManager: AuthManager,
     searchType = "standard",
     apiUrl = "https://v1.pointapi.com",
-    apiVersions = ['v2']
+    apiVersions = []
   ) {
     this.emailAddress = emailAddress;
     this.authManager = authManager;
@@ -212,7 +212,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
       // Close the connection
       this.socket.disconnect();
 
-      // Clear socket dict - should already be disconnected since they share
+      // Wipe socket obj - should already be disconnected since they share
       // a connection with the default socket
       this.versionedSockets = {}
     }
