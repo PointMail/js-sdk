@@ -66,8 +66,7 @@ export interface AutocompleteSession {
   ) => Promise<AutocompleteResponse | null>;
   feedback: (
     responseId: string,
-    suggestionText: string | string[],
-    type: "positive" | "negative"
+    suggestion: SuggestionMeta
   ) => Promise<void>;
   setRealtimeData: (
     pastContext?: string,
@@ -282,16 +281,16 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
   }
 
   /**
-   *  Give feedback on Point Api's suggestions
+   * Give feedback on Point Api's suggestions. 
+   * This is like chosenSuggestion/Hotkey interaction.
    */
   public async feedback(
     responseId: string,
-    suggestionText: string | string[],
-    type: "positive" | "negative"
+    suggestion: SuggestionMeta,
   ): Promise<void> {
     this.socket.emit(
       "feedback",
-      { responseId, text: suggestionText, type },
+      { responseId, suggestion },
       (response: { message: string; status: string }) => {
         if (!response || response.status !== "success") {
           if (response.message) {
