@@ -191,9 +191,6 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
 
       // Close the connection
       this.socket.disconnect();
-
-      // Wipe socket obj - should already be disconnected since they share
-      // a connection with the default socket
     }
 
     this.authManager.offJwtChange(this.onJwtChange);
@@ -244,7 +241,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
    * @param trigger String that is a shortcut for the full hotkey text
    * @returns A list of the predicted suggestion objects
    */
-  public hotkey(trigger: string, version?: string): Promise<AutocompleteResponse | null> {
+  public hotkey(trigger: string): Promise<AutocompleteResponse | null> {
     return new Promise((resolve, reject) => {
       if (!this.socket || this.socket.disconnected) {
         reject("Socket is disconnected");
@@ -266,7 +263,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
     });
   }
 
-  public variable(placeholder: string, version?: string): Promise<AutocompleteResponse | null> {
+  public variable(placeholder: string): Promise<AutocompleteResponse | null> {
     return new Promise((resolve, reject) => {
       if (!this.socket || this.socket.disconnected) {
         reject("Socket is disconnected");
