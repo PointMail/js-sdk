@@ -1,13 +1,50 @@
 {
-  "extends": ["tslint:recommended", "tslint-config-prettier"],
+  "extends": [
+    "tslint:recommended",
+    "tslint-config-prettier"
+  ],
   "linterOptions": {
-    "exclude": ["config/**/*.js", "node_modules/**/*.ts"]
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts"
+    ]
   },
   "rules": {
-    "interface-name": [true, "never-prefix"],
-    "ordered-imports": false,
-    "curly": false,
+    "interface-name": [
+      true,
+      "never-prefix"
+    ],
+    "member-ordering": [
+      true,
+      {
+        "order": [
+          {
+            "name": "static non-private",
+            "kinds": [
+              "public-static-field",
+              "protected-static-field",
+              "public-static-method",
+              "protected-static-method"
+            ]
+          },
+          "constructor"
+        ]
+      }
+    ],
     "object-literal-sort-keys": false,
-    "no-console": { "severity": "warning" }
+    "ordered-imports": false,
+    "semicolon": [
+      true,
+      "always"
+    ],
+    "indent": [
+      true,
+      "spaces",
+      2
+    ],
+    "curly": [
+      true,
+      "ignore-same-line"
+    ]
   }
 }

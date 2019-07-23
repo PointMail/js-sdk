@@ -7,12 +7,12 @@ import {
   mockSetContext,
   mockReplies,
 } from "../__mocks__/socket-mock";
-import AuthManager, {mockOnJwtChange, mockOffJwtChange, mockGetJwt} from '../src/__mocks__/authManager'
+import AuthManager, {mockOnJwtChange, mockOffJwtChange, mockGetJwt} from '../src/__mocks__/authManager';
 const { suggestionsResponse } = testResponse;
 const emailAddress = "aiansiti@college.harvard.edu";
 const apiKey = "authcode1234";
 
-jest.mock('../src/authManager')
+jest.mock('../src/authManager');
 jest.mock(
   "socket.io-client",
   () => require.requireActual("../__mocks__/socket-mock").default

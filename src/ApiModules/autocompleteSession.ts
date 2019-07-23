@@ -157,7 +157,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
       if (this.onErrorHandler) {
         this.onErrorHandler(error);
       }
-    })
+    });
 
     this.socket.on("disconnect", (reason: any) => {
       // If client was the one that disconnected,

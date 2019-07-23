@@ -35,14 +35,14 @@ export interface PointApi {
     url: string,
     data?: object,
     headers?: Record<string, string>,
-  ) => Promise<Response>
+  ) => Promise<Response>;
 
   fetch: (
     method: string,
     url: string,
     data?: object,
     headers?: Record<string, string>
-  ) => Promise<Response>
+  ) => Promise<Response>;
 }
 
 
