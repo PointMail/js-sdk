@@ -62,7 +62,6 @@ export default class PointApiImpl implements PointApi {
 
   /** Point API version */
   private readonly ApiVersionAccept: string = 'application/vnd.point.v1';
-
   private readonly authManager: AuthManager;
 
   /**
@@ -107,7 +106,8 @@ export default class PointApiImpl implements PointApi {
       this.emailAddress,
       this.authManager,
       searchType,
-      this.apiUrl
+      this.apiUrl,
+      this.ApiVersionAccept
     );
 
     session.reconnect();
@@ -128,7 +128,8 @@ export default class PointApiImpl implements PointApi {
       this.emailAddress,
       this.authManager,
       searchType,
-      this.apiUrl
+      this.apiUrl,
+      this.ApiVersionAccept
     );
 
     await session.reconnect();

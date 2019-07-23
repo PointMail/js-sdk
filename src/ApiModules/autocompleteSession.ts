@@ -90,11 +90,9 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
   /** Search type */
   private searchType: string;
   /** API URL */
-  private readonly apiUrl: string;
-  /** optional api versions to open socket namespaces for */
-  private readonly apiVersions: string[];
-  /** opened namespace sockets for specified versions */
-  private versionedSockets: {[key:string]: SocketIOClient.Socket}
+  private readonly ApiUrl: string;
+  /** Point dropdown session version */
+  private readonly ApiVersionAccept: string;
   /** @private default SocketIO instance used to interact with Point API */
   private socket: SocketIOClient.Socket;
 
@@ -116,14 +114,13 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
     authManager: AuthManager,
     searchType = "standard",
     apiUrl = "https://v1.pointapi.com",
-    apiVersions = []
+    apiVersion: string
   ) {
     this.emailAddress = emailAddress;
     this.authManager = authManager;
     this.searchType = searchType;
-    this.apiUrl = apiUrl;
-    this.apiVersions = apiVersions;
-    this.versionedSockets = {};
+    this.ApiUrl = apiUrl;
+    this.ApiVersionAccept = apiVersion;
   }
 
   /**
@@ -136,7 +133,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
 
     const jwt = await this.authManager.getJwt();
 
-    this.socket = io(this.apiUrl, {
+    this.socket = io(this.ApiUrl, {
       reconnection: false,
       query: {
         emailAddress: this.emailAddress,
@@ -145,29 +142,12 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
       transportOptions: {
         polling: {
           extraHeaders: {
+            Accept: this.ApiVersionAccept,
             Authorization: "Bearer " + jwt
           }
         }
       }
     });
-
-    // different namespaces, same socket according to docs
-    for (const version of this.apiVersions) {
-      this.versionedSockets[version] = io(this.apiUrl+'/'+version, {
-        reconnection: false,
-        query: {
-          emailAddress: this.emailAddress,
-          searchType: this.searchType
-        },
-        transportOptions: {
-          polling: {
-            extraHeaders: {
-              Authorization: "Bearer " + jwt
-            }
-          }
-        }
-      });
-    }
 
     this.socket.on("connect", () => {
       this.reconnectCount = 0;
@@ -214,7 +194,6 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
 
       // Wipe socket obj - should already be disconnected since they share
       // a connection with the default socket
-      this.versionedSockets = {}
     }
 
     this.authManager.offJwtChange(this.onJwtChange);
@@ -237,15 +216,13 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
    */
   public autocomplete(
     seedText: string,
-    currentContext?: string,
-    version?: string
+    currentContext?: string
   ): Promise<AutocompleteResponse | null> {
-    const socket = version ? this.getVersionedSocket(version) : this.socket
     return new Promise((resolve, reject) => {
-      if (!socket || socket.disconnected) {
+      if (!this.socket || this.socket.disconnected) {
         reject("Socket is disconnected");
       }
-      socket.emit(
+      this.socket.emit(
         "autocomplete",
         { seedText: seedText.trim(), currentContext },
         (response: AutocompleteResponse) => {
@@ -268,12 +245,11 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
    * @returns A list of the predicted suggestion objects
    */
   public hotkey(trigger: string, version?: string): Promise<AutocompleteResponse | null> {
-    const socket = version ? this.getVersionedSocket(version) : this.socket
     return new Promise((resolve, reject) => {
-      if (!socket || socket.disconnected) {
+      if (!this.socket || this.socket.disconnected) {
         reject("Socket is disconnected");
       }
-      socket.emit(
+      this.socket.emit(
         "hotkey",
         { trigger },
         (response: AutocompleteResponse) => {
@@ -291,12 +267,11 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
   }
 
   public variable(placeholder: string, version?: string): Promise<AutocompleteResponse | null> {
-    const socket = version ? this.getVersionedSocket(version) : this.socket
     return new Promise((resolve, reject) => {
-      if (!socket || socket.disconnected) {
+      if (!this.socket || this.socket.disconnected) {
         reject("Socket is disconnected");
       }
-      socket.emit(
+      this.socket.emit(
         "variable",
         { placeholder },
         (response: AutocompleteResponse) => {
@@ -319,11 +294,9 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
   public async feedback(
     responseId: string,
     suggestionText: string | string[],
-    type: "positive" | "negative",
-    version?: string
+    type: "positive" | "negative"
   ): Promise<void> {
-    const socket = version ? this.getVersionedSocket(version) : this.socket
-    socket.emit(
+    this.socket.emit(
       "feedback",
       { responseId, text: suggestionText, type },
       (response: { message: string; status: string }) => {
@@ -342,11 +315,9 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
    */
   public async setContext(
     previousMessage: string,
-    contextType: ContextType = "text",
-    version?: string
+    contextType: ContextType = "text"
   ): Promise<void> {
-    const socket = version ? this.getVersionedSocket(version) : this.socket
-    socket.emit(
+    this.socket.emit(
       "set-context",
       { previousMessage, contextType },
       (response: { message: string; status: string }) => {
@@ -365,12 +336,10 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
    */
   public reply(
     previousMessage: string,
-    contextType: ContextType = "text",
-    version?: string
+    contextType: ContextType = "text"
   ): Promise<ReplyResponse | null> {
-    const socket = version ? this.getVersionedSocket(version) : this.socket
     return new Promise((resolve, reject) => {
-      if (!socket || socket.disconnected) {
+      if (!this.socket || this.socket.disconnected) {
         reject("Socket is disconnected");
       }
       this.socket.emit(
@@ -384,17 +353,6 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
         }
       );
     });
-  }
-
-  /**
-   * versioned socket fetcher
-   */
-  private getVersionedSocket(version:string): SocketIOClient.Socket {
-    const socket = this.versionedSockets[version]
-    if (socket === undefined) {
-      throw new Error("Invalid api version: " + version);
-    }
-    return socket
   }
 
   /**
