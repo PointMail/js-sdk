@@ -1,4 +1,5 @@
 import { PointApi } from "../main";
+import { SuggestionMeta } from "./autocompleteSession";
 
 /** Result containing just a status field */
 export interface StatusResponse {
@@ -13,6 +14,10 @@ export default class InteractionsApiModule {
 
   constructor(api: PointApi) {
     this.api = api;
+  }
+
+  public async chosenSuggestion(responseId: string, suggestion: SuggestionMeta) {
+    await this.storeInteraction("chosenSuggestion", { responseId, suggestion });
   }
 
   public async draftDiscarded() {
