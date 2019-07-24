@@ -4,7 +4,7 @@ import {
   testResponse,
   mockfeedback,
   mockSuggestions,
-  mockSetContext,
+  mockSetRealtimeData,
   mockReplies,
 } from "../__mocks__/socket-mock";
 import AuthManager, {mockOnJwtChange, mockOffJwtChange, mockGetJwt} from '../src/__mocks__/authManager'
@@ -28,7 +28,7 @@ beforeEach(() => {
   mockGetJwt.mockClear();
   mockfeedback.mockClear();
   mockSuggestions.mockClear();
-  mockSetContext.mockClear();
+  mockSetRealtimeData.mockClear();
   mockReplies.mockClear();
 });
 
@@ -79,8 +79,8 @@ test("Chosen suggestions tracking", async () => {
 test("Set Gmail Context", async () => {
   const apiSession = await apiSessionPromise;
 
-  await apiSession.setContext("hello", "gmail");
-  expect(mockSetContext).toBeCalled();
+  await apiSession.setRealtimeData('pastContext', "pastEmailId", 'text');
+  expect(mockSetRealtimeData).toBeCalled();
 });
 
 test("Gets replies", async () => {

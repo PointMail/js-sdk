@@ -53,9 +53,10 @@ export default class AutocompleteDemoSession implements AutocompleteSession {
     return Promise.resolve();
   }
 
-  public async setContext(
-    previousMessage: string,
-    contextType: ContextType = "text"
+  public async setRealtimeData(
+    pastContext: string | undefined,
+    pastEmailId: string | undefined,
+    currentContext: string | undefined
   ): Promise<void> {
     return Promise.resolve();
   }
