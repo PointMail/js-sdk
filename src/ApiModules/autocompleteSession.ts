@@ -91,7 +91,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
   /** Search type */
   private searchType: string;
   /** API URL */
-  private readonly apiUrl: string;
+  private readonly ApiUrl: string;
   /** @private SocketIO instance used to interact with Point API */
   private socket: SocketIOClient.Socket;
 
@@ -117,7 +117,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
     this.emailAddress = emailAddress;
     this.authManager = authManager;
     this.searchType = searchType;
-    this.apiUrl = apiUrl;
+    this.ApiUrl = apiUrl;
   }
 
   /**
@@ -130,7 +130,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
 
     const jwt = await this.authManager.getJwt();
 
-    this.socket = io(this.apiUrl, {
+    this.socket = io(this.ApiUrl, {
       reconnection: false,
       query: {
         emailAddress: this.emailAddress,
@@ -153,7 +153,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
       if (this.onErrorHandler) {
         this.onErrorHandler(error);
       }
-    })
+    });
 
     this.socket.on("disconnect", (reason: any) => {
       // If client was the one that disconnected,
@@ -261,7 +261,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
 
   public variable(placeholder: string): Promise<AutocompleteResponse | null> {
     return new Promise((resolve, reject) => {
-      if (this.socket.disconnected) {
+      if (!this.socket || this.socket.disconnected) {
         reject("Socket is disconnected");
       }
       this.socket.emit(

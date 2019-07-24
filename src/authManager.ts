@@ -146,7 +146,7 @@ export default class AuthManagerImpl implements AuthManager {
           // Server returned an internal error
           // Retry /auth after some delay
           const delay = Math.pow(2, retryCount) * 500;
-          await new Promise(r => setTimeout(r, delay))
+          await new Promise(r => setTimeout(r, delay));
           await this.refreshJwtToken(true, retryCount + 1);
         }
       }

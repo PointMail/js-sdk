@@ -10,9 +10,9 @@ export interface Account {
 }
 
 export interface Website {
-  urls: string[],
-  displayName: string,
-  dropdownEnabled: boolean
+  urls: string[];
+  displayName: string;
+  dropdownEnabled: boolean;
 }
 
 export interface Preferences {
