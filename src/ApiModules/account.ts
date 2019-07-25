@@ -13,6 +13,7 @@ export interface Website {
   urls: string[];
   displayName: string;
   dropdownEnabled: boolean;
+  usesReact: boolean;
 }
 
 export interface Preferences {
