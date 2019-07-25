@@ -44,7 +44,7 @@ export default class InteractionsApiModule {
   }
 
   public async tutorialStepViewed(step: number, stepText?: string) {
-    await this.storeInteraction("tutorialStepViewed", {step, stepText});
+    await this.storeInteraction("tutorialStepViewed", { step, stepText });
   }
 
   public async tutorialFinished() {
