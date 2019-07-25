@@ -102,13 +102,14 @@ export default class AuthManagerImpl implements AuthManager {
     autoRenew: boolean = true,
     retryCount: number = 0
   ): Promise<void> => {
-    const { ApiUrl, emailAddress, apiKey } = this;
+    const { ApiUrl, ApiVersionAccept, emailAddress, apiKey } = this;
 
     try {
       const response = await fetch(
         `${ApiUrl}/auth?emailAddress=${emailAddress}`,
         {
           headers: {
+            Accept: ApiVersionAccept,
             Authorization: `Bearer ${apiKey}`
           },
           method: "POST",
