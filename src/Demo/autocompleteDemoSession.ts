@@ -3,7 +3,8 @@ import {
   AutocompleteSession,
   ContextType,
   ReplyResponse,
-  SessionError
+  SessionError,
+  SuggestionMeta
 } from "../ApiModules/autocompleteSession";
 import LocalApiServer from "./localApiServer";
 
@@ -47,8 +48,7 @@ export default class AutocompleteDemoSession implements AutocompleteSession {
 
   public async feedback(
     responseId: string,
-    suggestionText: string | string[],
-    type: "positive" | "negative"
+    suggestion: SuggestionMeta
   ): Promise<void> {
     return Promise.resolve();
   }
