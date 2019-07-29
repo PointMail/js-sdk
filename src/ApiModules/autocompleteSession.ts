@@ -289,7 +289,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
     suggestion: SuggestionMeta,
   ): Promise<void> {
     this.socket.emit(
-      "feedback",
+      "feedback_1_1_29",
       { responseId, suggestion },
       (response: { message: string; status: string }) => {
         if (!response || response.status !== "success") {
