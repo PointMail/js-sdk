@@ -17,7 +17,12 @@ export interface AuthManager {
 export default class AuthManagerImpl implements AuthManager {
   private emailAddress: string;
   private apiKey: string;
-  private apiUrl: string;
+
+  /** Point API URL */
+  private readonly ApiUrl: string;
+
+  /** Point API version */
+  private readonly ApiVersionAccept: string;
 
   private jwt: Promise<string> | null;
   private jwtRenewTimeoutId: NodeJS.Timer;
@@ -34,11 +39,13 @@ export default class AuthManagerImpl implements AuthManager {
   constructor(
     emailAddress: string,
     apiKey: string,
-    apiUrl: string = "https://v1.pointapi.com"
+    apiUrl: string = "https://v1.pointapi.com",
+    apiVersion: string
   ) {
     this.emailAddress = emailAddress;
     this.apiKey = apiKey;
-    this.apiUrl = apiUrl;
+    this.ApiUrl = apiUrl;
+    this.ApiVersionAccept = apiVersion;
 
     this.jwtChangedEmitter = new EventEmitter();
   }
@@ -95,13 +102,14 @@ export default class AuthManagerImpl implements AuthManager {
     autoRenew: boolean = true,
     retryCount: number = 0
   ): Promise<void> => {
-    const { emailAddress, apiUrl, apiKey } = this;
+    const { ApiUrl, ApiVersionAccept, emailAddress, apiKey } = this;
 
     try {
       const response = await fetch(
-        `${apiUrl}/auth?emailAddress=${emailAddress}`,
+        `${ApiUrl}/auth?emailAddress=${emailAddress}`,
         {
           headers: {
+            Accept: ApiVersionAccept,
             Authorization: `Bearer ${apiKey}`
           },
           method: "POST",
@@ -139,7 +147,7 @@ export default class AuthManagerImpl implements AuthManager {
           // Server returned an internal error
           // Retry /auth after some delay
           const delay = Math.pow(2, retryCount) * 500;
-          await new Promise(r => setTimeout(r, delay))
+          await new Promise(r => setTimeout(r, delay));
           await this.refreshJwtToken(true, retryCount + 1);
         }
       }
@@ -163,12 +171,13 @@ export default class AuthManagerImpl implements AuthManager {
    * for autocomplete. Can be called right after successfull authorization. 
    */
   private initSession = async (): Promise<void> => {
-    const { emailAddress, apiUrl, jwt } = this;
+    const { ApiUrl, ApiVersionAccept, emailAddress, jwt } = this;
 
     await fetch(
-      `${apiUrl}/init?emailAddress=${emailAddress}`,
+      `${ApiUrl}/init?emailAddress=${emailAddress}`,
       {
         headers: {
+          Accept: ApiVersionAccept,
           Authorization: `Bearer ${jwt}`,
         },
         method: "GET",

@@ -66,12 +66,12 @@ export interface AutocompleteSession {
   ) => Promise<AutocompleteResponse | null>;
   feedback: (
     responseId: string,
-    suggestionText: string | string[],
-    type: "positive" | "negative"
+    suggestion: SuggestionMeta
   ) => Promise<void>;
-  setContext: (
-    previousMessage: string,
-    contextType?: ContextType
+  setRealtimeData: (
+    pastContext?: string,
+    pastEmailId?: string,
+    currentContext?: string
   ) => Promise<void>;
   reply: (
     previousMessage: string,
@@ -90,7 +90,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
   /** Search type */
   private searchType: string;
   /** API URL */
-  private readonly apiUrl: string;
+  private readonly ApiUrl: string;
   /** @private SocketIO instance used to interact with Point API */
   private socket: SocketIOClient.Socket;
 
@@ -116,7 +116,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
     this.emailAddress = emailAddress;
     this.authManager = authManager;
     this.searchType = searchType;
-    this.apiUrl = apiUrl;
+    this.ApiUrl = apiUrl;
   }
 
   /**
@@ -129,7 +129,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
 
     const jwt = await this.authManager.getJwt();
 
-    this.socket = io(this.apiUrl, {
+    this.socket = io(this.ApiUrl, {
       reconnection: false,
       query: {
         emailAddress: this.emailAddress,
@@ -152,7 +152,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
       if (this.onErrorHandler) {
         this.onErrorHandler(error);
       }
-    })
+    });
 
     this.socket.on("disconnect", (reason: any) => {
       // If client was the one that disconnected,
@@ -260,7 +260,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
 
   public variable(placeholder: string): Promise<AutocompleteResponse | null> {
     return new Promise((resolve, reject) => {
-      if (this.socket.disconnected) {
+      if (!this.socket || this.socket.disconnected) {
         reject("Socket is disconnected");
       }
       this.socket.emit(
@@ -281,16 +281,16 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
   }
 
   /**
-   *  Give feedback on Point Api's suggestions
+   * Give feedback on Point Api's suggestions. 
+   * This is like chosenSuggestion/Hotkey interaction.
    */
   public async feedback(
     responseId: string,
-    suggestionText: string | string[],
-    type: "positive" | "negative"
+    suggestion: SuggestionMeta,
   ): Promise<void> {
     this.socket.emit(
-      "feedback",
-      { responseId, text: suggestionText, type },
+      "feedback_1_1_29",
+      { responseId, suggestion },
       (response: { message: string; status: string }) => {
         if (!response || response.status !== "success") {
           if (response.message) {
@@ -305,13 +305,14 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
   /**
    *  Set the context of the autocomplete session
    */
-  public async setContext(
-    previousMessage: string,
-    contextType: ContextType = "text"
+  public async setRealtimeData(
+    pastContext: string | undefined,
+    pastEmailId: string | undefined,
+    currentContext: string | undefined
   ): Promise<void> {
     this.socket.emit(
-      "set-context",
-      { previousMessage, contextType },
+      "set-realtime-data",
+      { pastContext, pastEmailId, currentContext },
       (response: { message: string; status: string }) => {
         if (!response || response.status !== "success") {
           if (response.message) {

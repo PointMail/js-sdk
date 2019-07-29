@@ -4,15 +4,15 @@ import {
   testResponse,
   mockfeedback,
   mockSuggestions,
-  mockSetContext,
+  mockSetRealtimeData,
   mockReplies,
 } from "../__mocks__/socket-mock";
-import AuthManager, {mockOnJwtChange, mockOffJwtChange, mockGetJwt} from '../src/__mocks__/authManager'
+import AuthManager, {mockOnJwtChange, mockOffJwtChange, mockGetJwt} from '../src/__mocks__/authManager';
 const { suggestionsResponse } = testResponse;
 const emailAddress = "aiansiti@college.harvard.edu";
 const apiKey = "authcode1234";
 
-jest.mock('../src/authManager')
+jest.mock('../src/authManager');
 jest.mock(
   "socket.io-client",
   () => require.requireActual("../__mocks__/socket-mock").default
@@ -28,7 +28,7 @@ beforeEach(() => {
   mockGetJwt.mockClear();
   mockfeedback.mockClear();
   mockSuggestions.mockClear();
-  mockSetContext.mockClear();
+  mockSetRealtimeData.mockClear();
   mockReplies.mockClear();
 });
 
@@ -65,22 +65,22 @@ test("Chosen suggestions tracking", async () => {
   const apiSession = await apiSessionPromise;
 
   await expect(
-    apiSession.feedback("", suggestions[0].suggestion, "positive")
+    apiSession.feedback("", suggestions[0])
   ).resolves.toBeUndefined();
   expect(mockfeedback).toBeCalled();
   await expect(
-    apiSession.feedback("", suggestions[0].suggestion, "positive")
+    apiSession.feedback("", suggestions[0])
   ).rejects.toThrow();
   await expect(
-    apiSession.feedback("", suggestions[0].suggestion, "positive")
+    apiSession.feedback("", suggestions[0])
   ).rejects.toThrow();
 });
 
 test("Set Gmail Context", async () => {
   const apiSession = await apiSessionPromise;
 
-  await apiSession.setContext("hello", "gmail");
-  expect(mockSetContext).toBeCalled();
+  await apiSession.setRealtimeData('pastContext', "pastEmailId", 'text');
+  expect(mockSetRealtimeData).toBeCalled();
 });
 
 test("Gets replies", async () => {
