@@ -1,11 +1,27 @@
-export const suggestions = [
-  { userAdded: false, suggestion: "Hello, how are you?", type: "suggestion" },
+import { SuggestionMeta } from "../src/ApiModules/autocompleteSession";
+
+export const suggestions: SuggestionMeta[] = [
+  {
+    userAdded: false,
+    suggestion: "Hello, how are you?",
+    expandedSuggestion: "",
+    type: "generated",
+    baseClass: "suggestion"
+  },
   {
     userAdded: false,
     suggestion: "Hello, how was your day?",
-    type: "suggestion"
+    expandedSuggestion: "",
+    type: "custom",
+    baseClass: "suggestion"
   },
-  { userAdded: false, suggestion: "Hello, my name jeff", type: "suggestion" }
+  {
+    userAdded: false,
+    suggestion: "Hello, my name jeff",
+    expandedSuggestion: "",
+    type: "generated",
+    baseClass: "suggestion"
+  }
 ];
 
 export const replies = [
@@ -59,10 +75,10 @@ export const mockReplies = jest
     callback(testResponse.repliesResponse)
   );
 
-const emit = jest.fn().mockImplementation((channel, data, callback) => {
+const emit = jest.fn().mockImplementation((channel: string, data, callback) => {
   if (channel === "autocomplete") {
     mockSuggestions(data, callback);
-  } else if (channel === "feedback") {
+  } else if (channel === "feedback" || channel.startsWith("feedback_")) {
     return mockfeedback(callback);
   } else if (channel === "set-realtime-data") {
     mockSetRealtimeData(callback);

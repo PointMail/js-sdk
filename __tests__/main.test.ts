@@ -65,14 +65,14 @@ test("Chosen suggestions tracking", async () => {
   const apiSession = await apiSessionPromise;
 
   await expect(
-    apiSession.feedback("", suggestions[0].suggestion, "positive")
+    apiSession.feedback("", suggestions[0])
   ).resolves.toBeUndefined();
   expect(mockfeedback).toBeCalled();
   await expect(
-    apiSession.feedback("", suggestions[0].suggestion, "positive")
+    apiSession.feedback("", suggestions[0])
   ).rejects.toThrow();
   await expect(
-    apiSession.feedback("", suggestions[0].suggestion, "positive")
+    apiSession.feedback("", suggestions[0])
   ).rejects.toThrow();
 });
 
