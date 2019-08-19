@@ -1,5 +1,11 @@
 import { EventEmitter } from "events";
 
+interface AuthResponse {
+  active: boolean;
+  expiresAt: number;
+  jwt: string;
+}
+
 export interface AuthManager {
   setCredentials: (
     emailAddress: string,
@@ -7,11 +13,12 @@ export interface AuthManager {
   ) => void;
   getJwt: () => Promise<string>;
   onJwtChange: (
-    listener: (jwt: string | null) => void
+    listener: (jwt: string | undefined) => void
   ) => void;
   offJwtChange: (
-    listener: (jwt: string | null) => void
+    listener: (jwt: string | undefined) => void
   ) => void;
+  isUserActive: () => boolean | undefined;
 }
 
 export default class AuthManagerImpl implements AuthManager {
@@ -24,7 +31,9 @@ export default class AuthManagerImpl implements AuthManager {
   /** Point API version */
   private readonly ApiVersionAccept: string;
 
-  private jwt: Promise<string> | null;
+  private userActive: boolean | undefined;
+
+  private jwt: string | undefined;
   private jwtRenewTimeoutId: NodeJS.Timer;
 
   private jwtChangedEmitter: EventEmitter;
@@ -54,7 +63,8 @@ export default class AuthManagerImpl implements AuthManager {
     this.emailAddress = emailAddress;
     this.apiKey = apiKey;
 
-    this.jwt = null;
+    this.jwt = undefined;
+    this.userActive = undefined;
     if (this.jwtRenewTimeoutId) {
       clearTimeout(this.jwtRenewTimeoutId);
     }
@@ -86,7 +96,7 @@ export default class AuthManagerImpl implements AuthManager {
    * Adds a listener that will be called upon JWT change.
    * @param listener: <Function> The callback function
    */
-  public onJwtChange = (listener: (jwt: string | null) => void) => {
+  public onJwtChange = (listener: (jwt: string | undefined) => void) => {
     this.jwtChangedEmitter.on('jwt', listener);
   }
 
@@ -94,8 +104,12 @@ export default class AuthManagerImpl implements AuthManager {
    * Removes a listener that will be called upon JWT change.
    * @param listener: <Function> The callback function
    */
-  public offJwtChange = (listener: (jwt: string | null) => void) => {
+  public offJwtChange = (listener: (jwt: string | undefined) => void) => {
     this.jwtChangedEmitter.off('jwt', listener);
+  }
+
+  public isUserActive = () => {
+    return this.userActive;
   }
 
   private refreshJwtToken = async (
@@ -118,9 +132,9 @@ export default class AuthManagerImpl implements AuthManager {
       );
 
       if (response.ok) {
-        const responseJson = await response.json();
-
+        const responseJson: AuthResponse = await response.json();
         this.jwt = responseJson.jwt;
+        this.userActive = responseJson.active;
 
         if (autoRenew) {
           if (this.jwtRenewTimeoutId) {
@@ -133,11 +147,14 @@ export default class AuthManagerImpl implements AuthManager {
           }, responseJson.expiresAt - Date.now() - 5000);
         }
 
-        // Last but not least, ask server to initialize for autocomplete
-        this.initSession();
+        // If the API User is active, ask server to initialize for autocomplete
+        if (this.userActive) {
+          this.initSession();
+        }
 
       } else {
-        this.jwt = null;
+        this.jwt = undefined;
+        this.userActive = undefined;
 
         if (response.status === 401) {
           // Unauthorized (wrong token, invalid user, etc.)
@@ -152,7 +169,8 @@ export default class AuthManagerImpl implements AuthManager {
         }
       }
     } catch (e) {
-      this.jwt = null;
+      this.jwt = undefined;
+      this.userActive = undefined;
 
       if (retryCount < 10) {
         // Retry /auth after some delay

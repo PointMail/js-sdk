@@ -10,10 +10,16 @@ export default class AuthManagerDummy implements AuthManager {
     return Promise.resolve("jwt-dummy");
   }
 
-  public onJwtChange(listener: (jwt: string | null) => void) {
+  public onJwtChange(listener: (jwt: string | undefined) => void) {
     // do nothing - jwt will never change
   }
-  public offJwtChange(listener: (jwt: string | null) => void) {
+
+  public offJwtChange(listener: (jwt: string | undefined) => void) {
     // do nothing - jwt will never change
+  }
+
+  public isUserActive() {
+    // dummy user is always active
+    return true;
   }
 }

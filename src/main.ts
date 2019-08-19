@@ -151,6 +151,10 @@ export default class PointApiImpl implements PointApi {
     headers?: object,
   ) {
     const jwt = await this.authManager.getJwt();
+    
+    if (this.authManager.isUserActive() === false) {
+      throw new Error("User inactive");
+    }
 
     const authHeaders = {
       Authorization: `Bearer ${jwt}`,
