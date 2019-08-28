@@ -16,6 +16,10 @@ export default class InteractionsApiModule {
     this.api = api;
   }
 
+  public async pastedData(data: string) {
+    await this.storeInteraction("pastedData", { data });
+  }
+
   public async chosenSuggestion(responseId: string, suggestion: SuggestionMeta) {
     await this.storeInteraction("chosenSuggestion", { responseId, suggestion });
   }
