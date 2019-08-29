@@ -30,6 +30,7 @@ export interface Hotkey {
   trigger: string;
   text: string;
   type: "generated" | "custom"; // generated vs custom
+  labels: string[];
 }
 
 /** Class to keep track of api credentials and make requests to the custom suggestions api */
@@ -60,18 +61,20 @@ export default class CustomSuggestionsApiModule {
     baseClass: string,
     oldTrigger?: string,
     newText?: string,
-    newTrigger?: string
+    newTrigger?: string,
+    newLabels?: string[]
   ): Promise<StatusResponse> {
-    return this.authFetch("PUT", { oldText, type, baseClass, oldTrigger, newText, newTrigger });
+    return this.authFetch("PUT", { oldText, type, baseClass, oldTrigger, newText, newTrigger, newLabels });
   }
 
   /** Add a custom suggestion or hotkey */
   public async add(
     text: string,
     type: string,
-    trigger?: string
+    trigger?: string,
+    labels?: string[]
   ): Promise<StatusResponse> {
-    return this.authFetch("POST", { text, trigger, type });
+    return this.authFetch("POST", { text, trigger, type, labels });
   }
 
   /** Make authenticated request to custom suggestions api */
