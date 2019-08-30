@@ -62,9 +62,9 @@ export default class CustomSuggestionsApiModule {
     oldTrigger?: string,
     newText?: string,
     newTrigger?: string,
-    newLabels?: string[]
+    labels?: string[]
   ): Promise<StatusResponse> {
-    return this.authFetch("PUT", { oldText, type, baseClass, oldTrigger, newText, newTrigger, newLabels });
+    return this.authFetch("PUT", { oldText, type, baseClass, oldTrigger, newText, newTrigger, labels });
   }
 
   /** Add a custom suggestion or hotkey */
