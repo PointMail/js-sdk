@@ -14,6 +14,9 @@ export interface Website {
   displayName: string;
   dropdownEnabled: boolean;
   usesReact: boolean;
+  supportsRichText: boolean;
+  supportsAutoInsert: boolean;
+  inIframe: boolean;
 }
 
 export interface Preferences {
