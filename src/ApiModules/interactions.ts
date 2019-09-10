@@ -32,12 +32,12 @@ export default class InteractionsApiModule {
     await this.storeInteraction("emailSent", { messageId });
   }
 
-  public async hotkeyMenuOpened() {
-    await this.storeInteraction("hotkeyMenuOpened");
+  public async pointSearchOpened(trigger: string) {
+    await this.storeInteraction("pointSearchOpened"+trigger);
   }
 
-  public async hotkeyMenuClosed() {
-    await this.storeInteraction("hotkeyMenuClosed");
+  public async pointSearchClosed(trigger: string) {
+    await this.storeInteraction("pointSearchClosed"+trigger);
   }
 
   public async hotkeyCopied(trigger: string) {
