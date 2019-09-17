@@ -48,7 +48,8 @@ export default class AutocompleteDemoSession implements AutocompleteSession {
 
   public async feedback(
     responseId: string,
-    suggestion: SuggestionMeta
+    suggestion: SuggestionMeta,
+    origin: string
   ): Promise<void> {
     return Promise.resolve();
   }

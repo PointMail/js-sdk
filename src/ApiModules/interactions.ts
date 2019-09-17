@@ -16,12 +16,12 @@ export default class InteractionsApiModule {
     this.api = api;
   }
 
-  public async pastedData(data: string) {
-    await this.storeInteraction("pastedData", { data });
+  public async pastedData(origin: string, data: string) {
+    await this.storeInteraction("pastedData", origin, { data });
   }
 
-  public async chosenSuggestion(responseId: string, suggestion: SuggestionMeta) {
-    await this.storeInteraction("chosenSuggestion", { responseId, suggestion });
+  public async chosenSuggestion(responseId: string, origin: string, suggestion: SuggestionMeta) {
+    await this.storeInteraction("chosenSuggestion", origin, { responseId, suggestion });
   }
 
   public async draftDiscarded() {
@@ -29,23 +29,23 @@ export default class InteractionsApiModule {
   }
 
   public async emailSent(messageId: string) {
-    await this.storeInteraction("emailSent", { messageId });
+    await this.storeInteraction("emailSent", undefined, { messageId });
   }
 
-  public async hotkeyMenuOpened() {
-    await this.storeInteraction("hotkeyMenuOpened");
+  public async pointSearchOpened(trigger: string, origin: string) {
+    await this.storeInteraction("pointSearchOpened"+trigger, origin);
   }
 
-  public async hotkeyMenuClosed() {
-    await this.storeInteraction("hotkeyMenuClosed");
+  public async pointSearchClosed(trigger: string, origin: string) {
+    await this.storeInteraction("pointSearchClosed"+trigger, origin);
   }
 
-  public async hotkeyCopied(trigger: string) {
-    await this.storeInteraction("hotkeyCopied", { trigger });
+  public async hotkeyCopied(trigger: string, origin: string) {
+    await this.storeInteraction("hotkeyCopied", origin, { trigger });
   }
 
-  public async hotkeyIconMoved() {
-    await this.storeInteraction("hotkeyIconMoved");
+  public async hotkeyIconMoved(origin: string) {
+    await this.storeInteraction("hotkeyIconMoved", origin);
   }
 
   public async tutorialOpened() {
@@ -53,7 +53,7 @@ export default class InteractionsApiModule {
   }
 
   public async tutorialStepViewed(step: number, stepText?: string) {
-    await this.storeInteraction("tutorialStepViewed", { step, stepText });
+    await this.storeInteraction("tutorialStepViewed", undefined, { step, stepText });
   }
 
   public async tutorialFinished() {
@@ -64,8 +64,8 @@ export default class InteractionsApiModule {
     await this.storeInteraction("tutorialClosed");
   }
 
-  private async storeInteraction(type: string, data?: object) {
-    await this.authFetch("POST", { type, data });
+  private async storeInteraction(type: string, origin?: string, data?: object) {
+    await this.authFetch("POST", { type, origin, data });
   }
 
   /** Make authenticated request to interactions api */

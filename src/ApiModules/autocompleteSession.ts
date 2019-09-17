@@ -66,7 +66,8 @@ export interface AutocompleteSession {
   ) => Promise<AutocompleteResponse | null>;
   feedback: (
     responseId: string,
-    suggestion: SuggestionMeta
+    suggestion: SuggestionMeta,
+    origin: string
   ) => Promise<void>;
   setRealtimeData: (
     pastContext?: string,
@@ -287,10 +288,11 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
   public async feedback(
     responseId: string,
     suggestion: SuggestionMeta,
+    origin: string
   ): Promise<void> {
     this.socket.emit(
       "feedback_1_1_29",
-      { responseId, suggestion },
+      { responseId, suggestion, origin },
       (response: { message: string; status: string }) => {
         if (!response || response.status !== "success") {
           if (response.message) {
