@@ -72,6 +72,10 @@ export default class InteractionsApiModule {
     await this.storeInteraction("pasteNotificationDismiss", origin, { data });
   }
 
+  public async showUseShortcutNotification(origin: string) {
+    await this.storeInteraction("showUseShortcutNotification", origin);
+  }
+
   private async storeInteraction(type: string, origin?: string, data?: object) {
     await this.authFetch("POST", { type, origin, data });
   }
