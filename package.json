@@ -30,22 +30,23 @@
   },
   "author": "Alex Iansiti <alex@pointapi.com>",
   "license": "MIT",
+  "dependencies": {
+    "socket.io-client": "2.3.0"
+  },
   "devDependencies": {
-    "@types/jest": "23.3.13",
+    "@types/jest": "24.0.18",
+    "@types/node": "12.7.12",
     "@types/socket.io-client": "1.4.32",
     "envify": "4.1.0",
-    "jest": "23.6.0",
+    "jest": "24.9.0",
     "merge": "1.2.1",
-    "parcel-bundler": "1.12.3",
-    "ts-jest": "22.4.6",
-    "tslint": "5.19.0",
+    "parcel-bundler": "1.12.4",
+    "ts-jest": "24.1.0",
+    "tslint": "5.20.0",
     "tslint-config-prettier": "1.18.0",
-    "typedoc": "0.11.1",
-    "typedoc-plugin-markdown": "1.2.1",
-    "typescript": "2.9.2"
-  },
-  "dependencies": {
-    "socket.io-client": "2.2.0"
+    "typedoc": "0.15.0",
+    "typedoc-plugin-markdown": "2.2.10",
+    "typescript": "3.6.4"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -58,7 +59,7 @@
     },
     "globals": {
       "ts-jest": {
-        "tsConfigFile": "tsconfig.json"
+        "tsConfig": "tsconfig.json"
       }
     },
     "testMatch": [
