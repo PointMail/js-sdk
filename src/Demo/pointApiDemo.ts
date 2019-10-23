@@ -1,6 +1,6 @@
 import AccountApiModule from "../ApiModules/account";
 import { AutocompleteSession } from "../ApiModules/autocompleteSession";
-import CustomSuggestionsApiModule from "../ApiModules/customSuggestions";
+import CustomSuggestionsApiModule, { GetResponse } from "../ApiModules/customSuggestions";
 import InteractionsApiModule from "../ApiModules/interactions";
 import { AuthManager } from "../authManager";
 import { PointApi } from "../main";
@@ -23,9 +23,7 @@ export default class PointApiDemo implements PointApi {
 
   private authManager: AuthManager;
 
-  constructor(
-    emailAddress: string,
-  ) {
+  constructor(emailAddress: string) {
     this.emailAddress = emailAddress;
     this.apiUrl = "demo";
 
@@ -80,5 +78,15 @@ export default class PointApiDemo implements PointApi {
   ) {
     const response = this.server.httpRequest(method, url, data, headers);
     return Promise.resolve(response);
+  }
+
+  public setCustomSuggestionsData(customSuggestions: GetResponse) {
+    for (const h of customSuggestions.hotkeys) {      
+      this.server.addHotkey(h.text, h.trigger, h.labels);
+    }
+
+    for (const s of customSuggestions.suggestions) {
+      this.server.addCustomSuggestion(s.text);
+    }
   }
 }
