@@ -4,7 +4,7 @@ import {
   ContextType,
   ReplyResponse,
   SessionError,
-  SuggestionMeta
+  Snippet
 } from "../ApiModules/autocompleteSession";
 import LocalApiServer from "./localApiServer";
 
@@ -33,12 +33,12 @@ export default class AutocompleteDemoSession implements AutocompleteSession {
     seedText: string,
     currentContext?: string
   ): Promise<AutocompleteResponse | null> {
-    const response = this.server.getSuggestions(seedText, currentContext);
+    const response = this.server.getSnippetsByText(seedText, currentContext);
     return Promise.resolve(response);
   }
 
   public hotkey(trigger: string): Promise<AutocompleteResponse | null> {
-    const response = this.server.getHotkeys(trigger);
+    const response = this.server.getSnippetsByName(trigger);
     return Promise.resolve(response);
   }
 
@@ -48,7 +48,7 @@ export default class AutocompleteDemoSession implements AutocompleteSession {
 
   public async feedback(
     responseId: string,
-    suggestion: SuggestionMeta,
+    snippet: Snippet,
     origin: string
   ): Promise<void> {
     return Promise.resolve();

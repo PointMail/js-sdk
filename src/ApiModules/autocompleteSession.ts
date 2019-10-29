@@ -5,19 +5,14 @@ const io: SocketIOClientStatic = (ioProxy as any).default || ioProxy;
 export type ContextType = "text" | "gmail";
 
 /**
- * Suggestion metadata
+ * Snippet metadata
  */
 
-export interface BaseMeta {
-  suggestion: string;
-  type: string;
-  baseClass: string;
-  placeholder?: string;
-}
-
-export interface SuggestionMeta extends BaseMeta {
-  expandedSuggestion: string;
-  userAdded: boolean;
+export interface Snippet {
+  'id_': string;
+  'name': string;
+  'content': string;
+  'labels': string[];
 }
 
 /**
@@ -35,7 +30,7 @@ interface Reply {
 }
 
 export interface AutocompleteResponse {
-  suggestions: SuggestionMeta[];
+  snippets: Snippet[];
   seedText: string;
   responseId: string;
 }
@@ -59,14 +54,14 @@ export interface AutocompleteSession {
     currentContext?: string
   ) => Promise<AutocompleteResponse | null>;
   hotkey: (
-    trigger: string
+    query: string
   ) => Promise<AutocompleteResponse | null>;
   variable: (
     placeholder: string
   ) => Promise<AutocompleteResponse | null>;
   feedback: (
     responseId: string,
-    suggestion: SuggestionMeta,
+    snippet: Snippet,
     origin: string
   ) => Promise<void>;
   setRealtimeData: (
@@ -221,8 +216,8 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
         (response: AutocompleteResponse) => {
           if (
             !response ||
-            !response.suggestions ||
-            !response.suggestions.length
+            !response.snippets ||
+            !response.snippets.length
           ) {
             resolve(null);
           }
@@ -237,19 +232,19 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
    * @param trigger String that is a shortcut for the full hotkey text
    * @returns A list of the predicted suggestion objects
    */
-  public hotkey(trigger: string): Promise<AutocompleteResponse | null> {
+  public hotkey(query: string): Promise<AutocompleteResponse | null> {
     return new Promise((resolve, reject) => {
       if (!this.socket || this.socket.disconnected) {
         reject("Socket is disconnected");
       }
       this.socket.emit(
         "hotkey",
-        { trigger },
+        { query },
         (response: AutocompleteResponse) => {
           if (
             !response ||
-            !response.suggestions ||
-            !response.suggestions.length
+            !response.snippets ||
+            !response.snippets.length
           ) {
             resolve(null);
           }
@@ -270,8 +265,8 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
         (response: AutocompleteResponse) => {
           if (
             !response ||
-            !response.suggestions ||
-            !response.suggestions.length
+            !response.snippets ||
+            !response.snippets.length
           ) {
             resolve(null);
           }
@@ -287,12 +282,12 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
    */
   public async feedback(
     responseId: string,
-    suggestion: SuggestionMeta,
+    snippet: Snippet,
     origin: string
   ): Promise<void> {
     this.socket.emit(
-      "feedback_1_1_29",
-      { responseId, suggestion, origin },
+      "feedback",
+      { responseId, snippet, origin },
       (response: { message: string; status: string }) => {
         if (!response || response.status !== "success") {
           if (response.message) {

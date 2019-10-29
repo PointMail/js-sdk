@@ -26,64 +26,45 @@ export default class LocalApiServer {
   }
 
   public extensionCustomGet() {
-    const suggestions = this.store.suggestions.
-      filter((s) => s.type !== 'default').
-      map((s) => {
-        return { id: s.suggestion, text: s.suggestion };
-      });
 
-    const hotkeys = this.store.hotkeys.
-      map((h) => {
-        return { id: h.suggestion, text: h.expandedSuggestion, trigger: h.suggestion, type: h.type };
-      });
+    const snippets = this.store.snippets;
 
     return {
-      hotkeys,
-      suggestions
-    }
+      snippets
+    };
   }
 
-  public extensionCustomPost(data: { type: string, text: string, trigger: string }) {
-    if (data.type === "hotkey") {
-      this.store.addHotkey(data.trigger, data.text);
-      return { status: "success" };
-    } else if (data.type === "suggestion") {
-      this.store.addCustomSuggestion(data.text);
-      return { status: "success" };
-    }
-    return { status: "failure" };
+  public extensionCustomPost(data: { snippet: string, name: string }) {
+    this.store.addSnippet(data.name, data.snippet);
+    return { status: "success" };
   }
 
-  public getSuggestions(seedText: string, currentContext?: string): AutocompleteResponse {
-    const suggestions = this.store.suggestions.
-      filter((meta) => meta.suggestion.startsWith(seedText)).
+  public getSnippetsByText(seedText: string, currentContext?: string): AutocompleteResponse {
+    const snippets = this.store.snippets.
+      filter((meta) => meta.content.startsWith(seedText)).
       slice(0, 3);
 
     return {
-      suggestions,
+      snippets,
       seedText,
       responseId: this.randomResponseId(),
     };
   }
 
-  public getHotkeys(triggerSeed: string): AutocompleteResponse {
-    const hotkeys = this.store.hotkeys.
-      filter((meta) => meta.suggestion.startsWith(triggerSeed)).
+  public getSnippetsByName(seedText: string): AutocompleteResponse {
+    const snippets = this.store.snippets.
+      filter((meta) => meta.name.startsWith(seedText)).
       slice(0, 3);
 
     return {
-      suggestions: hotkeys,
-      seedText: triggerSeed,
+      snippets,
+      seedText,
       responseId: this.randomResponseId(),
     };
   }
 
-  public addCustomSuggestion(suggestion: string) {
-    this.store.addCustomSuggestion(suggestion);
-  }
-
-  public addHotkey(trigger: string, text: string) {
-    this.store.addHotkey(trigger, text);
+  public addSnippet(name: string, snippet: string) {
+    this.store.addSnippet(name, snippet);
   }
 
   private mockResponse(body?: any) {

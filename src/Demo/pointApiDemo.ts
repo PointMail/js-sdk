@@ -43,7 +43,7 @@ export default class PointApiDemo implements PointApi {
     this.authManager.setCredentials(emailAddress, apiKey);
   }
 
-  public initAutocompleteSession(
+  private initAutocompleteSession(
     searchType: string
   ): AutocompleteSession {
     return new AutocompleteDemoSession(this.server);

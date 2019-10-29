@@ -1,26 +1,23 @@
-import { SuggestionMeta } from "../src/ApiModules/autocompleteSession";
+import { Snippet } from "../src/ApiModules/autocompleteSession";
 
-export const suggestions: SuggestionMeta[] = [
+export const snippets: Snippet[] = [
   {
-    userAdded: false,
-    suggestion: "Hello, how are you?",
-    expandedSuggestion: "",
-    type: "generated",
-    baseClass: "suggestion"
+    id_: '1',
+    content: "Hello, how are you?",
+    name: "snip_1",
+    labels: []
   },
   {
-    userAdded: false,
-    suggestion: "Hello, how was your day?",
-    expandedSuggestion: "",
-    type: "custom",
-    baseClass: "suggestion"
+    id_: '2',
+    content: "Hello, how was your day?",
+    name: "snip_2",
+    labels: []
   },
   {
-    userAdded: false,
-    suggestion: "Hello, my name jeff",
-    expandedSuggestion: "",
-    type: "generated",
-    baseClass: "suggestion"
+    id_: '3',
+    content: "Hello, my name jeff",
+    name: "snip_3",
+    labels: []
   }
 ];
 
@@ -37,7 +34,7 @@ export const replies = [
 
 export const testResponse = {
   suggestionsResponse: {
-    suggestions,
+    snippets,
     seedText: null,
     timestamp: null
   },

@@ -1,10 +1,9 @@
 import { PointApi } from "../main";
-import { BaseMeta } from "./autocompleteSession";
+import { Snippet } from "./autocompleteSession";
 
 /** Result of a GET request to api */
 export interface GetResponse {
-  suggestions: Suggestion[];
-  hotkeys: Hotkey[];
+  snippets: Snippet[];
 }
 
 /** Result containing just a status field */
@@ -12,26 +11,6 @@ interface StatusResponse {
   status: string;
 }
 
-/** Blacklisted suggestion object */
-export interface Blacklist {
-  id: string;
-  text: string;
-}
-
-/** Custom suggestion object. Adds custom suggestion text to the dropdown */
-export interface Suggestion {
-  id: string;
-  text: string;
-}
-
-/** Hotkey suggestion object. Autocompletes ':trigger' to 'text' */
-export interface Hotkey {
-  id: string;
-  trigger: string;
-  text: string;
-  type: "generated" | "custom"; // generated vs custom
-  labels: string[];
-}
 
 /** Class to keep track of api credentials and make requests to the custom suggestions api */
 export default class CustomSuggestionsApiModule {
@@ -50,31 +29,27 @@ export default class CustomSuggestionsApiModule {
 
   /** Delete a custom suggestion or hotkey */
   public async delete(
-    suggestion: BaseMeta
+    snippetId: string,
   ): Promise<StatusResponse> {
-    return this.authFetch("DELETE", { ...suggestion });
+    return this.authFetch("DELETE", { snippetId });
   }
 
   public async edit(
-    oldText: string,
-    type: string,
-    baseClass: string,
-    oldTrigger?: string,
-    newText?: string,
-    newTrigger?: string,
-    labels?: string[]
+    snippetId: string,
+    newContent: string,
+    newName: string,
+    labels: string[]
   ): Promise<StatusResponse> {
-    return this.authFetch("PUT", { oldText, type, baseClass, oldTrigger, newText, newTrigger, labels });
+    return this.authFetch("PUT", { snippetId, newContent, newName, labels });
   }
 
   /** Add a custom suggestion or hotkey */
   public async add(
-    text: string,
-    type: string,
-    trigger?: string,
-    labels?: string[]
+    content: string,
+    name: string,
+    labels: string[]
   ): Promise<StatusResponse> {
-    return this.authFetch("POST", { text, trigger, type, labels });
+    return this.authFetch("POST", { name, content, labels });
   }
 
   /** Make authenticated request to custom suggestions api */

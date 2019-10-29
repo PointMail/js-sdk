@@ -27,7 +27,6 @@ export interface PointApi {
 
   setCredentials: (emailAddress: string, apiKey: string) => void;
 
-  initAutocompleteSession: (searchType: string) => AutocompleteSession;
   initAutocompleteSessionAsync: (searchType: string) => Promise<AutocompleteSession>;
 
   authFetch: (
@@ -90,29 +89,6 @@ export default class PointApiImpl implements PointApi {
   public setCredentials(emailAddress: string, apiKey: string) {
     this.emailAddress = emailAddress;
     this.authManager.setCredentials(emailAddress, apiKey);
-  }
-
-  /**
-   * @deprecated Please use initAutocompleteSessionAsync() method instead.
-   * 
-   * Initializes a new autocomplete session. 
-   * This method doesn't track if the session has finished connection init.
-   * 
-   * @param searchType how to search for matching suggestions (standard, keyword, hybdrid)
-   */
-  public initAutocompleteSession(
-    searchType: string
-  ): AutocompleteSession {
-    const session = new AutocompleteSessionImpl(
-      this.emailAddress,
-      this.authManager,
-      searchType,
-      this.apiUrl
-    );
-
-    session.reconnect();
-
-    return session;
   }
 
 

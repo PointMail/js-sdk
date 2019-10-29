@@ -11,19 +11,15 @@ import AccountApiModule, {
 import AutocompleteSessionImpl, {
   AutocompleteSession,
   ContextType,
-  BaseMeta,
   SessionError,
-  SuggestionMeta,
+  Snippet,
   ReplyMeta,
   AutocompleteResponse,
   ReplyResponse
 } from "./ApiModules/autocompleteSession";
 
 import CustomSuggestionsApiModule, {
-  Blacklist,
-  GetResponse as CustomSuggestionsGetResponse,
-  Hotkey,
-  Suggestion
+  GetResponse as CustomSuggestionsGetResponse
 } from "./ApiModules/customSuggestions";
 
 import Events from "./ApiModules/events";
@@ -40,14 +36,13 @@ export {
   AutocompleteSession,
   AutocompleteSessionImpl,
   ContextType,
-  BaseMeta,
   SessionError,
-  SuggestionMeta,
+  Snippet,
   ReplyMeta,
   AutocompleteResponse,
   ReplyResponse
 };
-export { CustomSuggestionsApiModule, Blacklist, CustomSuggestionsGetResponse, Hotkey, Suggestion };
+export { CustomSuggestionsApiModule, CustomSuggestionsGetResponse };
 export { Events };
 export { InteractionsApiModule, StatusResponse };
 export * from "./main";
