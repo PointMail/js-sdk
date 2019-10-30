@@ -14,7 +14,7 @@ export default class LocalApiServer {
     data?: object,
     headers?: Record<string, string>
   ): Response {
-    if (url.startsWith('/extension/custom')) {
+    if (url.startsWith('/snippets')) {
       if ('GET' === method) {
         return this.mockResponse(this.extensionCustomGet());
       } else if ('POST' === method) {
