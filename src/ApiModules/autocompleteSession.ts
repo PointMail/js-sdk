@@ -49,15 +49,12 @@ export interface AutocompleteSession {
   reconnect: () => Promise<void>;
   disconnect: () => void;
   setOnErrorHandler: (callback: (error: SessionError) => void) => void;
-  autocomplete: (
+  queryByContent: (
     seedText: string,
     currentContext?: string
   ) => Promise<AutocompleteResponse | null>;
-  hotkey: (
+  queryByName: (
     query: string
-  ) => Promise<AutocompleteResponse | null>;
-  variable: (
-    placeholder: string
   ) => Promise<AutocompleteResponse | null>;
   feedback: (
     responseId: string,
@@ -202,7 +199,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
    * @param seedText The text to base suggestion predictions off of
    * @returns A list of the predicted suggestion objects
    */
-  public autocomplete(
+  public queryByContent(
     seedText: string,
     currentContext?: string
   ): Promise<AutocompleteResponse | null> {
@@ -211,7 +208,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
         reject("Socket is disconnected");
       }
       this.socket.emit(
-        "autocomplete",
+        "querySnippetContents",
         { seedText: seedText.trim(), currentContext },
         (response: AutocompleteResponse) => {
           if (
@@ -232,36 +229,14 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
    * @param trigger String that is a shortcut for the full hotkey text
    * @returns A list of the predicted suggestion objects
    */
-  public hotkey(query: string): Promise<AutocompleteResponse | null> {
+  public queryByName(query: string): Promise<AutocompleteResponse | null> {
     return new Promise((resolve, reject) => {
       if (!this.socket || this.socket.disconnected) {
         reject("Socket is disconnected");
       }
       this.socket.emit(
-        "hotkey",
+        "querySnippetNames",
         { query },
-        (response: AutocompleteResponse) => {
-          if (
-            !response ||
-            !response.snippets ||
-            !response.snippets.length
-          ) {
-            resolve(null);
-          }
-          resolve(response);
-        }
-      );
-    });
-  }
-
-  public variable(placeholder: string): Promise<AutocompleteResponse | null> {
-    return new Promise((resolve, reject) => {
-      if (!this.socket || this.socket.disconnected) {
-        reject("Socket is disconnected");
-      }
-      this.socket.emit(
-        "variable",
-        { placeholder },
         (response: AutocompleteResponse) => {
           if (
             !response ||

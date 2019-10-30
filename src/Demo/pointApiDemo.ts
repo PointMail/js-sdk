@@ -1,6 +1,6 @@
 import AccountApiModule from "../ApiModules/account";
 import { AutocompleteSession } from "../ApiModules/autocompleteSession";
-import CustomSuggestionsApiModule from "../ApiModules/customSuggestions";
+import CustomSuggestionsApiModule from "../ApiModules/snippets";
 import InteractionsApiModule from "../ApiModules/interactions";
 import { AuthManager } from "../authManager";
 import { PointApi } from "../main";
@@ -16,7 +16,7 @@ export default class PointApiDemo implements PointApi {
   public readonly apiUrl: string;
 
   public readonly account: AccountApiModule;
-  public readonly customSuggestions: CustomSuggestionsApiModule;
+  public readonly snippets: CustomSuggestionsApiModule;
   public readonly interactions: InteractionsApiModule;
 
   private readonly server: LocalApiServer;
@@ -31,7 +31,7 @@ export default class PointApiDemo implements PointApi {
 
     // Init API submodules
     this.account = new AccountApiModule(this);
-    this.customSuggestions = new CustomSuggestionsApiModule(this);
+    this.snippets = new CustomSuggestionsApiModule(this);
     this.interactions = new InteractionsApiModule(this);
 
     this.authManager = new AuthManagerDummy();

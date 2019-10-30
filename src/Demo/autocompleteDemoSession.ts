@@ -29,7 +29,7 @@ export default class AutocompleteDemoSession implements AutocompleteSession {
     // do nothing - no errors will occur
   }
 
-  public autocomplete(
+  public queryByContent(
     seedText: string,
     currentContext?: string
   ): Promise<AutocompleteResponse | null> {
@@ -37,13 +37,9 @@ export default class AutocompleteDemoSession implements AutocompleteSession {
     return Promise.resolve(response);
   }
 
-  public hotkey(trigger: string): Promise<AutocompleteResponse | null> {
+  public queryByName(trigger: string): Promise<AutocompleteResponse | null> {
     const response = this.server.getSnippetsByName(trigger);
     return Promise.resolve(response);
-  }
-
-  public variable(placeholder: string): Promise<AutocompleteResponse | null> {
-    return Promise.resolve(null);
   }
 
   public async feedback(

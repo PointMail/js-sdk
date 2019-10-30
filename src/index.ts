@@ -18,9 +18,9 @@ import AutocompleteSessionImpl, {
   ReplyResponse
 } from "./ApiModules/autocompleteSession";
 
-import CustomSuggestionsApiModule, {
+import SnippetsApiModule, {
   GetResponse as SnippetsGetResponse
-} from "./ApiModules/customSuggestions";
+} from "./ApiModules/snippets";
 
 import Events from "./ApiModules/events";
 
@@ -42,7 +42,7 @@ export {
   AutocompleteResponse,
   ReplyResponse
 };
-export { CustomSuggestionsApiModule, SnippetsGetResponse };
+export { SnippetsApiModule, SnippetsGetResponse };
 export { Events };
 export { InteractionsApiModule, StatusResponse };
 export * from "./main";
