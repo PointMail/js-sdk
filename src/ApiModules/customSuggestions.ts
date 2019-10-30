@@ -13,7 +13,7 @@ interface StatusResponse {
 
 
 /** Class to keep track of api credentials and make requests to the custom suggestions api */
-export default class CustomSuggestionsApiModule {
+export default class SnippetApiModule {
   private readonly api: PointApi;
 
   private readonly url: string = "/extension/custom";

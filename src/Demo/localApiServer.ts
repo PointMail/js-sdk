@@ -39,7 +39,7 @@ export default class LocalApiServer {
     return { status: "success" };
   }
 
-  public getSnippetsByText(seedText: string, currentContext?: string): AutocompleteResponse {
+  public getSnippetsByContent(seedText: string, currentContext?: string): AutocompleteResponse {
     const snippets = this.store.snippets.
       filter((meta) => meta.content.startsWith(seedText)).
       slice(0, 3);

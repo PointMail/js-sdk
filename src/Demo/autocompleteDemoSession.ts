@@ -33,7 +33,7 @@ export default class AutocompleteDemoSession implements AutocompleteSession {
     seedText: string,
     currentContext?: string
   ): Promise<AutocompleteResponse | null> {
-    const response = this.server.getSnippetsByText(seedText, currentContext);
+    const response = this.server.getSnippetsByContent(seedText, currentContext);
     return Promise.resolve(response);
   }
 
