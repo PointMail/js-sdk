@@ -27,7 +27,7 @@ export default class LocalApiServer {
 
   public extensionCustomGet() {
 
-    const snippets = this.store.snippets;
+    const snippets = this.store.snippets.slice();
 
     return {
       snippets
