@@ -1,8 +1,6 @@
 import {
   AutocompleteResponse,
   AutocompleteSession,
-  ContextType,
-  ReplyResponse,
   SessionError,
   Snippet
 } from "../ApiModules/autocompleteSession";
@@ -48,20 +46,5 @@ export default class AutocompleteDemoSession implements AutocompleteSession {
     origin: string
   ): Promise<void> {
     return Promise.resolve();
-  }
-
-  public async setRealtimeData(
-    pastContext: string | undefined,
-    pastEmailId: string | undefined,
-    currentContext: string | undefined
-  ): Promise<void> {
-    return Promise.resolve();
-  }
-
-  public reply(
-    previousMessage: string,
-    contextType: ContextType = "text"
-  ): Promise<ReplyResponse | null> {
-    return Promise.resolve(null);
   }
 }

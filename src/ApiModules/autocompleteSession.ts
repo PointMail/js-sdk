@@ -61,15 +61,6 @@ export interface AutocompleteSession {
     snippet: Snippet,
     origin: string
   ) => Promise<void>;
-  setRealtimeData: (
-    pastContext?: string,
-    pastEmailId?: string,
-    currentContext?: string
-  ) => Promise<void>;
-  reply: (
-    previousMessage: string,
-    contextType: ContextType
-  ) => Promise<ReplyResponse | null>;
 }
 
 /**
@@ -269,28 +260,6 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
             throw new Error(response.message);
           }
           throw new Error("Could not record feedback");
-        }
-      }
-    );
-  }
-
-  /**
-   *  Set the context of the autocomplete session
-   */
-  public async setRealtimeData(
-    pastContext: string | undefined,
-    pastEmailId: string | undefined,
-    currentContext: string | undefined
-  ): Promise<void> {
-    this.socket.emit(
-      "set-realtime-data",
-      { pastContext, pastEmailId, currentContext },
-      (response: { message: string; status: string }) => {
-        if (!response || response.status !== "success") {
-          if (response.message) {
-            throw new Error(response.message);
-          }
-          throw new Error("Could not set context");
         }
       }
     );

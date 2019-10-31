@@ -21,33 +21,18 @@ export const snippets: Snippet[] = [
   }
 ];
 
-export const replies = [
-  {
-    prompt: "what is your phone number?",
-    suggestions: [
-      { confidence: 3, text: "My phone number is PHONE_NUMBER." },
-      { confidence: 3, text: "You can reach me at PHONE_NUMBER." },
-      { confidence: 3, text: "The best number to reach me at is PHONE_NUMBER." }
-    ]
-  }
-];
-
 export const testResponse = {
-  suggestionsResponse: {
+  snippetsResponse: {
     snippets,
     seedText: null,
     timestamp: null
-  },
-  repliesResponse: {
-    replies,
-    responseId: "1234"
   }
 };
 
-export const mockSuggestions = jest
+export const mockSnippets = jest
   .fn()
   .mockImplementation((data, callback) =>
-    callback(testResponse.suggestionsResponse)
+    callback(testResponse.snippetsResponse)
   );
 
 export const mockfeedback = jest
@@ -60,27 +45,12 @@ export const mockfeedback = jest
   )
   .mockImplementationOnce(callback => callback());
 
-export const mockSetRealtimeData = jest
-  .fn()
-  .mockImplementationOnce(callback =>
-    callback({ timestamp: "foo", status: "success" })
-  );
-
-export const mockReplies = jest
-  .fn()
-  .mockImplementationOnce((data, callback) =>
-    callback(testResponse.repliesResponse)
-  );
 
 const emit = jest.fn().mockImplementation((channel: string, data, callback) => {
-  if (channel === "autocomplete") {
-    mockSuggestions(data, callback);
-  } else if (channel === "feedback" || channel.startsWith("feedback_")) {
+  if (channel === "queryByContent") {
+    mockSnippets(data, callback);
+  } else if (channel === "feedback") {
     return mockfeedback(callback);
-  } else if (channel === "set-realtime-data") {
-    mockSetRealtimeData(callback);
-  } else if (channel === "reply") {
-    mockReplies(data, callback);
   }
 });
 const connect = jest.fn();
