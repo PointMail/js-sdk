@@ -1,6 +1,7 @@
 import AccountApiModule from "../ApiModules/account";
 import { AutocompleteSession } from "../ApiModules/autocompleteSession";
-import CustomSuggestionsApiModule from "../ApiModules/snippets";
+import SnippetApiModule from "../ApiModules/snippets";
+import { GetResponse } from "../ApiModules/snippets";
 import InteractionsApiModule from "../ApiModules/interactions";
 import { AuthManager } from "../authManager";
 import { PointApi } from "../main";
@@ -16,22 +17,20 @@ export default class PointApiDemo implements PointApi {
   public readonly apiUrl: string;
 
   public readonly account: AccountApiModule;
-  public readonly snippets: CustomSuggestionsApiModule;
+  public readonly snippets: SnippetApiModule;
   public readonly interactions: InteractionsApiModule;
 
   private readonly server: LocalApiServer;
 
   private authManager: AuthManager;
 
-  constructor(
-    emailAddress: string,
-  ) {
+  constructor(emailAddress: string) {
     this.emailAddress = emailAddress;
     this.apiUrl = "demo";
 
     // Init API submodules
     this.account = new AccountApiModule(this);
-    this.snippets = new CustomSuggestionsApiModule(this);
+    this.snippets = new SnippetApiModule(this);
     this.interactions = new InteractionsApiModule(this);
 
     this.authManager = new AuthManagerDummy();
@@ -80,5 +79,11 @@ export default class PointApiDemo implements PointApi {
   ) {
     const response = this.server.httpRequest(method, url, data, headers);
     return Promise.resolve(response);
+  }
+
+  public setCustomSuggestionsData(snippetGetResponse: GetResponse) {
+    for (const snippet of snippetGetResponse.snippets) {      
+      this.server.addSnippet(snippet.content, snippet.name);
+    }
   }
 }

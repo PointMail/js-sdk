@@ -21,4 +21,8 @@ export default class SuggestionsStore {
       labels: []
     });
   }
+
+  public snippetNameExists(name: string) {
+    return this.snippets.filter(snippet => snippet.name === name).length > 0;
+  }
 }

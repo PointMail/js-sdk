@@ -2,7 +2,7 @@ import { AutocompleteResponse } from "../ApiModules/autocompleteSession";
 import SuggestionsStore from "./suggestionsStore";
 
 export default class LocalApiServer {
-  private readonly store: SuggestionsStore;
+  private store: SuggestionsStore;
 
   constructor() {
     this.store = new SuggestionsStore();
@@ -69,8 +69,8 @@ export default class LocalApiServer {
 
   private mockResponse(body?: any) {
     const init = {
-      status: 200,
-      statusText: "OK",
+      status: !body.success ? 400 : 200,
+      statusText: !body.success ? "BAD REQUEST" : "OK",
       headers: {
         "content-type": "application/json"
       }
