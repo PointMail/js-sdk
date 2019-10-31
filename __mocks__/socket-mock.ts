@@ -29,11 +29,29 @@ export const testResponse = {
   }
 };
 
-export const mockSnippets = jest
+export const mockSnippetsByContent = jest
   .fn()
-  .mockImplementation((data, callback) =>
-    callback(testResponse.snippetsResponse)
-  );
+  .mockImplementation((data, callback) => {
+    if (!testResponse.snippetsResponse) {
+      callback(null);
+    }
+    const filteredSnippets = testResponse.snippetsResponse.snippets.filter(snippet => 
+      snippet.content.toLowerCase().startsWith(data.seedText.toLowerCase())
+    );
+    callback({snippets: filteredSnippets, seedText: testResponse.snippetsResponse.seedText, timestamp: testResponse.snippetsResponse.timestamp});
+  });
+
+  export const mockSnippetsByName = jest
+  .fn()
+  .mockImplementation((data, callback) => {
+    if (!testResponse.snippetsResponse) {
+      callback(null);
+    }
+    const filteredSnippets = testResponse.snippetsResponse.snippets.filter(snippet => 
+      snippet.name.toLowerCase().startsWith(data.query.toLowerCase())
+    );
+    callback({snippets: filteredSnippets, seedText: testResponse.snippetsResponse.seedText, timestamp: testResponse.snippetsResponse.timestamp});
+  });
 
 export const mockfeedback = jest
   .fn()
@@ -47,8 +65,10 @@ export const mockfeedback = jest
 
 
 const emit = jest.fn().mockImplementation((channel: string, data, callback) => {
-  if (channel === "queryByContent") {
-    mockSnippets(data, callback);
+  if (channel === "querySnippetContents") {
+    mockSnippetsByContent(data, callback);
+  } else if (channel === "querySnippetNames") {
+    return mockSnippetsByName(data, callback);
   } else if (channel === "feedback") {
     return mockfeedback(callback);
   }

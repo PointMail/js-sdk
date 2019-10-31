@@ -3,7 +3,8 @@ import {
   snippets,
   testResponse,
   mockfeedback,
-  mockSnippets,
+  mockSnippetsByContent,
+  mockSnippetsByName
 } from "../__mocks__/socket-mock";
 import AuthManager, { mockOnJwtChange, mockOffJwtChange, mockGetJwt } from '../src/__mocks__/authManager';
 const { snippetsResponse } = testResponse;
@@ -25,37 +26,57 @@ beforeEach(() => {
   mockOffJwtChange.mockClear();
   mockGetJwt.mockClear();
   mockfeedback.mockClear();
-  mockSnippets.mockClear();
+  mockSnippetsByContent.mockClear();
+  mockSnippetsByName.mockClear();
 });
 
 test("Inits PointApi object correctly", () => {
   expect(api.emailAddress).toEqual(emailAddress);
 });
 
-describe("Query suggestions", () => {
+describe("Query snippets by content", () => {
   test("Returns results correctly", async () => {
     const apiSession = await apiSessionPromise;
 
-    const seedText = "hello123";
+    const seedText = "hello";
     const result = await apiSession.queryByContent(seedText);
     expect(result).toBeDefined();
     expect(result).not.toBeNull();
     if (result) {
       expect(result.snippets).toHaveLength(3);
     }
-    expect(mockSnippets.mock.calls[0][0]).toHaveProperty(
+    expect(mockSnippetsByContent.mock.calls[0][0]).toHaveProperty(
       "seedText",
       seedText
     );
   });
-  test("Bad responses", async () => {
+});
+
+describe("Query snippets by name", () => {
+  test("Returns results correctly", async () => {
     const apiSession = await apiSessionPromise;
 
-    snippetsResponse.snippets = [];
-    expect(await apiSession.queryByContent("hello")).toBeNull();
-    delete testResponse.snippetsResponse;
-    expect(await apiSession.queryByContent("hello")).toBeNull();
+    const query = "snip";
+    const result = await apiSession.queryByName(query);
+    expect(result).toBeDefined();
+    expect(result).not.toBeNull();
+    if (result) {
+      expect(result.snippets).toHaveLength(3);
+    }
+    expect(mockSnippetsByName.mock.calls[0][0]).toHaveProperty(
+      "query",
+      query
+    );
   });
+});
+
+test("Bad responses", async () => {
+  const apiSession = await apiSessionPromise;
+
+  snippetsResponse.snippets = [];
+  expect(await apiSession.queryByContent("hello123")).toBeNull();
+  delete testResponse.snippetsResponse;
+  expect(await apiSession.queryByContent("hello123")).toBeNull();
 });
 
 test("Chosen suggestions tracking", async () => {
