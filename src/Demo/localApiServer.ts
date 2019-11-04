@@ -41,7 +41,7 @@ export default class LocalApiServer {
 
   public getSnippetsByContent(seedText: string, currentContext?: string): AutocompleteResponse {
     const snippets = this.store.snippets.
-      filter((meta) => meta.content.startsWith(seedText)).
+      filter((meta) => meta.content.toLowerCase().startsWith(seedText.toLowerCase())).
       slice(0, 3);
 
     return {
@@ -53,7 +53,7 @@ export default class LocalApiServer {
 
   public getSnippetsByName(seedText: string): AutocompleteResponse {
     const snippets = this.store.snippets.
-      filter((meta) => meta.name.startsWith(seedText)).
+      filter((meta) => meta.name.toLowerCase().startsWith(seedText.toLowerCase())).
       slice(0, 3);
 
     return {
