@@ -5,19 +5,14 @@ const io: SocketIOClientStatic = (ioProxy as any).default || ioProxy;
 export type ContextType = "text" | "gmail";
 
 /**
- * Suggestion metadata
+ * Snippet metadata
  */
 
-export interface BaseMeta {
-  suggestion: string;
-  type: string;
-  baseClass: string;
-  placeholder?: string;
-}
-
-export interface SuggestionMeta extends BaseMeta {
-  expandedSuggestion: string;
-  userAdded: boolean;
+export interface Snippet {
+  'id_': string;
+  'name': string;
+  'content': string;
+  'labels': string[];
 }
 
 /**
@@ -35,7 +30,7 @@ interface Reply {
 }
 
 export interface AutocompleteResponse {
-  suggestions: SuggestionMeta[];
+  snippets: Snippet[];
   seedText: string;
   responseId: string;
 }
@@ -54,30 +49,18 @@ export interface AutocompleteSession {
   reconnect: () => Promise<void>;
   disconnect: () => void;
   setOnErrorHandler: (callback: (error: SessionError) => void) => void;
-  autocomplete: (
+  queryByContent: (
     seedText: string,
     currentContext?: string
   ) => Promise<AutocompleteResponse | null>;
-  hotkey: (
-    trigger: string
-  ) => Promise<AutocompleteResponse | null>;
-  variable: (
-    placeholder: string
+  queryByName: (
+    query: string
   ) => Promise<AutocompleteResponse | null>;
   feedback: (
     responseId: string,
-    suggestion: SuggestionMeta,
+    snippet: Snippet,
     origin: string
   ) => Promise<void>;
-  setRealtimeData: (
-    pastContext?: string,
-    pastEmailId?: string,
-    currentContext?: string
-  ) => Promise<void>;
-  reply: (
-    previousMessage: string,
-    contextType: ContextType
-  ) => Promise<ReplyResponse | null>;
 }
 
 /**
@@ -207,7 +190,7 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
    * @param seedText The text to base suggestion predictions off of
    * @returns A list of the predicted suggestion objects
    */
-  public autocomplete(
+  public queryByContent(
     seedText: string,
     currentContext?: string
   ): Promise<AutocompleteResponse | null> {
@@ -216,13 +199,13 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
         reject("Socket is disconnected");
       }
       this.socket.emit(
-        "autocomplete",
+        "querySnippetContents",
         { seedText: seedText.trim(), currentContext },
         (response: AutocompleteResponse) => {
           if (
             !response ||
-            !response.suggestions ||
-            !response.suggestions.length
+            !response.snippets ||
+            !response.snippets.length
           ) {
             resolve(null);
           }
@@ -237,41 +220,19 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
    * @param trigger String that is a shortcut for the full hotkey text
    * @returns A list of the predicted suggestion objects
    */
-  public hotkey(trigger: string): Promise<AutocompleteResponse | null> {
+  public queryByName(query: string): Promise<AutocompleteResponse | null> {
     return new Promise((resolve, reject) => {
       if (!this.socket || this.socket.disconnected) {
         reject("Socket is disconnected");
       }
       this.socket.emit(
-        "hotkey",
-        { trigger },
+        "querySnippetNames",
+        { query },
         (response: AutocompleteResponse) => {
           if (
             !response ||
-            !response.suggestions ||
-            !response.suggestions.length
-          ) {
-            resolve(null);
-          }
-          resolve(response);
-        }
-      );
-    });
-  }
-
-  public variable(placeholder: string): Promise<AutocompleteResponse | null> {
-    return new Promise((resolve, reject) => {
-      if (!this.socket || this.socket.disconnected) {
-        reject("Socket is disconnected");
-      }
-      this.socket.emit(
-        "variable",
-        { placeholder },
-        (response: AutocompleteResponse) => {
-          if (
-            !response ||
-            !response.suggestions ||
-            !response.suggestions.length
+            !response.snippets ||
+            !response.snippets.length
           ) {
             resolve(null);
           }
@@ -287,40 +248,18 @@ export default class AutocompleteSessionImpl implements AutocompleteSession {
    */
   public async feedback(
     responseId: string,
-    suggestion: SuggestionMeta,
+    snippet: Snippet,
     origin: string
   ): Promise<void> {
     this.socket.emit(
-      "feedback_1_1_29",
-      { responseId, suggestion, origin },
+      "feedback",
+      { responseId, snippet, origin },
       (response: { message: string; status: string }) => {
         if (!response || response.status !== "success") {
           if (response.message) {
             throw new Error(response.message);
           }
           throw new Error("Could not record feedback");
-        }
-      }
-    );
-  }
-
-  /**
-   *  Set the context of the autocomplete session
-   */
-  public async setRealtimeData(
-    pastContext: string | undefined,
-    pastEmailId: string | undefined,
-    currentContext: string | undefined
-  ): Promise<void> {
-    this.socket.emit(
-      "set-realtime-data",
-      { pastContext, pastEmailId, currentContext },
-      (response: { message: string; status: string }) => {
-        if (!response || response.status !== "success") {
-          if (response.message) {
-            throw new Error(response.message);
-          }
-          throw new Error("Could not set context");
         }
       }
     );

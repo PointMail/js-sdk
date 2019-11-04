@@ -1,6 +1,6 @@
 import AccountApiModule from "./ApiModules/account";
 import AutocompleteSessionImpl, { AutocompleteSession } from "./ApiModules/autocompleteSession";
-import CustomSuggestionsApiModule from "./ApiModules/customSuggestions";
+import SnippetsApiModule from "./ApiModules/snippets";
 import InteractionsApiModule from "./ApiModules/interactions";
 import AuthManagerImpl, { AuthManager } from "./authManager";
 
@@ -22,12 +22,11 @@ export interface PointApi {
    * API submodules
    */
   readonly account: AccountApiModule;
-  readonly customSuggestions: CustomSuggestionsApiModule;
+  readonly snippets: SnippetsApiModule;
   readonly interactions: InteractionsApiModule;
 
   setCredentials: (emailAddress: string, apiKey: string) => void;
 
-  initAutocompleteSession: (searchType: string) => AutocompleteSession;
   initAutocompleteSessionAsync: (searchType: string) => Promise<AutocompleteSession>;
 
   authFetch: (
@@ -57,7 +56,7 @@ export default class PointApiImpl implements PointApi {
   public readonly apiUrl: string;
 
   public readonly account: AccountApiModule;
-  public readonly customSuggestions: CustomSuggestionsApiModule;
+  public readonly snippets: SnippetsApiModule;
   public readonly interactions: InteractionsApiModule;
 
   /** Point API version */
@@ -81,7 +80,7 @@ export default class PointApiImpl implements PointApi {
 
     // Init API submodules
     this.account = new AccountApiModule(this);
-    this.customSuggestions = new CustomSuggestionsApiModule(this);
+    this.snippets = new SnippetsApiModule(this);
     this.interactions = new InteractionsApiModule(this);
 
     this.authManager = new AuthManagerImpl(emailAddress, apiKey, apiUrl, this.ApiVersionAccept);
@@ -90,29 +89,6 @@ export default class PointApiImpl implements PointApi {
   public setCredentials(emailAddress: string, apiKey: string) {
     this.emailAddress = emailAddress;
     this.authManager.setCredentials(emailAddress, apiKey);
-  }
-
-  /**
-   * @deprecated Please use initAutocompleteSessionAsync() method instead.
-   * 
-   * Initializes a new autocomplete session. 
-   * This method doesn't track if the session has finished connection init.
-   * 
-   * @param searchType how to search for matching suggestions (standard, keyword, hybdrid)
-   */
-  public initAutocompleteSession(
-    searchType: string
-  ): AutocompleteSession {
-    const session = new AutocompleteSessionImpl(
-      this.emailAddress,
-      this.authManager,
-      searchType,
-      this.apiUrl
-    );
-
-    session.reconnect();
-
-    return session;
   }
 
 

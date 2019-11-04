@@ -1,5 +1,5 @@
 import { PointApi } from "../main";
-import { SuggestionMeta } from "./autocompleteSession";
+import { Snippet } from "./autocompleteSession";
 
 /** Result containing just a status field */
 export interface StatusResponse {
@@ -20,7 +20,7 @@ export default class InteractionsApiModule {
     await this.storeInteraction("pastedData", origin, { data });
   }
 
-  public async chosenSuggestion(responseId: string, origin: string, suggestion: SuggestionMeta) {
+  public async chosenSuggestion(responseId: string, origin: string, suggestion: Snippet) {
     await this.storeInteraction("chosenSuggestion", origin, { responseId, suggestion });
   }
 
