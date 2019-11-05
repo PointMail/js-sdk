@@ -21,7 +21,6 @@ export default class SuggestionsStore {
       content: snippet,
       labels: []
     });
-    console.log("Added snip", this.snippets);
   }
 
   public snippetNameExists(name: string) {

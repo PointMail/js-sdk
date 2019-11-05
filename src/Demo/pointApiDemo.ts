@@ -83,7 +83,7 @@ export default class PointApiDemo implements PointApi {
 
   public setCustomSuggestionsData(snippetGetResponse: GetResponse) {
     for (const snippet of snippetGetResponse.snippets) {      
-      this.server.addSnippet(snippet.content, snippet.name);
+      this.server.addSnippet(snippet.name, snippet.content);
     }
   }
 }
