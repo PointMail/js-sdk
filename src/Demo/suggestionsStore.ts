@@ -8,7 +8,7 @@ const INITIAL_SNIPPETS: Snippet[] = [
 ];
 
 export default class SuggestionsStore {
-  public readonly snippets: Snippet[];
+  public snippets: Snippet[];
 
   public constructor() {
     this.snippets = INITIAL_SNIPPETS.slice();
@@ -21,6 +21,7 @@ export default class SuggestionsStore {
       content: snippet,
       labels: []
     });
+    console.log("Added snip", this.snippets);
   }
 
   public snippetNameExists(name: string) {
