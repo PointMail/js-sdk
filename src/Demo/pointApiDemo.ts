@@ -1,6 +1,7 @@
 import AccountApiModule from "../ApiModules/account";
 import { AutocompleteSession } from "../ApiModules/autocompleteSession";
-import CustomSuggestionsApiModule, { GetResponse } from "../ApiModules/customSuggestions";
+import SnippetApiModule from "../ApiModules/snippets";
+import { GetResponse } from "../ApiModules/snippets";
 import InteractionsApiModule from "../ApiModules/interactions";
 import { AuthManager } from "../authManager";
 import { PointApi } from "../main";
@@ -16,7 +17,7 @@ export default class PointApiDemo implements PointApi {
   public readonly apiUrl: string;
 
   public readonly account: AccountApiModule;
-  public readonly customSuggestions: CustomSuggestionsApiModule;
+  public readonly snippets: SnippetApiModule;
   public readonly interactions: InteractionsApiModule;
 
   private readonly server: LocalApiServer;
@@ -29,7 +30,7 @@ export default class PointApiDemo implements PointApi {
 
     // Init API submodules
     this.account = new AccountApiModule(this);
-    this.customSuggestions = new CustomSuggestionsApiModule(this);
+    this.snippets = new SnippetApiModule(this);
     this.interactions = new InteractionsApiModule(this);
 
     this.authManager = new AuthManagerDummy();
@@ -41,7 +42,7 @@ export default class PointApiDemo implements PointApi {
     this.authManager.setCredentials(emailAddress, apiKey);
   }
 
-  public initAutocompleteSession(
+  private initAutocompleteSession(
     searchType: string
   ): AutocompleteSession {
     return new AutocompleteDemoSession(this.server);
@@ -80,13 +81,9 @@ export default class PointApiDemo implements PointApi {
     return Promise.resolve(response);
   }
 
-  public setCustomSuggestionsData(customSuggestions: GetResponse) {
-    for (const h of customSuggestions.hotkeys) {      
-      this.server.addHotkey(h.text, h.trigger, h.labels);
-    }
-
-    for (const s of customSuggestions.suggestions) {
-      this.server.addCustomSuggestion(s.text);
+  public setCustomSuggestionsData(snippetGetResponse: GetResponse) {
+    for (const snippet of snippetGetResponse.snippets) {      
+      this.server.addSnippet(snippet.name, snippet.content);
     }
   }
 }

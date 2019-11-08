@@ -1,14 +1,13 @@
 import PointApi from "../src/main";
 import {
-  suggestions,
+  snippets,
   testResponse,
   mockfeedback,
-  mockSuggestions,
-  mockSetRealtimeData,
-  mockReplies,
+  mockSnippetsByContent,
+  mockSnippetsByName
 } from "../__mocks__/socket-mock";
 import AuthManager, { mockOnJwtChange, mockOffJwtChange, mockGetJwt } from '../src/__mocks__/authManager';
-const { suggestionsResponse } = testResponse;
+const { snippetsResponse } = testResponse;
 const emailAddress = "aiansiti@college.harvard.edu";
 const apiKey = "authcode1234";
 
@@ -27,71 +26,70 @@ beforeEach(() => {
   mockOffJwtChange.mockClear();
   mockGetJwt.mockClear();
   mockfeedback.mockClear();
-  mockSuggestions.mockClear();
-  mockSetRealtimeData.mockClear();
-  mockReplies.mockClear();
+  mockSnippetsByContent.mockClear();
+  mockSnippetsByName.mockClear();
 });
 
 test("Inits PointApi object correctly", () => {
   expect(api.emailAddress).toEqual(emailAddress);
 });
 
-describe("Query suggestions", () => {
+describe("Query snippets by content", () => {
   test("Returns results correctly", async () => {
     const apiSession = await apiSessionPromise;
 
-    const seedText = "hello123";
-    const result = await apiSession.autocomplete(seedText);
+    const seedText = "hello";
+    const result = await apiSession.queryByContent(seedText);
     expect(result).toBeDefined();
     expect(result).not.toBeNull();
     if (result) {
-      expect(result.suggestions).toHaveLength(3);
+      expect(result.snippets).toHaveLength(3);
     }
-    expect(mockSuggestions.mock.calls[0][0]).toHaveProperty(
+    expect(mockSnippetsByContent.mock.calls[0][0]).toHaveProperty(
       "seedText",
       seedText
     );
   });
-  test("Bad responses", async () => {
+});
+
+describe("Query snippets by name", () => {
+  test("Returns results correctly", async () => {
     const apiSession = await apiSessionPromise;
 
-    suggestionsResponse.suggestions = [];
-    expect(await apiSession.autocomplete("hello")).toBeNull();
-    delete testResponse.suggestionsResponse;
-    expect(await apiSession.autocomplete("hello")).toBeNull();
+    const query = "snip";
+    const result = await apiSession.queryByName(query);
+    expect(result).toBeDefined();
+    expect(result).not.toBeNull();
+    if (result) {
+      expect(result.snippets).toHaveLength(3);
+    }
+    expect(mockSnippetsByName.mock.calls[0][0]).toHaveProperty(
+      "query",
+      query
+    );
   });
+});
+
+test("Bad responses", async () => {
+  const apiSession = await apiSessionPromise;
+
+  snippetsResponse.snippets = [];
+  expect(await apiSession.queryByContent("hello123")).toBeNull();
+  delete testResponse.snippetsResponse;
+  expect(await apiSession.queryByContent("hello123")).toBeNull();
 });
 
 test("Chosen suggestions tracking", async () => {
   const apiSession = await apiSessionPromise;
 
   await expect(
-    apiSession.feedback("", suggestions[0], "jest-unit-tests")
+    apiSession.feedback("", snippets[0], "jest-unit-tests")
   ).resolves.toBeUndefined();
   expect(mockfeedback).toBeCalled();
   await expect(
-    apiSession.feedback("", suggestions[0], "jest-unit-tests")
+    apiSession.feedback("", snippets[0], "jest-unit-tests")
   ).rejects.toThrow();
   await expect(
-    apiSession.feedback("", suggestions[0], "jest-unit-tests")
+    apiSession.feedback("", snippets[0], "jest-unit-tests")
   ).rejects.toThrow();
-});
-
-test("Set Gmail Context", async () => {
-  const apiSession = await apiSessionPromise;
-
-  await apiSession.setRealtimeData('pastContext', "pastEmailId", 'text');
-  expect(mockSetRealtimeData).toBeCalled();
-});
-
-test("Gets replies", async () => {
-  const apiSession = await apiSessionPromise;
-
-  const result = await apiSession.reply("hello", "text");
-  expect(result).toBeDefined();
-  expect(result).not.toBeNull();
-  if (result) {
-    expect(result.replies[0].suggestions).toHaveLength(3);
-  }
-  expect(mockReplies).toBeCalled();
 });

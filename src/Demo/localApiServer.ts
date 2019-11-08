@@ -14,7 +14,7 @@ export default class LocalApiServer {
     data?: object,
     headers?: Record<string, string>
   ): Response {
-    if (url.startsWith('/extension/custom')) {
+    if (url.startsWith('/snippets')) {
       if ('GET' === method) {
         return this.mockResponse(this.extensionCustomGet());
       } else if ('POST' === method) {
@@ -26,82 +26,45 @@ export default class LocalApiServer {
   }
 
   public extensionCustomGet() {
-    const suggestions = this.store.suggestions.
-      filter((s) => s.type !== 'default').
-      map((s) => {
-        return {
-          id: s.suggestion,
-          text: s.suggestion
-        };
-      });
 
-    const hotkeys = this.store.hotkeys.
-      map((h) => {
-        return {
-          id: h.suggestion,
-          labels: h.labels,
-          text: h.expandedSuggestion,
-          trigger: h.suggestion,
-          type: h.type
-        };
-      });
+    const snippets = this.store.snippets.slice();
 
     return {
-      hotkeys,
-      suggestions
+      snippets
     };
   }
 
-  public extensionCustomPost(data: { type: string, text: string, trigger: string, labels: string[] }) {
-    if (data.type === "hotkey") {
-      return this.addHotkey(data.text, data.trigger, data.labels);
-    } else if (data.type === "suggestion") {
-      return this.addCustomSuggestion(data.text);
-    } else {
-      return { success: false, status: "failure" };
-    }
+  public extensionCustomPost(data: { snippet: string, name: string }) {
+    this.store.addSnippet(data.name, data.snippet);
+    return { status: "success" };
   }
 
-  public getSuggestions(seedText: string, currentContext?: string): AutocompleteResponse {
-    const suggestions = this.store.suggestions.
-      filter((meta) => meta.suggestion.startsWith(seedText)).
+  public getSnippetsByContent(seedText: string, currentContext?: string): AutocompleteResponse {
+    const snippets = this.store.snippets.
+      filter((meta) => meta.content.toLowerCase().startsWith(seedText.toLowerCase())).
       slice(0, 3);
 
     return {
-      suggestions,
+      snippets,
       seedText,
       responseId: this.randomResponseId(),
     };
   }
 
-  public getHotkeys(triggerSeed: string): AutocompleteResponse {
-    const hotkeys = this.store.hotkeys.
-      filter((meta) => meta.suggestion.startsWith(triggerSeed)).
+  public getSnippetsByName(seedText: string): AutocompleteResponse {
+    const snippets = this.store.snippets.
+      filter((meta) => meta.name.toLowerCase().startsWith(seedText.toLowerCase())).
       slice(0, 3);
 
     return {
-      suggestions: hotkeys,
-      seedText: triggerSeed,
+      snippets,
+      seedText,
       responseId: this.randomResponseId(),
     };
   }
 
-  public addCustomSuggestion(suggestion: string) {
-    if (this.store.customSuggestionExists(suggestion)) {
-      return { success: false, status: "Suggestions must be unique" };
-    } else {
-      this.store.addCustomSuggestion(suggestion);
-      return { success: true, status: "success" };
-    }
-  }
-
-  public addHotkey(text: string, trigger: string, labels: string[]) {
-    if (this.store.hotkeyTriggerExists(trigger)) {
-      return { success: false, status: "Snippet trigger must be unique" };
-    } else {
-      this.store.addHotkey(trigger, text, labels);
-      return { success: true, status: "success" };
-    }
+  public addSnippet(name: string, snippet: string) {
+    this.store.addSnippet(name, snippet);
   }
 
   private mockResponse(body?: any) {

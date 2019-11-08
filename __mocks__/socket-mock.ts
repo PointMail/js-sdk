@@ -1,57 +1,57 @@
-import { SuggestionMeta } from "../src/ApiModules/autocompleteSession";
+import { Snippet } from "../src/ApiModules/autocompleteSession";
 
-export const suggestions: SuggestionMeta[] = [
+export const snippets: Snippet[] = [
   {
-    userAdded: false,
-    suggestion: "Hello, how are you?",
-    expandedSuggestion: "",
-    type: "generated",
-    baseClass: "suggestion"
+    id_: '1',
+    content: "Hello, how are you?",
+    name: "snip_1",
+    labels: []
   },
   {
-    userAdded: false,
-    suggestion: "Hello, how was your day?",
-    expandedSuggestion: "",
-    type: "custom",
-    baseClass: "suggestion"
+    id_: '2',
+    content: "Hello, how was your day?",
+    name: "snip_2",
+    labels: []
   },
   {
-    userAdded: false,
-    suggestion: "Hello, my name jeff",
-    expandedSuggestion: "",
-    type: "generated",
-    baseClass: "suggestion"
-  }
-];
-
-export const replies = [
-  {
-    prompt: "what is your phone number?",
-    suggestions: [
-      { confidence: 3, text: "My phone number is PHONE_NUMBER." },
-      { confidence: 3, text: "You can reach me at PHONE_NUMBER." },
-      { confidence: 3, text: "The best number to reach me at is PHONE_NUMBER." }
-    ]
+    id_: '3',
+    content: "Hello, my name jeff",
+    name: "snip_3",
+    labels: []
   }
 ];
 
 export const testResponse = {
-  suggestionsResponse: {
-    suggestions,
+  snippetsResponse: {
+    snippets,
     seedText: null,
     timestamp: null
-  },
-  repliesResponse: {
-    replies,
-    responseId: "1234"
   }
 };
 
-export const mockSuggestions = jest
+export const mockSnippetsByContent = jest
   .fn()
-  .mockImplementation((data, callback) =>
-    callback(testResponse.suggestionsResponse)
-  );
+  .mockImplementation((data, callback) => {
+    if (!testResponse.snippetsResponse) {
+      callback(null);
+    }
+    const filteredSnippets = testResponse.snippetsResponse.snippets.filter(snippet => 
+      snippet.content.toLowerCase().startsWith(data.seedText.toLowerCase())
+    );
+    callback({snippets: filteredSnippets, seedText: testResponse.snippetsResponse.seedText, timestamp: testResponse.snippetsResponse.timestamp});
+  });
+
+  export const mockSnippetsByName = jest
+  .fn()
+  .mockImplementation((data, callback) => {
+    if (!testResponse.snippetsResponse) {
+      callback(null);
+    }
+    const filteredSnippets = testResponse.snippetsResponse.snippets.filter(snippet => 
+      snippet.name.toLowerCase().startsWith(data.query.toLowerCase())
+    );
+    callback({snippets: filteredSnippets, seedText: testResponse.snippetsResponse.seedText, timestamp: testResponse.snippetsResponse.timestamp});
+  });
 
 export const mockfeedback = jest
   .fn()
@@ -63,27 +63,14 @@ export const mockfeedback = jest
   )
   .mockImplementationOnce(callback => callback());
 
-export const mockSetRealtimeData = jest
-  .fn()
-  .mockImplementationOnce(callback =>
-    callback({ timestamp: "foo", status: "success" })
-  );
-
-export const mockReplies = jest
-  .fn()
-  .mockImplementationOnce((data, callback) =>
-    callback(testResponse.repliesResponse)
-  );
 
 const emit = jest.fn().mockImplementation((channel: string, data, callback) => {
-  if (channel === "autocomplete") {
-    mockSuggestions(data, callback);
-  } else if (channel === "feedback" || channel.startsWith("feedback_")) {
+  if (channel === "querySnippetContents") {
+    mockSnippetsByContent(data, callback);
+  } else if (channel === "querySnippetNames") {
+    return mockSnippetsByName(data, callback);
+  } else if (channel === "feedback") {
     return mockfeedback(callback);
-  } else if (channel === "set-realtime-data") {
-    mockSetRealtimeData(callback);
-  } else if (channel === "reply") {
-    mockReplies(data, callback);
   }
 });
 const connect = jest.fn();
