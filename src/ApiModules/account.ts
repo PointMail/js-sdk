@@ -29,6 +29,7 @@ export interface Preferences {
 export type Preference =
   { field: 'search_type', value: 'standard' | 'keyword' | 'hybrid' } |
   { field: 'tab_completion', value: boolean } |
+  { field: 'gmail_dropdown', value: boolean } |
   { field: 'facebook_dropdown', value: boolean } |
   { field: 'zendesk_dropdown', value: boolean } |
   { field: 'menu_everywhere', value: boolean };
