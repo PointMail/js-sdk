@@ -5,7 +5,8 @@ import AccountApiModule, {
   Account,
   Preferences,
   SearchType,
-  Subscription
+  Subscription,
+  WebsitePreferences
 } from "./ApiModules/account";
 
 import AutocompleteSessionImpl, {
@@ -31,7 +32,14 @@ import InteractionsApiModule, {
 export default PointApiImpl;
 export { PointApiDemo };
 export { PointApi, ErrorResponse };
-export { AccountApiModule, Account, Preferences, SearchType, Subscription };
+export {
+  AccountApiModule,
+  Account,
+  Preferences,
+  SearchType,
+  Subscription,
+  WebsitePreferences
+};
 export {
   AutocompleteSession,
   AutocompleteSessionImpl,

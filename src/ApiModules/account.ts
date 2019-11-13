@@ -9,7 +9,7 @@ export interface Account {
   subscription: Subscription;
 }
 
-export interface Website {
+export interface WebsitePreferences {
   urls: string[];
   displayName: string;
   dropdownEnabled: boolean;
@@ -23,7 +23,7 @@ export interface Website {
 export interface Preferences {
   searchType: SearchType;
   tabCompletion: boolean;
-  websites: Website[];
+  websites: WebsitePreferences[];
   snippetMenuEverywhere: boolean;
 }
 
