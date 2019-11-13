@@ -17,6 +17,7 @@ export interface Website {
   supportsRichText: boolean;
   supportsAutoInsert: boolean;
   inIframe: boolean;
+  copyPasteNotificationEnabled: boolean;
 }
 
 export interface Preferences {
