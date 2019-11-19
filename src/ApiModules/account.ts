@@ -9,7 +9,7 @@ export interface Account {
   subscription: Subscription;
 }
 
-export interface Website {
+export interface WebsitePreferences {
   urls: string[];
   displayName: string;
   dropdownEnabled: boolean;
@@ -17,18 +17,20 @@ export interface Website {
   supportsRichText: boolean;
   supportsAutoInsert: boolean;
   inIframe: boolean;
+  copyPasteNotificationEnabled: boolean;
 }
 
 export interface Preferences {
   searchType: SearchType;
   tabCompletion: boolean;
-  websites: Website[];
+  websites: WebsitePreferences[];
   snippetMenuEverywhere: boolean;
 }
 
 export type Preference =
   { field: 'search_type', value: 'standard' | 'keyword' | 'hybrid' } |
   { field: 'tab_completion', value: boolean } |
+  { field: 'gmail_dropdown', value: boolean } |
   { field: 'facebook_dropdown', value: boolean } |
   { field: 'zendesk_dropdown', value: boolean } |
   { field: 'menu_everywhere', value: boolean };
