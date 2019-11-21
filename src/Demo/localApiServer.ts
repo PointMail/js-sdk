@@ -20,29 +20,74 @@ export default class LocalApiServer {
       } else if ('POST' === method) {
         return this.mockResponse(this.extensionCustomPost(data as any));
       }
+    } else if (url.startsWith('/account')) {
+      if ('GET' === method) {
+        return this.mockResponse(this.accountGet());
+      }
+    } else if (url.startsWith('/interactions')) {
+      return this.mockResponse({ success: true });
     }
 
-    return this.mockResponse();
+    return this.mockResponse({ success: false });
   }
 
   public extensionCustomGet() {
-
     const snippets = this.store.snippets.slice();
 
     return {
+      success: true,
       snippets
     };
   }
 
-  public extensionCustomPost(data: { snippet: string, name: string }) {
-    this.store.addSnippet(data.name, data.snippet);
-    return { status: "success" };
+  public extensionCustomPost(
+    snippet: {
+      name: string,
+      content: string,
+      labels: string[]
+    }
+  ) {
+    if (this.store.snippetNameExists(snippet.name)) {
+      return {
+        success: false,
+        status: "Snippet name must be unique"
+      };
+    }
+
+    this.store.addSnippet(snippet.name, snippet.content, snippet.labels);
+    return {
+      success: true,
+      status: "success"
+    };
   }
 
+  public accountGet() {
+    return {
+      "success": true,
+      "emailAddress": "demo@pointapi.com",
+      "name": "Demo Account",
+      "preferences": {
+        "searchType": "standard",
+        "snippetMenuEverywhere": false,
+        "tabCompletion": true,
+        "websites": []
+      },
+      "subscription": {
+        "dailyLimit": 0,
+        "dailyUsage": 0,
+        "expirationDate": 4102488000.000,
+        "membershipType": "premium",
+        "willRenew": true
+      }
+    };
+  }
+
+
   public getSnippetsByContent(seedText: string, currentContext?: string): AutocompleteResponse {
-    const snippets = this.store.snippets.
-      filter((meta) => meta.content.toLowerCase().startsWith(seedText.toLowerCase())).
-      slice(0, 3);
+    const seedTextLower = seedText.toLowerCase();
+    const snippets = this.store.snippets
+      .filter((meta) => meta.content.toLowerCase().startsWith(seedTextLower))
+      .slice(0, 3);
 
     return {
       snippets,
@@ -63,11 +108,16 @@ export default class LocalApiServer {
     };
   }
 
-  public addSnippet(name: string, snippet: string) {
-    this.store.addSnippet(name, snippet);
+  public addSnippet(
+    name: string,
+    content: string,
+    labels: string[],
+    addToBottom?: boolean
+  ) {
+    this.store.addSnippet(name, content, labels, addToBottom);
   }
 
-  private mockResponse(body?: any) {
+  private mockResponse(body: any) {
     const init = {
       status: !body.success ? 400 : 200,
       statusText: !body.success ? "BAD REQUEST" : "OK",
