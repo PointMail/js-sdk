@@ -12,13 +12,24 @@ export default class SuggestionsStore {
     this.snippets = INITIAL_SNIPPETS.slice();
   }
 
-  public addSnippet(name: string, content: string, labels: string[]) {
-    this.snippets.unshift({
+  public addSnippet(
+    name: string,
+    content: string,
+    labels: string[],
+    addToBottom?: boolean
+  ) {
+    const snippet = {
       id_: (this.snippets.length + 1).toString(),
       name,
       content,
       labels
-    });
+    };
+
+    if (addToBottom) {
+      this.snippets.push(snippet)
+    } else {
+      this.snippets.unshift(snippet);
+    }
   }
 
   public snippetNameExists(name: string) {

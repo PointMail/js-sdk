@@ -108,8 +108,13 @@ export default class LocalApiServer {
     };
   }
 
-  public addSnippet(name: string, content: string, labels: string[]) {
-    this.store.addSnippet(name, content, labels);
+  public addSnippet(
+    name: string,
+    content: string,
+    labels: string[],
+    addToBottom?: boolean
+  ) {
+    this.store.addSnippet(name, content, labels, addToBottom);
   }
 
   private mockResponse(body: any) {
