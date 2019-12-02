@@ -60,8 +60,8 @@ export default class InteractionsApiModule {
     await this.storeInteraction("tutorialFinished");
   }
 
-  public async tutorialClosed() {
-    await this.storeInteraction("tutorialClosed");
+  public async tutorialClosed(step: number) {
+    await this.storeInteraction("tutorialClosed", undefined, { step });
   }
 
   public async pasteNotificationSave(origin: string, data: string) {
