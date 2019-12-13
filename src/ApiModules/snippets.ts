@@ -17,6 +17,7 @@ export default class SnippetApiModule {
   private readonly api: PointApi;
 
   private readonly url: string = "/snippets";
+  private readonly shareUrl: string = `${this.url}/share`;
 
   constructor(api: PointApi) {
     this.api = api;
@@ -52,8 +53,28 @@ export default class SnippetApiModule {
     return this.authFetch("POST", { name, content, labels });
   }
 
+  /**
+   * Share a snippet with others using an email address.
+   *
+   * @param snippet: Snippet to share
+   * @param emailAddress: Email address of the recepient
+   * @param note: A note to attach to the share invitation
+   */
+  public async share(
+    snippet: Snippet,
+    emailAddress: string,
+    note?: string
+  ): Promise<void> {
+    return this.authFetch(
+      "POST",
+      { snippet, emailAddress, note },
+      this.shareUrl
+    );
+  }
+
   /** Make authenticated request to custom suggestions api */
-  private async authFetch(method: string, data?: object) {
-    return (await this.api.authFetch(method, this.url, data)).json();
+  private async authFetch(method: string, data?: object, url?: string) {
+    const requestUrl = url || this.url;
+    return (await this.api.authFetch(method, requestUrl, data)).json();
   }
 }
